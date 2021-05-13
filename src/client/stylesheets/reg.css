@@ -1,0 +1,75 @@
+
+  input.booty {
+    background-color: white;
+    width: auto;
+    min-width: 30%;
+  }
+  
+  button,input {
+    width: 100%;
+  }
+  
+  button.account {
+    background-color: lightblue;
+    width: auto;
+    min-width: 100%;
+  }
+  
+  .wrap1 {
+    margin-top: 0%;
+    width:50%;
+    text-align: center;
+    margin-left: 25%;
+    background: white;
+  }
+  
+  .wrap2 {
+    text-align: left;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid gray;
+    padding: 50px;
+    padding-top: 15%;
+    height:100vh;
+  }
+
+  .wrap3 {
+    text-align: justify;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid gray;
+    padding: 30px;
+    font-size: 13px;
+  }
+
+  .form-control {
+    width: 100% !important;
+  }
+  
+  .sheckle {
+      text-align: left;
+      width: 20%;
+      margin-left: 0%;
+  }
+
+  div.a {
+      margin-top: 1%;
+      margin-bottom: 1%;
+      font-size: 13px;
+  }
+  .bongola {
+      font-size: 13px;
+  }
+
+  button.modalbutton {
+    border: none;
+    padding: 0;
+    background: none;
+    width: auto;
+    font-size: 13px;
+    color:#007bff;;
+  }
+
+  h1{
+    text-shadow: 2px 2px 4px;
+  }

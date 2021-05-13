@@ -1,0 +1,19 @@
+.accordion {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 3%;
+  }
+
+.accordion__panel {
+    background-color:  #e8e8e8;
+}
+
+  jizz {
+    text-align: center;
+
+    background-color: #dddddd;
+    width: 10%;
+    border: 1px solid gray;
+    padding: 50px;
+    margin-left: 45%;
+  }
