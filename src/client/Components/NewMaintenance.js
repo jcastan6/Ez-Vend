@@ -13,10 +13,11 @@ import {
 class NewMaintenance extends Component {
   constructor(props) {
     super(props);
-
+    this.showReminder = this.showReminder.bind(this);
     this.state = {
       machineType: this.props.type,
       task: "",
+      priority: null,
       recurring: false,
       reminderCount: null,
     };
@@ -44,14 +45,35 @@ class NewMaintenance extends Component {
   };
 
   validateForm() {
-    return this.state.task.length > 0;
+    if (this.state.task.length > 0 && this.state.reminderCount) {
+      return true;
+    }
+
+    return false;
+  }
+
+  showReminder() {
+    return (
+      <FormGroup controlId="reminderCount">
+        <FormLabel>Remind Every:</FormLabel>
+        <FormControl
+          autoFocus
+          type="type"
+          value={this.state.reminderCount}
+          onChange={this.handleChange}
+        />
+        Days
+      </FormGroup>
+    );
   }
 
   render() {
     return (
       <div>
         <h1 id="justice">
-          <b>New {this.state.machineType} Maintenance</b>
+          <b>New Maintenance</b>
+          <br />
+          <h4>Machine : {this.state.machineType} </h4>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>
@@ -64,18 +86,8 @@ class NewMaintenance extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-      
-          <FormGroup controlId="reminderCount">
-            <FormLabel>Remind Every:</FormLabel>
-            <FormControl
-              autoFocus
-              type="type"
-              value={this.state.reminderCount}
-              onChange={this.handleChange}
-            />
-            Visits
-          </FormGroup>
 
+          {this.showReminder()}
           <Button
             block
             disabled={!this.validateForm()}

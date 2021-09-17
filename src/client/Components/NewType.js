@@ -34,6 +34,9 @@ class NewType extends Component {
         "Content-Type": "application/json",
       },
     }).then(() => {
+      this.setState({
+        type: "",
+      });
       this.props.getTypes();
     });
   };

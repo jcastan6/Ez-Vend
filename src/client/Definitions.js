@@ -9,6 +9,11 @@ import MachineType from "./Components/MachineType/MachineType.js";
 import { BsFillPlusSquareFill } from "react-icons/bs";
 import MachineMaintenances from "./Components/MachineMaintenances/MachineMaintenances";
 import NewClient from "./Components/NewClient/NewClient";
+import ClientEditor from "./Components/ClientEditor/ClientEditor";
+import NewEmployee from "./Components/Employees/NewEmployee";
+import EmployeeEditor from "./Components/Employees/EmployeeEditor";
+import "react-web-tabs/dist/react-web-tabs.css";
+import "./app.css";
 export default class Definitions extends Component {
   constructor(props) {
     super(props);
@@ -18,14 +23,20 @@ export default class Definitions extends Component {
       showModal: false,
       types: [],
       clients: [],
+      employees: [],
     };
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.renderClientPanels = this.renderClientPanels.bind(this);
     this.renderClientTypes = this.renderClientTypes.bind(this);
+    this.renderEmployees = this.renderEmployees.bind(this);
+    this.renderEmployeePanels = this.renderEmployeePanels.bind(this);
     this.renderTypes = this.renderTypes.bind(this);
     this.getTypes = this.getTypes.bind(this);
     this.getClients = this.getClients.bind(this);
+    this.getEmployees = this.getEmployees.bind(this);
+    this.refreshCycle = this.refreshCycle.bind(this);
+    this.getEmployees();
     this.getTypes();
     this.getClients();
   }
@@ -38,6 +49,29 @@ export default class Definitions extends Component {
     this.setState({ showModal: id });
   }
 
+  getEmployees() {
+    this.setState({
+      employees: [],
+    });
+    fetch(`http://localhost:4000/users/getEmployees`, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        res.sort((a, b) => (a.name > b.name ? 1 : -1));
+        this.setState(
+          {
+            employees: res,
+          },
+          () => console.log()
+        );
+      });
+  }
+
   getTypes() {
     fetch(`http://localhost:4000/machines/getTypes`, {
       method: "GET",
@@ -48,6 +82,7 @@ export default class Definitions extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
+        res.sort((a, b) => (a.type > b.type ? 1 : -1));
         this.setState(
           {
             types: res,
@@ -66,6 +101,7 @@ export default class Definitions extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
+        res.sort((a, b) => (a.name > b.name ? 1 : -1));
         this.setState(
           {
             clients: res,
@@ -77,6 +113,7 @@ export default class Definitions extends Component {
 
   renderTypes() {
     let latest = [];
+
     latest.push(
       <div>
         <Tab tabFor="new" style={{ width: "100%" }} className="definition-tab">
@@ -96,6 +133,7 @@ export default class Definitions extends Component {
         );
       }
     }
+
     return latest;
   }
 
@@ -149,14 +187,88 @@ export default class Definitions extends Component {
     let latest = [];
     latest.push(
       <TabPanel tabId="new">
-        <NewClient></NewClient>
+        <NewClient getClients={this.refreshCycle}></NewClient>
       </TabPanel>
     );
     if (this.state.clients.length >= 1) {
       for (let i = 0; i < this.state.clients.length; i++) {
         latest.push(
           <div>
-            <TabPanel tabId={this.state.clients[i].name}></TabPanel>
+            <TabPanel tabId={this.state.clients[i].name}>
+              <ClientEditor
+                getClients={this.refreshCycle}
+                client={this.state.clients[i]}
+              ></ClientEditor>
+            </TabPanel>
+          </div>
+        );
+      }
+    }
+    return latest;
+  }
+
+  renderEmployees() {
+    let latest = [];
+    latest.push(
+      <div>
+        <Tab tabFor="new" style={{ width: "100%" }} className="definition-tab">
+          <BsFillPlusSquareFill />
+        </Tab>
+      </div>
+    );
+
+    if (this.state.employees.length >= 1) {
+      for (let i = 0; i < this.state.employees.length; i++) {
+        latest.push(
+          <div>
+            <Tab
+              tabFor={this.state.employees[i].name}
+              style={{ width: "100%" }}
+            >
+              {this.state.employees[i].name}
+            </Tab>
+          </div>
+        );
+      }
+    }
+    return latest;
+  }
+
+  refreshCycle() {
+    this.setState({
+      user: retrieveCookie(),
+      latestImages: [],
+      showModal: false,
+      types: [],
+      clients: [],
+      employees: [],
+    });
+    this.getClients();
+    this.getEmployees();
+    this.getTypes();
+    this.renderClientPanels();
+    this.renderClientTypes();
+    this.renderEmployees();
+    this.renderEmployeePanels();
+  }
+
+  renderEmployeePanels() {
+    let latest = [];
+    latest.push(
+      <TabPanel tabId="new">
+        <NewEmployee getEmployees={this.getEmployees}></NewEmployee>
+      </TabPanel>
+    );
+    if (this.state.employees.length >= 1) {
+      for (let i = 0; i < this.state.employees.length; i++) {
+        latest.push(
+          <div>
+            <TabPanel tabId={this.state.employees[i].name}>
+              <EmployeeEditor
+                getEmployees={this.refreshCycle}
+                employee={this.state.employees[i]}
+              ></EmployeeEditor>
+            </TabPanel>
           </div>
         );
       }
@@ -166,18 +278,14 @@ export default class Definitions extends Component {
 
   render() {
     return (
-      <div>
-        <Header />
+      <div className="body">
         <Jumbotron>
           <Container fluid>
-            <h1>Machines </h1>
-            <br />
-            <Tabs
-              defaultTab="vertical-tab-one"
-              vertical
-              className="vertical-tabs"
-            >
-              <TabList>{this.renderTypes()}</TabList>
+            <h1>Maintenances </h1>
+            <Tabs defaultTab="vertical-tab-one" vertical>
+              <TabList className="definition-tabs">
+                {this.renderTypes()}
+              </TabList>
               {this.renderPanels()}
             </Tabs>
           </Container>
@@ -198,9 +306,16 @@ export default class Definitions extends Component {
         </Jumbotron>
         <Jumbotron>
           <Container fluid>
-            <h1>Rutas</h1>
+            <h1>Employees</h1>
             <p />
-            {/* <Row className="justify-content-center">{this.latestImages()}</Row> */}
+            <Tabs
+              defaultTab="vertical-tab-one"
+              vertical
+              className="vertical-tabs"
+            >
+              <TabList>{this.renderEmployees()}</TabList>
+              {this.renderEmployeePanels()}
+            </Tabs>
           </Container>
         </Jumbotron>
       </div>

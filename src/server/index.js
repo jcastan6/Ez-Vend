@@ -10,6 +10,7 @@ const userRouter = require("./routes/users-router");
 const productRouter = require("./routes/products-router");
 const machinesRouter = require("./routes/machines-router");
 const clientsRouter = require("./routes/clients-router");
+const routesRouter = require("./routes/routes-router");
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use("/users", userRouter);
 app.use("/clients", clientsRouter);
 app.use("/products", productRouter);
 app.use("/machines", machinesRouter);
+app.use("/routes", routesRouter);
 
 app.use((err, req, res, next) => {
   // set locals, only providing error in development

@@ -75,6 +75,7 @@ router.post("/editClient", async (req, res) => {
       id: req.body.id,
     },
   });
+  console.log(task);
   if (task) {
     await task
       .update({
@@ -84,6 +85,22 @@ router.post("/editClient", async (req, res) => {
         await db.backup();
         return res.status(200).json({ result: "client edited" });
       });
+  }
+});
+
+router.post("/deleteClient", async (req, res) => {
+  await db.check();
+  const task = await models.client.findOne({
+    where: {
+      id: req.body.id,
+    },
+  });
+  console.log(task);
+  if (task) {
+    await task.destroy().then(async () => {
+      await db.backup();
+      return res.status(200).json({ result: "client edited" });
+    });
   }
 });
 

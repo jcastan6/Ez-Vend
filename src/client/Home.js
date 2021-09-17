@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container, Jumbotron, Row, Col } from "react-bootstrap";
 import Header from "./Components/Header/Header.js";
 import { retrieveCookie } from "./Components/Cookies";
+import Maintenances from "./Components/Maintenances/Maintenances";
 
 export default class Home extends Component {
   constructor(props) {
@@ -48,9 +49,11 @@ export default class Home extends Component {
   render() {
     return (
       <div>
-        <Header />
-        <Jumbotron />
-        <Container fluid />
+        <Jumbotron>
+          <Container>
+            <Maintenances />
+          </Container>
+        </Jumbotron>
       </div>
     );
   }

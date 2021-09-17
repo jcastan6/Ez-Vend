@@ -10,7 +10,7 @@ export default class Products extends Component {
     this.state = {
       user: retrieveCookie(),
       products: [],
-      business: "adminbusiness"
+      business: "adminbusiness",
     };
 
     this.getMachines();
@@ -22,14 +22,14 @@ export default class Products extends Component {
       method: "GET",
       credentials: "same-origin",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
-      .then(response => response.json())
-      .then(res => {
+      .then((response) => response.json())
+      .then((res) => {
         this.setState(
           {
-            machines: res
+            machines: res,
           },
           () => console.log()
         );
@@ -54,7 +54,6 @@ export default class Products extends Component {
   render() {
     return (
       <div>
-        <Header />
         <Jumbotron>
           <h1>All of your machines, listed by last added</h1>
           <p>clicking on a machine will give you more details</p>

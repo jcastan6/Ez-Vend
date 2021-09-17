@@ -37,7 +37,10 @@ export default class NewClient extends Component {
     })
       .then((res) => res.json())
       .then((res) => {
-        this.handleRouteChange();
+        this.setState({
+          name: "",
+        });
+        this.props.getClients();
       });
   };
 

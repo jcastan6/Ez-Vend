@@ -1,0 +1,8 @@
+.navbar {
+}
+
+.nav-link.active {
+  /* hot pink, bold text for active tab title */
+  color: #de1820 !important;
+  font-weight: bolder;
+}

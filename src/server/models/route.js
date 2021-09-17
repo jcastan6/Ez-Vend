@@ -3,6 +3,7 @@ module.exports = (sequelize, Sequelize) => {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
     },
     createdAt: {
       type: Sequelize.DATE,
@@ -12,27 +13,32 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DATE,
       defaultValue: sequelize.literal("NOW()"),
     },
-    machines: {
+    name: {
       type: Sequelize.STRING,
-      defaultValue: "[]",
-      get() {
-        return JSON.parse(this.getDataValue("machines"));
-      },
-      set(val) {
-        return this.setDataValue("machines", JSON.stringify(val));
-      },
+      allowNull: false,
     },
-    employees: {
+
+    days: {
       type: Sequelize.STRING,
       defaultValue: "[]",
       get() {
-        return JSON.parse(this.getDataValue("employees"));
+        return JSON.parse(this.getDataValue("days"));
       },
       set(val) {
-        return this.setDataValue("employees", JSON.stringify(val));
+        return this.setDataValue("days", JSON.stringify(val));
       },
     },
   });
+  route.associate = (models) => {
+    route.belongsToMany(models.employee, {
+      through: "employeeRoutes",
+      onUpdate: "CASCADE",
+    });
+    route.belongsToMany(models.vendingMachine, {
+      through: "machineRoutes",
+      onUpdate: "CASCADE",
+    });
+  };
 
   return route;
 };

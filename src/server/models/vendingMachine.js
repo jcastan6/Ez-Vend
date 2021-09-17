@@ -7,8 +7,12 @@ module.exports = (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    machineNo: {
+      type: Sequelize.INTEGER,
+    },
     serialNo: {
       type: Sequelize.STRING,
+      allowNull: true,
     },
     createdAt: {
       type: Sequelize.DATE,
@@ -28,13 +32,19 @@ module.exports = (sequelize, Sequelize) => {
       as: "client",
       onUpdate: "CASCADE",
     });
-    vendingMachine.hasOne(models.machineType, {
+    vendingMachine.belongsTo(models.machineType, {
       as: "type",
       onUpdate: "CASCADE",
     });
 
-    vendingMachine.hasMany(models.maintenance, {
+    vendingMachine.hasMany(models.maintenanceLog, {
       as: "maintenances",
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+
+    vendingMachine.hasMany(models.maintenanceReport, {
+      as: "reports",
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     });

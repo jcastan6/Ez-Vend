@@ -9,20 +9,19 @@ import {
   Carousel,
 } from "react-bootstrap";
 
-class NewMachine extends Component {
+export default class NewEmployee extends Component {
   constructor(props) {
     super(props);
     this.handleRouteChange = this.handleRouteChange.bind(this);
-    this.state = {
-      type: "",
-      businessName: "adminbusiness",
-      types: [],
-      attributes: [],
-    };
+    this.toggleTechnician = this.toggleTechnician.bind(this);
     this.getTypes = this.getTypes.bind(this);
-    this.getAttributes = this.getAttributes.bind(this);
-    this.getTypes();
-    this.getAttributes();
+
+    this.state = {
+      name: "",
+      type: "",
+      isTechnician: false,
+      types: [],
+    };
   }
 
   handleChange = (event) => {
@@ -33,7 +32,7 @@ class NewMachine extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:4000/machines/newMachine", {
+    fetch("http://localhost:4000/users/addEmployee", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -43,7 +42,12 @@ class NewMachine extends Component {
     })
       .then((res) => res.json())
       .then((res) => {
-        this.handleRouteChange();
+        this.setState({
+          name: "",
+          type: "",
+          isTechnician: false,
+        });
+        this.props.getEmployees();
       });
   };
 
@@ -52,7 +56,7 @@ class NewMachine extends Component {
   }
 
   validateForm() {
-    return this.state.type.length > 0;
+    return this.state.name.length > 0;
   }
 
   getTypes() {
@@ -73,66 +77,75 @@ class NewMachine extends Component {
 
         this.setState({
           types: types,
+          type: types[0].props.children,
         }),
           () => console.log();
       });
   }
 
-  getAttributes() {
-    fetch(`http://localhost:4000/machines/getMachineAttributes/`, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        let attributes = [];
-        res.forEach((element) => {
-          attributes.push(
-            <FormGroup>
-              <FormLabel>{element}</FormLabel>
-              <FormControl as="textarea" rows={1} />
-            </FormGroup>
-          );
-        });
+  isTechnician() {
+    if (this.state.isTechnician === true) {
+      return (
+        <FormGroup className="userId" controlId="type">
+          <FormLabel>Type</FormLabel>
+          <FormControl
+            as="select"
+            size="lg"
+            value={this.state.type}
+            onChange={this.handleChange}
+          >
+            {this.state.types}
+          </FormControl>
+        </FormGroup>
+      );
+    }
+  }
 
-        this.setState({
-          attributes: attributes,
-        }),
-          () => console.log();
-      });
+  toggleTechnician() {
+    this.getTypes();
+    this.setState({
+      isTechnician: !this.state.isTechnician,
+    });
   }
 
   render() {
     return (
       <div>
         <h1 id="justice">
-          <b>Add New Machine</b>
+          <b>Add New Employee</b>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>
-          <FormGroup className="userId" controlId="type">
-            <FormLabel>Machine Type</FormLabel>
-            <FormControl as="select" size="lg">
-              {this.state.types}
-            </FormControl>
+          <FormGroup className="userId" controlId="name">
+            <FormLabel>Name</FormLabel>
+            <FormControl
+              autoFocus
+              type="name"
+              value={this.state.name}
+              onChange={this.handleChange}
+            />
           </FormGroup>
 
-          {this.state.attributes}
-
+          <FormGroup controlId="isTechnician">
+            <FormLabel>Technician</FormLabel>
+            <FormControl
+              autoFocus
+              type="checkbox"
+              value={this.state.type}
+              onChange={this.toggleTechnician}
+            />
+          </FormGroup>
+          {this.isTechnician()}
           <Button
             block
             disabled={!this.validateForm()}
             type="submit"
             onClick={this.onSubmit}
           >
-            Agregar
+            Add
           </Button>
         </form>
       </div>
     );
   }
 }
-export default withRouter(NewMachine);

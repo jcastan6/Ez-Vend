@@ -1,4 +1,4 @@
-// repeating tasks with an optionally scheduled reminder, this is the definition of the task
+// repeating tasks with a scheduled reminder, this is the global definition of the task
 const { UUIDV4, UUIDV1, MACADDR } = require("sequelize");
 
 module.exports = (sequelize, Sequelize) => {
@@ -29,8 +29,8 @@ module.exports = (sequelize, Sequelize) => {
   });
 
   maintenanceTask.associate = (models) => {
-    maintenanceTask.hasMany(models.maintenance, {
-      as: "tasks",
+    maintenanceTask.hasMany(models.maintenanceLog, {
+      as: "logs",
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     });

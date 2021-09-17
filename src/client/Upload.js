@@ -5,7 +5,7 @@ import {
   FormControl,
   FormLabel,
   Button,
-  Container
+  Container,
 } from "react-bootstrap";
 
 import Header from "./Components/Header";
@@ -20,7 +20,7 @@ export default class Upload extends Component {
       image: [],
       tags: [],
       tagText: "",
-      valid: false
+      valid: false,
     };
     this.handleRouteChange = this.handleRouteChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -28,13 +28,13 @@ export default class Upload extends Component {
     this.removeTag = this.removeTag.bind(this);
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
     });
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     const formData = new FormData();
     formData.append("image", this.state.image[0]);
     formData.append("userid", this.state.user);
@@ -45,24 +45,24 @@ export default class Upload extends Component {
     fetch("http://localhost:4000/images/new", {
       method: "POST",
       credentials: "same-origin",
-      body: formData
+      body: formData,
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.status === 401) {
           alert("Unable to Upload");
         } else {
           this.handleRouteChange(res.post.post.postid);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   };
 
   handleRouteChange(postid) {
     this.props.history.push({
-      pathname: `/Post/${JSON.stringify(postid)}`
+      pathname: `/Post/${JSON.stringify(postid)}`,
     });
   }
 
@@ -70,12 +70,12 @@ export default class Upload extends Component {
     return this.state.title.length > 0 && this.state.image;
   }
 
-  addFile = event => {
+  addFile = (event) => {
     console.log(event.target.files[0]);
     this.state.image.push(event.target.files[0]);
     this.setState(
       {
-        valid: true
+        valid: true,
       },
       () => console.log()
     );
@@ -86,7 +86,7 @@ export default class Upload extends Component {
       this.state.tags.push(this.state.tagText);
       this.setState(
         {
-          tagText: ""
+          tagText: "",
         },
         () => console.log()
       );
@@ -100,7 +100,7 @@ export default class Upload extends Component {
 
     this.setState(
       {
-        tags: newTags
+        tags: newTags,
       },
       () => console.log()
     );
@@ -119,7 +119,6 @@ export default class Upload extends Component {
   render() {
     return (
       <div>
-        <Header />
         <Form>
           <FormGroup className="title" controlId="title">
             <FormLabel>Title</FormLabel>

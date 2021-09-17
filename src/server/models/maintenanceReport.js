@@ -1,17 +1,24 @@
+const bcrypt = require("bcrypt");
+
+// reports for corrective maintenances to-do (emergency repairs etc)
 module.exports = (sequelize, Sequelize) => {
-  const employee = sequelize.define("employee", {
+  const maintenanceReport = sequelize.define("maintenanceReport", {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    task: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    isTechnician: {
+    priority: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+    },
+    completed: {
       type: Sequelize.BOOLEAN,
-      allowNull: false,
+      defaultValue: false,
     },
     createdAt: {
       type: Sequelize.DATE,
@@ -23,12 +30,11 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
 
-  employee.associate = (models) => {
-    employee.belongsTo(models.machineType, {
-      as: "machineType",
+  maintenanceReport.associate = (models) => {
+    maintenanceReport.belongsTo(models.employee, {
+      as: "employee",
       onUpdate: "CASCADE",
     });
   };
-
-  return employee;
+  return maintenanceReport;
 };

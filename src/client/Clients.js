@@ -55,7 +55,6 @@ export default class Clients extends Component {
   render() {
     return (
       <div>
-        <Header />
         <Jumbotron>
           <h1>All of your clients, listed by last added</h1>
           <p>clicking on a client will give you more details</p>

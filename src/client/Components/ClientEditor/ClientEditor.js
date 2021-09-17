@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import "../Definitions.css";
 
-class TaskEditor extends Component {
+class ClientEditor extends Component {
   constructor(props) {
     super(props);
 
@@ -27,7 +27,23 @@ class TaskEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+
     fetch("http://localhost:4000/clients/editClient", {
+      method: "POST",
+      credentials: "same-origin",
+      body: JSON.stringify(this.state),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.props.getClients();
+      });
+  };
+
+  delete = () => {
+    fetch("http://localhost:4000/clients/deleteClient", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -49,12 +65,12 @@ class TaskEditor extends Component {
     return (
       <div className="tab-panel">
         <h1 id="justice">
-          <b>Edit Task</b>
+          <b>Edit Client</b>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit} className="body">
-          <FormGroup controlId="task">
-            <FormLabel>Task</FormLabel>
+          <FormGroup controlId="name">
+            <FormLabel>Name</FormLabel>
             <FormControl
               autoFocus
               type="type"
@@ -71,9 +87,17 @@ class TaskEditor extends Component {
           >
             Update
           </Button>
+          <Button
+            block
+            disabled={!this.validateForm()}
+            variant="danger"
+            onClick={this.delete}
+          >
+            Delete
+          </Button>
         </form>
       </div>
     );
   }
 }
-export default withRouter(TaskEditor);
+export default withRouter(ClientEditor);

@@ -5,3 +5,28 @@
 body {
   font-family: "Montserrat", sans-serif;
 }
+
+.definition-tabs {
+  height: auto;
+  width: max-content;
+  max-height: 25rem;
+  overflow-y: scroll;
+  border-right: 1px solid red;
+  scrollbar-width: none;
+}
+
+.body {
+  padding-right: 50px;
+  padding-left: 50px;
+  padding-top: 10px;
+}
+
+.machines-table {
+  border-color: black;
+  border-radius: 1px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.table {
+  border-radius: 4px;
+}

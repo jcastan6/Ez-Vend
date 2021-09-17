@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import Modal from "react-modal";
 import { Container, Jumbotron, Row, Col, Button } from "react-bootstrap";
 import DataTableExtensions from "react-data-table-component-extensions";
-import Header from "./Components/Header/Header";
-import { retrieveCookie } from "./Components/Cookies";
-import MachineCard from "./Components/MachineCard/MachineCard";
-import NewRoute from "./Components/Routes/NewRoute";
+
+import ReportMaintenance from "../Report/ReportMaintenance";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
 
-export default class Routes extends Component {
+export default class Maintenances extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,6 +26,18 @@ export default class Routes extends Component {
 
   handleCloseModal() {
     this.setState({ showModal: false });
+  }
+
+  getMaintenanceReports() {
+    fetch(`http://localhost:4000/routes/getAll/`, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((res) => {});
   }
 
   getRoutes() {
@@ -136,7 +146,6 @@ export default class Routes extends Component {
           </Button>
           <br />
           <br />
-          <NewRoute getRoutes={this.getRoutes} route={route} />
         </Modal>
       );
     });
@@ -156,12 +165,9 @@ export default class Routes extends Component {
             </Button>
             <br />
             <br />
-            <NewRoute getRoutes={this.getRoutes} />
           </Modal>
           <Jumbotron>
-            <h1>Routes</h1>
-            {this.renderRoutes()}
-            {this.renderRouteModals()}
+            <h1>Maintenances</h1>
           </Jumbotron>
         </div>
       </div>

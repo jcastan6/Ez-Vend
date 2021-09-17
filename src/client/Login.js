@@ -6,7 +6,7 @@ import {
   FormControl,
   FormLabel,
   Image,
-  Carousel
+  Carousel,
 } from "react-bootstrap";
 
 import { saveCookie } from "./Components/Cookies";
@@ -17,28 +17,28 @@ class Login extends Component {
     this.handleRouteChange = this.handleRouteChange.bind(this);
     this.state = {
       userid: "",
-      password: ""
+      password: "",
     };
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
     });
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     fetch("http://localhost:4000/users/login", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.status === 401) {
           alert("Sorry please check log-in credentials");
         } else if (res.password === true) {
@@ -49,7 +49,7 @@ class Login extends Component {
           throw error;
         }
       })
-      .catch(err => {
+      .catch((err) => {
         alert("Error logging in please try again");
         console.error(err);
       });
