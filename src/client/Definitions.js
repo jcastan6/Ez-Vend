@@ -278,46 +278,49 @@ export default class Definitions extends Component {
 
   render() {
     return (
-      <div className="body">
-        <Jumbotron>
-          <Container fluid>
-            <h1>Maintenances </h1>
-            <Tabs defaultTab="vertical-tab-one" vertical>
-              <TabList className="definition-tabs">
-                {this.renderTypes()}
-              </TabList>
-              {this.renderPanels()}
-            </Tabs>
-          </Container>
-        </Jumbotron>
-        <Jumbotron>
-          <Container fluid>
-            <h1>Clients</h1>
-            <Tabs
-              defaultTab="vertical-tab-one"
-              vertical
-              className="vertical-tabs"
-            >
-              <TabList>{this.renderClientTypes()}</TabList>
-              {this.renderClientPanels()}
-            </Tabs>
-            <p />
-          </Container>
-        </Jumbotron>
-        <Jumbotron>
-          <Container fluid>
-            <h1>Employees</h1>
-            <p />
-            <Tabs
-              defaultTab="vertical-tab-one"
-              vertical
-              className="vertical-tabs"
-            >
-              <TabList>{this.renderEmployees()}</TabList>
-              {this.renderEmployeePanels()}
-            </Tabs>
-          </Container>
-        </Jumbotron>
+      <div>
+        <Header></Header>
+        <div className="body">
+          <Jumbotron>
+            <Container fluid>
+              <h1>Maintenances </h1>
+              <Tabs defaultTab="vertical-tab-one" vertical>
+                <TabList className="definition-tabs">
+                  {this.renderTypes()}
+                </TabList>
+                {this.renderPanels()}
+              </Tabs>
+            </Container>
+          </Jumbotron>
+          <Jumbotron>
+            <Container fluid>
+              <h1>Clients</h1>
+              <Tabs
+                defaultTab="vertical-tab-one"
+                vertical
+                className="vertical-tabs"
+              >
+                <TabList>{this.renderClientTypes()}</TabList>
+                {this.renderClientPanels()}
+              </Tabs>
+              <p />
+            </Container>
+          </Jumbotron>
+          <Jumbotron>
+            <Container fluid>
+              <h1>Employees</h1>
+              <p />
+              <Tabs
+                defaultTab="vertical-tab-one"
+                vertical
+                className="vertical-tabs"
+              >
+                <TabList>{this.renderEmployees()}</TabList>
+                {this.renderEmployeePanels()}
+              </Tabs>
+            </Container>
+          </Jumbotron>
+        </div>
       </div>
     );
   }

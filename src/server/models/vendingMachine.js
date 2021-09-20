@@ -48,6 +48,11 @@ module.exports = (sequelize, Sequelize) => {
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     });
+    vendingMachine.hasMany(models.maintenanceHistory, {
+      as: "history",
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
   };
   return vendingMachine;
 };

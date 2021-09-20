@@ -19,10 +19,17 @@ module.exports = (sequelize, Sequelize) => {
   });
 
   maintenanceHistory.associate = (models) => {
-    maintenanceHistory.hasOne(models.employee, {
+    models.maintenanceHistory.belongsTo(models.maintenanceLog, {
+      as: "maintenanceType",
+      onUpdate: "CASCADE",
+    });
+    models.maintenanceHistory.belongsTo(models.maintenanceReport, {
+      as: "maintenanceReport",
+      onUpdate: "CASCADE",
+    });
+    models.maintenanceHistory.belongsTo(models.employee, {
       as: "employee",
       onUpdate: "CASCADE",
-      onDelete: "CASCADE",
     });
   };
   return maintenanceHistory;

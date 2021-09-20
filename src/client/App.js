@@ -12,6 +12,7 @@ import Search from "./Search";
 import Header from "./Components/Header/Header";
 
 import MobileHome from "./Mobile-Components/Home";
+import ReportMaintenance from "./Components/Report/ReportMaintenance.js";
 
 import "./app.css";
 
@@ -23,7 +24,6 @@ export default class Routing extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Header />
         <Route
           exact
           path="/"
@@ -36,7 +36,8 @@ export default class Routing extends Component {
         <Route component={Definitions} path="/definitions" />
         <Route component={Routes} path="/routes" />
 
-        <Route component={MobileHome} path="mobile/" />
+        <Route component={MobileHome} path="/mobile" />
+        <Route component={ReportMaintenance} path="/report" />
       </BrowserRouter>
     );
   }

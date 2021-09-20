@@ -11,6 +11,9 @@ import MachineEditor from "./Components/Machines/MachineEditor";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import "./app.css";
+import MaintenanceLogs from "./Components/Maintenances/MaintenanceLogs";
+import MaintenanceHistory from "./Components/Maintenances/MaintenanceHistory";
+import MaintenanceReports from "./Components/Maintenances/MaintenanceReports";
 
 export default class Machines extends Component {
   constructor(props) {
@@ -45,7 +48,6 @@ export default class Machines extends Component {
       .then((response) => response.json())
       .then((res) => {
         res.forEach((machine) => {
-          console.log(machine);
           machine.edit = (
             <Button onClick={() => this.handleOpenModal(machine.id)}>
               Edit
@@ -115,9 +117,9 @@ export default class Machines extends Component {
         sortable: true,
       },
       {
-        name: "Reports",
+        name: "Open Reports",
         selector: "reports",
-        sortable: false,
+        sortable: true,
       },
       {
         name: "Edit",
@@ -175,7 +177,15 @@ export default class Machines extends Component {
             </Col>
             <Col>
               <Jumbotron>
-                <Card body> heheh</Card>
+                <MaintenanceLogs machine={machine}></MaintenanceLogs>
+              </Jumbotron>
+              <Jumbotron>
+                <MaintenanceReports machine={machine}></MaintenanceReports>
+              </Jumbotron>
+            </Col>
+            <Col>
+              <Jumbotron>
+                <MaintenanceHistory machine={machine}></MaintenanceHistory>
               </Jumbotron>
             </Col>
           </Row>
@@ -187,6 +197,7 @@ export default class Machines extends Component {
   render() {
     return (
       <div>
+        <Header></Header>
         <div className="body">
           <Jumbotron>
             <Modal

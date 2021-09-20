@@ -12,8 +12,9 @@ import {
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
+import maintenanceHistory from "../../../server/models/maintenanceHistory";
 
-class MaintenanceLogs extends Component {
+class MaintenanceHistory extends Component {
   constructor(props) {
     super(props);
     this.handleRouteChange = this.handleRouteChange.bind(this);
@@ -30,7 +31,7 @@ class MaintenanceLogs extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://localhost:4000/machines/getMaintenanceLogs/`, {
+    fetch(`http://localhost:4000/machines/getMaintenanceHistory/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",
@@ -55,24 +56,24 @@ class MaintenanceLogs extends Component {
         sortable: true,
       },
       {
-        name: "Days since last done",
-        selector: "daysCount",
+        name: "Date",
+        selector: "createdAt",
         sortable: true,
       },
       {
-        name: "Past Due",
+        name: "Type",
         selector: "pastDue",
         sortable: true,
       },
       {
-        name: "Remind Every",
+        name: "Completed by",
         selector: "reminderAt",
         sortable: true,
       },
     ];
     return (
       <Card body>
-        <Card.Title>Maintenances</Card.Title>
+        <Card.Title>Maintenance History</Card.Title>
         <DataTableExtensions
           filterHidden={false}
           columns={columns}
@@ -95,4 +96,4 @@ class MaintenanceLogs extends Component {
     return <div>{this.renderTasks()}</div>;
   }
 }
-export default withRouter(MaintenanceLogs);
+export default withRouter(MaintenanceHistory);

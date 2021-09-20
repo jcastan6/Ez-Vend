@@ -16,7 +16,7 @@ class MachineEditor extends Component {
     this.state = {
       id: this.props.machine.id,
       machineNo: this.props.machine.machineNo,
-      machineType: this.props.machineType,
+      machineType: this.props.machine.type,
       clientName: this.props.machine.client,
       serialNo: this.props.machine.serialNo,
       model: this.props.machine.model,
@@ -80,12 +80,7 @@ class MachineEditor extends Component {
       .then((res) => {
         let types = [];
 
-        res.forEach((element) => {
-          types.push(<option>{element.type}</option>);
-        });
-
         this.setState({
-          types: types,
           machineType: types[0].props.children,
         }),
           () => console.log();
@@ -150,7 +145,8 @@ class MachineEditor extends Component {
           <FormGroup className="userId" controlId="machineType">
             <FormLabel>Machine Type</FormLabel>
             <FormControl
-              as="select"
+              as="Input"
+              readOnly
               size="lg"
               value={this.state.machineType}
               onChange={this.handleChange}

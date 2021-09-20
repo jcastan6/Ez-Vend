@@ -417,64 +417,6 @@ class NewRoute extends Component {
                 </Button>
                 <br />
                 <br />
-                {/* <Card body>
-                  <Form>
-                    <Form.Label>Days</Form.Label>
-                    {["checkbox"].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
-                        <Form.Check
-                          inline
-                          label="Monday"
-                          name="group1"
-                          type={type}
-                          id={`inline-${type}-1`}
-                        />
-                        <Form.Check
-                          inline
-                          label="Tuesday"
-                          name="group1"
-                          type={type}
-                          id={`inline-${type}-2`}
-                        />
-                        <Form.Check
-                          inline
-                          label="Wednesday"
-                          name="group1"
-                          type={type}
-                          id={`inline-${type}-3`}
-                        />
-                        <Form.Check
-                          inline
-                          label="Thursday"
-                          name="group1"
-                          type={type}
-                          id={`inline-${type}-4`}
-                        />
-                        <Form.Check
-                          inline
-                          label="Friday"
-                          name="group1"
-                          type={type}
-                          id={`inline-${type}-5`}
-                        />
-                        <Form.Check
-                          inline
-                          label="Saturday"
-                          name="group1"
-                          type={type}
-                          id={`inline-${type}-6`}
-                        />
-                        <Form.Check
-                          inline
-                          label="Sunday"
-                          name="group1"
-                          type={type}
-                          id={`inline-${type}-7`}
-                        />
-                      </div>
-                    ))}
-                  </Form>
-                </Card> */}
                 <Card body>
                   <Form.Group controlId="routeName">
                     <Form.Label>Name</Form.Label>

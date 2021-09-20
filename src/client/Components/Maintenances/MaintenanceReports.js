@@ -12,8 +12,9 @@ import {
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
+import maintenanceHistory from "../../../server/models/maintenanceHistory";
 
-class MaintenanceLogs extends Component {
+class MaintenanceReports extends Component {
   constructor(props) {
     super(props);
     this.handleRouteChange = this.handleRouteChange.bind(this);
@@ -30,7 +31,7 @@ class MaintenanceLogs extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://localhost:4000/machines/getMaintenanceLogs/`, {
+    fetch(`http://localhost:4000/machines/getMachineReports/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",
@@ -40,6 +41,9 @@ class MaintenanceLogs extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
+        res.forEach((element) => {
+          element.createdAt = String(element.createdAt).split("T")[0];
+        });
         this.setState({
           maintenances: res,
         }),
@@ -55,24 +59,14 @@ class MaintenanceLogs extends Component {
         sortable: true,
       },
       {
-        name: "Days since last done",
-        selector: "daysCount",
-        sortable: true,
-      },
-      {
-        name: "Past Due",
-        selector: "pastDue",
-        sortable: true,
-      },
-      {
-        name: "Remind Every",
-        selector: "reminderAt",
+        name: "Reported",
+        selector: "createdAt",
         sortable: true,
       },
     ];
     return (
       <Card body>
-        <Card.Title>Maintenances</Card.Title>
+        <Card.Title>Maintenance Reports</Card.Title>
         <DataTableExtensions
           filterHidden={false}
           columns={columns}
@@ -95,4 +89,4 @@ class MaintenanceLogs extends Component {
     return <div>{this.renderTasks()}</div>;
   }
 }
-export default withRouter(MaintenanceLogs);
+export default withRouter(MaintenanceReports);

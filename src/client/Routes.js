@@ -146,6 +146,7 @@ export default class Routes extends Component {
   render() {
     return (
       <div>
+        <Header></Header>
         <div className="body">
           <Modal
             shouldCloseOnOverlayClick
