@@ -1,4 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
+  const tasks = sequelize.define("employeeTasks", {
+    priority: {
+      type: Sequelize.INTEGER,
+    },
+  });
   const route = sequelize.define("route", {
     id: {
       type: Sequelize.INTEGER,
@@ -17,25 +22,14 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
-
-    days: {
-      type: Sequelize.STRING,
-      defaultValue: "[]",
-      get() {
-        return JSON.parse(this.getDataValue("days"));
-      },
-      set(val) {
-        return this.setDataValue("days", JSON.stringify(val));
-      },
-    },
   });
   route.associate = (models) => {
     route.belongsToMany(models.employee, {
       through: "employeeRoutes",
       onUpdate: "CASCADE",
     });
-    route.belongsToMany(models.vendingMachine, {
-      through: "machineRoutes",
+    route.belongsToMany(models.maintenanceTask, {
+      through: tasks,
       onUpdate: "CASCADE",
     });
   };

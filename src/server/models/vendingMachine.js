@@ -37,17 +37,12 @@ module.exports = (sequelize, Sequelize) => {
       onUpdate: "CASCADE",
     });
 
-    vendingMachine.hasMany(models.maintenanceLog, {
-      as: "maintenances",
+    vendingMachine.hasMany(models.maintenanceTask, {
+      as: "tasks",
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     });
 
-    vendingMachine.hasMany(models.maintenanceReport, {
-      as: "reports",
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    });
     vendingMachine.hasMany(models.maintenanceHistory, {
       as: "history",
       onUpdate: "CASCADE",

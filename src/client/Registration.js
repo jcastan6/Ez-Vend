@@ -12,12 +12,12 @@ const formValid = ({ formErrors, ...rest }) => {
   let valid = true;
 
   // validate form errors being empty
-  Object.values(formErrors).forEach(val => {
+  Object.values(formErrors).forEach((val) => {
     val.length > 0 && (valid = false);
   });
 
   // validate the form was filled out
-  Object.values(rest).forEach(val => {
+  Object.values(rest).forEach((val) => {
     val === null && (valid = false);
   });
 
@@ -36,13 +36,13 @@ export default class Registration extends Component {
         email: "",
         password: "",
         confirmPassword: "",
-        userid: ""
+        userid: "",
       },
-      isActive: false
+      isActive: false,
     };
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     const formErrors = { ...this.state.formErrors };
@@ -76,7 +76,7 @@ export default class Registration extends Component {
     );
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     console.log("submitted");
     e.preventDefault();
     if (formValid(this.state)) {
@@ -86,10 +86,10 @@ export default class Registration extends Component {
         credentials: "same-origin",
         body: JSON.stringify(this.state),
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-        .then(res => {
+        .then((res) => {
           if (res.status === 200) {
             alert("account created");
           } else {
@@ -97,7 +97,7 @@ export default class Registration extends Component {
             throw error;
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           alert("unable to register account");
         });
@@ -116,7 +116,7 @@ export default class Registration extends Component {
 
   toggleModal = () => {
     this.setState({
-      isActive: !this.state.isActive
+      isActive: !this.state.isActive,
     });
   };
 
@@ -208,7 +208,7 @@ export default class Registration extends Component {
                   onRequestClose={this.toggleModal}
                   style={{
                     overlay: {
-                      opacity: "1"
+                      opacity: "1",
                     },
                     content: {
                       position: "absolute",
@@ -218,8 +218,8 @@ export default class Registration extends Component {
                       height: "70%",
                       left: "30%",
                       border: "2px solid gray",
-                      borderRadius: "50px 20px"
-                    }
+                      borderRadius: "50px 20px",
+                    },
                   }}
                 >
                   <div className="wrap3">

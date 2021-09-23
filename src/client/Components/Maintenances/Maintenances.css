@@ -1,0 +1,21 @@
+@media screen and (max-width: 900px) {
+  .modal-form {
+    padding-right: 20%;
+    padding-left: 20%;
+    padding-top: 5%;
+    padding-bottom: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+@media screen and (min-width: 900px) {
+  .modal-form {
+    padding-right: 30%;
+    padding-left: 30%;
+    padding-top: 2%;
+    padding-bottom: 100%;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+.add {
+  float: right;
+}

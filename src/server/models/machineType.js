@@ -17,12 +17,5 @@ module.exports = (sequelize, Sequelize) => {
       defaultValue: sequelize.literal("NOW()"),
     },
   });
-  machineType.associate = (models) => {
-    machineType.hasMany(models.maintenanceTask, {
-      as: "tasks",
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    });
-  };
   return machineType;
 };

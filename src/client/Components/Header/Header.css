@@ -1,7 +1,11 @@
 .navbar {
+  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .nav-link.active {
+  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   /* hot pink, bold text for active tab title */
   color: #de1820 !important;
   font-weight: bolder;

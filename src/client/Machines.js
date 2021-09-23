@@ -4,8 +4,8 @@ import { retrieveCookie } from "./Components/Cookies";
 import Modal from "react-modal";
 import MachineCard from "./Components/MachineCard/MachineCard";
 import NewMachine from "./Components/Machines/NewMachine";
-import { Container, Jumbotron, Row, Col, Button, Card } from "react-bootstrap";
-import { useTable } from "react-table";
+import { Jumbotron, Row, Col, Button, Card, Container } from "react-bootstrap";
+
 import DataTable, { createTheme } from "react-data-table-component";
 import MachineEditor from "./Components/Machines/MachineEditor";
 import DataTableExtensions from "react-data-table-component-extensions";
@@ -14,7 +14,8 @@ import "./app.css";
 import MaintenanceLogs from "./Components/Maintenances/MaintenanceLogs";
 import MaintenanceHistory from "./Components/Maintenances/MaintenanceHistory";
 import MaintenanceReports from "./Components/Maintenances/MaintenanceReports";
-
+import { ThemeConsumer } from "styled-components";
+import { BsThreeDotsVertical } from "react-icons/bs";
 export default class Machines extends Component {
   constructor(props) {
     super(props);
@@ -49,9 +50,9 @@ export default class Machines extends Component {
       .then((res) => {
         res.forEach((machine) => {
           machine.edit = (
-            <Button onClick={() => this.handleOpenModal(machine.id)}>
-              Edit
-            </Button>
+            <BsThreeDotsVertical
+              onClick={() => this.handleOpenModal(machine.id)}
+            ></BsThreeDotsVertical>
           );
 
           if (!machine.type) {
@@ -78,33 +79,39 @@ export default class Machines extends Component {
   }
 
   renderMachines() {
-    createTheme("machines", {
-      text: {
-        primary: "#00000",
-        secondary: "#000000",
-      },
-
-      background: {
-        default: "rgba(0,0,0,0)",
-      },
+    const customStyles = {
       context: {
-        background: "rgba(0,0,0,.2)",
-        text: "#000000",
+        background: "#cb4b16",
+        text: "#FFFFFF",
       },
-      divider: {
-        default: "rgba(0,0,0,.2)",
+      headCells: {
+        style: {
+          fontSize: "14px",
+        },
       },
-      action: {
-        button: "rgba(0,0,0,1)",
-        hover: "rgba(0,0,0,.08)",
-        disabled: "rgba(0,0,0,.12)",
+      rows: {
+        highlightOnHoverStyle: {
+          backgroundColor: "rgb(230, 244, 244)",
+          borderBottomColor: "#FFFFFF",
+          outline: "1px solid #FFFFFF",
+        },
       },
-    });
+      pagination: {
+        style: {
+          border: "none",
+        },
+      },
+    };
     const columns = [
       {
         name: "MachineNo",
         selector: "machineNo",
         sortable: true,
+        style: {
+          color: "#202124",
+          fontSize: "14px",
+          fontWeight: 500,
+        },
       },
       {
         name: "Type",
@@ -125,6 +132,8 @@ export default class Machines extends Component {
         name: "Edit",
         selector: "edit",
         sortable: false,
+        right: true,
+        Button: true,
       },
     ];
 
@@ -135,17 +144,13 @@ export default class Machines extends Component {
         data={this.state.machines}
       >
         <DataTable
+          title="Machines"
           data={this.state.machines}
-          theme="machines"
-          noHeader
+          customStyles={customStyles}
           columns={columns}
           pagination
-          subHeader
-          subHeaderComponent={
-            <Button onClick={() => this.handleOpenModal("new")}>
-              Add Machines
-            </Button>
-          }
+          pointerOnHover
+          highlightOnHover
         />
       </DataTableExtensions>
     );
@@ -166,27 +171,21 @@ export default class Machines extends Component {
           <br />
           <Row>
             <Col>
-              <Jumbotron>
-                <Card body>
-                  <MachineEditor
-                    machine={machine}
-                    getMachines={this.getMachines}
-                  ></MachineEditor>
-                </Card>
-              </Jumbotron>
+              <Card body>
+                <MachineEditor
+                  machine={machine}
+                  getMachines={this.getMachines}
+                ></MachineEditor>
+              </Card>
             </Col>
             <Col>
-              <Jumbotron>
-                <MaintenanceLogs machine={machine}></MaintenanceLogs>
-              </Jumbotron>
-              <Jumbotron>
-                <MaintenanceReports machine={machine}></MaintenanceReports>
-              </Jumbotron>
+              <MaintenanceLogs machine={machine}></MaintenanceLogs>
+              <br></br>
+              <MaintenanceReports machine={machine}></MaintenanceReports>
             </Col>
+
             <Col>
-              <Jumbotron>
-                <MaintenanceHistory machine={machine}></MaintenanceHistory>
-              </Jumbotron>
+              <MaintenanceHistory machine={machine}></MaintenanceHistory>
             </Col>
           </Row>
         </Modal>
@@ -199,24 +198,38 @@ export default class Machines extends Component {
       <div>
         <Header></Header>
         <div className="body">
-          <Jumbotron>
-            <Modal
-              shouldCloseOnOverlayClick
-              isOpen={this.state.showModal === "new"}
-            >
-              <Button variant="outline-primary" onClick={this.handleCloseModal}>
-                X
-              </Button>
+          <Container fluid>
+            <Row>
+              <Col lg={2}>
+                <Button onClick={() => this.handleOpenModal("new")}>
+                  Add Machines
+                </Button>
+              </Col>
+              <br></br>
+              <br></br>
+              <Modal
+                isOpen={this.state.showModal === "new"}
+                className="modal-form"
+              >
+                <Card>
+                  <Card.Body>
+                    <Button variant="secondary" onClick={this.handleCloseModal}>
+                      x
+                    </Button>
+                    <NewMachine getMachines={this.getMachines} />
+                  </Card.Body>
+                </Card>
+              </Modal>
 
-              <NewMachine getMachines={this.getMachines} />
-            </Modal>
-            <h1>Machines</h1>
-            <div className="table">
-              {this.machineModals()}
+              <Col>
+                <div className="table">
+                  {this.machineModals()}
 
-              {this.renderMachines()}
-            </div>
-          </Jumbotron>
+                  {this.renderMachines()}
+                </div>
+              </Col>
+            </Row>
+          </Container>
         </div>
       </div>
     );

@@ -5,7 +5,7 @@ import { Tab, TabPanel, Tabs, TabList } from "react-web-tabs";
 import "./MachineMaintenances.css";
 import { BsFillPlusSquareFill } from "react-icons/bs";
 import "react-web-tabs/dist/react-web-tabs.css";
-import NewMaintenance from "../NewMaintenance";
+import NewMaintenance from "../Maintenances/NewMaintenance";
 import TaskEditor from "../TaskEditor/TaskEditor";
 import "../Definitions.css";
 class MachineMaintenances extends Component {

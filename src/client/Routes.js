@@ -8,6 +8,7 @@ import MachineCard from "./Components/MachineCard/MachineCard";
 import NewRoute from "./Components/Routes/NewRoute";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 export default class Routes extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export default class Routes extends Component {
 
   handleCloseModal() {
     this.setState({ showModal: false });
+    this.getRoutes();
   }
 
   getRoutes() {
@@ -42,9 +44,12 @@ export default class Routes extends Component {
       .then((res) => {
         res.forEach((route) => {
           route.edit = (
-            <Button onClick={() => this.handleOpenModal(route.id)}>Edit</Button>
+            <BsThreeDotsVertical
+              onClick={() => this.handleOpenModal(route.id)}
+            />
           );
         });
+        console.log(res);
 
         this.setState(
           {
@@ -86,8 +91,17 @@ export default class Routes extends Component {
         sortable: true,
       },
       {
-        name: "Machines",
-        selector: "vendingMachines.length",
+        name: "Tasks Assigned",
+        selector: "maintenanceTasks.length",
+        sortable: true,
+      },
+      {
+        name: "Employee",
+        selector: (row) => {
+          if (row.employees[0]) {
+            return row.employees[0].name;
+          }
+        },
         sortable: true,
       },
       {
@@ -97,6 +111,29 @@ export default class Routes extends Component {
         right: true,
       },
     ];
+    const customStyles = {
+      context: {
+        background: "#cb4b16",
+        text: "#FFFFFF",
+      },
+      headCells: {
+        style: {
+          fontSize: "14px",
+        },
+      },
+      rows: {
+        highlightOnHoverStyle: {
+          backgroundColor: "rgb(230, 244, 244)",
+          borderBottomColor: "#FFFFFF",
+          outline: "1px solid #FFFFFF",
+        },
+      },
+      pagination: {
+        style: {
+          border: "none",
+        },
+      },
+    };
 
     return (
       <div className="table">
@@ -107,16 +144,11 @@ export default class Routes extends Component {
         >
           <DataTable
             data={this.state.routes}
-            theme="machines"
+            customStyles={customStyles}
             noHeader
             columns={columns}
             pagination
-            subHeader
-            subHeaderComponent={
-              <Button onClick={() => this.handleOpenModal("new")}>
-                New Route
-              </Button>
-            }
+            title="Routes"
           />
         </DataTableExtensions>
       </div>
@@ -148,22 +180,34 @@ export default class Routes extends Component {
       <div>
         <Header></Header>
         <div className="body">
-          <Modal
-            shouldCloseOnOverlayClick
-            isOpen={this.state.showModal === "new"}
-          >
-            <Button variant="outline-primary" onClick={this.handleCloseModal}>
-              X
-            </Button>
-            <br />
-            <br />
-            <NewRoute getRoutes={this.getRoutes} />
-          </Modal>
-          <Jumbotron>
-            <h1>Routes</h1>
-            {this.renderRoutes()}
-            {this.renderRouteModals()}
-          </Jumbotron>
+          <Container fluid>
+            <Row>
+              <Col lg={2}>
+                <Button onClick={() => this.handleOpenModal("new")}>
+                  New Route
+                </Button>
+              </Col>
+              <Col>
+                <Modal
+                  shouldCloseOnOverlayClick
+                  isOpen={this.state.showModal === "new"}
+                >
+                  <Button
+                    variant="outline-primary"
+                    onClick={this.handleCloseModal}
+                  >
+                    X
+                  </Button>
+                  <br />
+                  <br />
+                  <NewRoute getRoutes={this.getRoutes} />
+                </Modal>
+
+                {this.renderRoutes()}
+                {this.renderRouteModals()}
+              </Col>
+            </Row>
+          </Container>
         </div>
       </div>
     );

@@ -1,5 +1,4 @@
-// individual maintenance tracker. Each machine has one for each of it's specified tasks.
-// Keeps track of how many days have passed since task was last done
+// keeps track of tasks done/completed, who completed them
 
 module.exports = (sequelize, Sequelize) => {
   const maintenanceHistory = sequelize.define("maintenanceHistory", {
@@ -19,12 +18,8 @@ module.exports = (sequelize, Sequelize) => {
   });
 
   maintenanceHistory.associate = (models) => {
-    models.maintenanceHistory.belongsTo(models.maintenanceLog, {
-      as: "maintenanceType",
-      onUpdate: "CASCADE",
-    });
-    models.maintenanceHistory.belongsTo(models.maintenanceReport, {
-      as: "maintenanceReport",
+    models.maintenanceHistory.belongsTo(models.maintenanceTask, {
+      as: "maintenance",
       onUpdate: "CASCADE",
     });
     models.maintenanceHistory.belongsTo(models.employee, {

@@ -81,7 +81,7 @@ class MachineEditor extends Component {
         let types = [];
 
         this.setState({
-          machineType: types[0].props.children,
+          machineType: res,
         }),
           () => console.log();
       });

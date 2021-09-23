@@ -144,19 +144,7 @@ export default class Definitions extends Component {
         <NewType getTypes={this.getTypes} history={this.props.history} />
       </TabPanel>
     );
-    if (this.state.types.length >= 1) {
-      for (let i = 0; i < this.state.types.length; i++) {
-        latest.push(
-          <div>
-            <TabPanel tabId={this.state.types[i].type}>
-              <MachineMaintenances
-                type={this.state.types[i].type}
-              ></MachineMaintenances>
-            </TabPanel>
-          </div>
-        );
-      }
-    }
+
     return latest;
   }
 

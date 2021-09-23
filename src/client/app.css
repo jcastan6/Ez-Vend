@@ -1,9 +1,11 @@
 @font-face {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   font-weight: 400;
 }
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif !important;
 }
 
 .definition-tabs {
@@ -15,18 +17,18 @@ body {
   scrollbar-width: none;
 }
 
-.body {
-  padding-right: 50px;
-  padding-left: 50px;
-  padding-top: 10px;
-}
-
-.machines-table {
-  border-color: black;
-  border-radius: 1px;
-  background-color: rgba(0, 0, 0, 0);
-}
-
 .table {
-  border-radius: 4px;
+  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
+  box-shadow: 2px 5px 10px 2px rgb(0 0 0 / 20%);
+}
+
+@media screen and (max-width: 900px) {
+}
+@media screen and (min-width: 900px) {
+  .body {
+    padding-right: 20%;
+    padding-left: 20%;
+    padding-top: 10px;
+  }
 }

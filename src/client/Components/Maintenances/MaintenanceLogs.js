@@ -12,6 +12,8 @@ import {
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
+import NewMaintenance from "./NewMaintenance";
+import TaskEditor from "../TaskEditor/TaskEditor";
 
 class MaintenanceLogs extends Component {
   constructor(props) {
@@ -30,8 +32,10 @@ class MaintenanceLogs extends Component {
   }
 
   getMaintenances() {
+    const get = {};
+    get.machine = this.state.machine;
     fetch(`http://localhost:4000/machines/getMaintenanceLogs/`, {
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(get),
       method: "POST",
       credentials: "same-origin",
       headers: {
@@ -40,6 +44,11 @@ class MaintenanceLogs extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
+        res.forEach((element) => {
+          element.edit = (
+            <TaskEditor task={element} getMaintenances={this.getMaintenances} />
+          );
+        });
         this.setState({
           maintenances: res,
         }),
@@ -53,6 +62,7 @@ class MaintenanceLogs extends Component {
         name: "Task",
         selector: "task",
         sortable: true,
+        grow: 3,
       },
       {
         name: "Days since last done",
@@ -69,10 +79,19 @@ class MaintenanceLogs extends Component {
         selector: "reminderAt",
         sortable: true,
       },
+      {
+        selector: "edit",
+        sortable: false,
+        right: true,
+        button: true,
+      },
     ];
     return (
       <Card body>
-        <Card.Title>Maintenances</Card.Title>
+        <NewMaintenance
+          machine={this.props.machine}
+          getMaintenances={this.getMaintenances}
+        ></NewMaintenance>
         <DataTableExtensions
           filterHidden={false}
           columns={columns}

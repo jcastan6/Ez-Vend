@@ -15,6 +15,7 @@ import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import WeekdayPicker from "reactjs-weekday-picker";
 import "react-day-picker/lib/style.css";
+import "./NewRoute.css";
 const arrayMove = require("array-move");
 import {
   BsFillPlusSquareFill,
@@ -25,46 +26,44 @@ import {
 class NewRoute extends Component {
   constructor(props) {
     super(props);
+
     this.handleRouteChange = this.handleRouteChange.bind(this);
     if (this.props.route) {
       this.state = {
-        machines: [],
         id: this.props.route.id,
         route: [],
         employees: [],
-        types: [],
-        clients: [],
+        tasks: [],
         routeName: this.props.route.name,
         routeEmployees: this.props.route.employees,
-        routeMachines: this.props.route.vendingMachines,
+        routeTasks: this.props.route.maintenanceTasks,
       };
     } else {
       this.state = {
-        machines: [],
         route: [],
         employees: [],
-        types: [],
+        tasks: [],
         clients: [],
         routeName: "",
         routeEmployees: [],
-        routeMachines: [],
+        routeTasks: [],
       };
     }
-    this.getTypes = this.getTypes.bind(this);
-    this.renderMachines = this.renderMachines.bind(this);
-    this.getMachines = this.getMachines.bind(this);
-    this.getClients = this.getClients.bind(this);
+    this.getTasks = this.getTasks.bind(this);
+
     this.getEmployees = this.getEmployees.bind(this);
     this.addEmployee = this.addEmployee.bind(this);
     this.removeEmployee = this.removeEmployee.bind(this);
-    this.renderMachines = this.renderMachines.bind(this);
-    this.removeMachine = this.removeMachine.bind(this);
+    this.renderTasks = this.renderTasks.bind(this);
+    this.removeTask = this.removeTask.bind(this);
     this.reorderMachines = this.reorderMachines.bind(this);
     this.saveRoute = this.saveRoute.bind(this);
+    this.checkTasks = this.checkTasks.bind(this);
+    this.checkTasks();
     this.getEmployees();
-    this.getClients();
-    this.getTypes();
-    this.getMachines();
+
+    this.getTasks();
+    //this.getMachines();
   }
 
   handleChange = (event) => {
@@ -72,6 +71,29 @@ class NewRoute extends Component {
       [event.target.id]: event.target.value,
     });
   };
+
+  checkTasks() {
+    if (this.props.route) {
+      let tasks = this.state.routeTasks;
+
+      tasks.forEach((task) => {
+        task.add = (
+          <a onClick={() => this.addToRoute(task)}>
+            <BsFillPlusSquareFill></BsFillPlusSquareFill>
+          </a>
+        );
+        task.client = task.vendingMachine.client;
+      });
+      tasks.sort((a, b) =>
+        a.employeeTasks.priority > b.employeeTasks.priority ? 1 : -1
+      );
+      console.log(JSON.stringify(tasks));
+      this.setState({
+        routeTasks: tasks,
+      }),
+        () => console.log();
+    }
+  }
 
   saveRoute() {
     if (!this.props.route) {
@@ -107,44 +129,6 @@ class NewRoute extends Component {
     window.location.reload(false);
   }
 
-  getMachines() {
-    fetch(`http://localhost:4000/machines/getAll/`, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        res.forEach((machine) => {
-          machine.add = (
-            <a onClick={() => this.addToRoute(machine)}>
-              <BsFillPlusSquareFill></BsFillPlusSquareFill>
-            </a>
-          );
-
-          if (!machine.type) {
-            machine.type = "";
-          } else {
-            machine.type = machine.type.type;
-          }
-
-          if (!machine.client) {
-            machine.client = "";
-          } else {
-            machine.client = machine.client.name;
-          }
-        });
-        this.setState(
-          {
-            machines: res,
-          },
-          () => console.log()
-        );
-      });
-  }
-
   getEmployees() {
     this.setState({
       employees: [],
@@ -175,8 +159,8 @@ class NewRoute extends Component {
       });
   }
 
-  getTypes() {
-    fetch(`http://localhost:4000/machines/getTypes/`, {
+  getTasks() {
+    fetch(`http://localhost:4000/machines/getAllMaintenanceLogs/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -185,49 +169,32 @@ class NewRoute extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
-        let types = [];
-
-        res.forEach((element) => {
-          types.push(<option>{element.type}</option>);
+        res.forEach((task) => {
+          task.add = (
+            <a onClick={() => this.addToRoute(task)}>
+              <BsFillPlusSquareFill></BsFillPlusSquareFill>
+            </a>
+          );
         });
-
         this.setState({
-          types: types,
-          machineType: types[0].props.children,
+          tasks: res,
         }),
           () => console.log();
       });
   }
 
-  getClients() {
-    fetch(`http://localhost:4000/clients/getAll/`, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        let types = [];
-        types.push(<option>{""}</option>);
-        res.forEach((element) => {
-          types.push(<option>{element.name}</option>);
-        });
-
-        this.setState({
-          clients: types,
-          clientName: types[0].props.children,
-        }),
-          () => console.log();
-      });
-  }
-
-  addToRoute(machine) {
-    let machines = this.state.routeMachines;
-    machines.push(machine);
+  addToRoute(task) {
+    let tasks = this.state.routeTasks;
+    if (task.emergency) {
+      tasks.unshift(task);
+    } else {
+      tasks.push(task);
+    }
+    let allTasks = this.state.tasks;
+    allTasks.splice(allTasks.indexOf(task), 1);
     this.setState({
-      routeMachines: machines,
+      tasks: allTasks,
+      routeTasks: tasks,
     }),
       () => console.log();
   }
@@ -252,19 +219,19 @@ class NewRoute extends Component {
   }
 
   reorderMachines(order, i) {
-    let machines = this.state.routeMachines;
+    let tasks = this.state.routeTasks;
     if (order === "up") {
       if (i !== 0) {
-        machines = arrayMove(machines, i, i - 1);
+        tasks = arrayMove(tasks, i, i - 1);
       }
     }
     if (order === "down") {
-      if (i !== this.state.routeMachines.length) {
-        machines = arrayMove(machines, i, i + 1);
+      if (i !== this.state.routeTasks.length) {
+        tasks = arrayMove(tasks, i, i + 1);
       }
     }
     this.setState({
-      routeMachines: machines,
+      routeTasks: tasks,
     }),
       () => console.log();
   }
@@ -286,26 +253,50 @@ class NewRoute extends Component {
     }
   }
 
-  removeMachine(machine) {
-    let machines = this.state.routeMachines;
+  removeTask(task) {
+    let allTasks = this.state.tasks;
 
-    machines.splice(machines.indexOf(machine), 1);
+    allTasks.push(this.state.routeTasks[task]);
+    let tasks = this.state.routeTasks;
+    tasks.splice(task, 1);
+
     this.setState({
-      routeMachines: machines,
+      tasks: allTasks,
+      routeTasks: tasks,
     }),
       () => console.log();
   }
 
   machineCards() {
-    if (this.state.routeMachines.length > 0) {
+    if (this.state.routeTasks.length > 0) {
       let cards = [];
 
-      for (let index = 0; index < this.state.routeMachines.length; index++) {
+      for (let index = 0; index < this.state.routeTasks.length; index++) {
         cards.push(
           <div>
             <br />
-            <Card body>
-              {this.state.routeMachines[index].machineNo}
+            <Card
+              body
+              className={
+                this.state.routeTasks[index].emergency === true
+                  ? "emergency-task"
+                  : ""
+              }
+            >
+              <Card.Title>
+                {this.state.routeTasks[index].vendingMachine.machineNo}
+                {" - "}
+
+                {() => {
+                  if (this.state.routeTasks[index].client.name) {
+                    return this.state.routeTasks[index].client.name + " - ";
+                  } else {
+                    return "";
+                  }
+                }}
+
+                {this.state.routeTasks[index].task}
+              </Card.Title>
               <Row className="justify-content-end">
                 <Col md="2">
                   <a onClick={() => this.reorderMachines("up", index)}>
@@ -318,7 +309,7 @@ class NewRoute extends Component {
                   </a>
                 </Col>
                 <Col md="2">
-                  <a onClick={() => this.removeMachine(index)}>
+                  <a onClick={() => this.removeTask(index)}>
                     <BsFillXCircleFill />
                   </a>
                 </Col>
@@ -332,7 +323,7 @@ class NewRoute extends Component {
     }
   }
 
-  renderMachines() {
+  renderTasks() {
     createTheme("machines", {
       text: {
         primary: "#00000",
@@ -358,17 +349,18 @@ class NewRoute extends Component {
     const columns = [
       {
         name: "MachineNo",
-        selector: "machineNo",
+        selector: "vendingMachine.machineNo",
         sortable: true,
       },
       {
-        name: "Type",
-        selector: "type",
+        name: "Task",
+        selector: "task",
         sortable: true,
+        grow: 3,
       },
       {
         name: "Client",
-        selector: "client",
+        selector: "client.name",
         sortable: true,
         right: true,
       },
@@ -399,94 +391,87 @@ class NewRoute extends Component {
       },
     ];
 
-    if (this.state.machines.length > 0) {
-      var modifiers = {
-        weekend: function (weekday) {
-          return weekday == 0 || weekday == 6;
-        },
-      };
-      const data = this.state.machines;
-      return (
-        <Container>
-          <Row>
-            <Col>
-              <Jumbotron>
-                <Button onClick={() => this.saveRoute()}>Save</Button>{" "}
-                <Button variant="danger" onClick={() => this.deleteRoute()}>
-                  Delete
-                </Button>
-                <br />
-                <br />
-                <Card body>
-                  <Form.Group controlId="routeName">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                      autoFocus
-                      type="type"
-                      value={this.state.routeName}
-                      onChange={this.handleChange}
-                    />
-                  </Form.Group>
-                </Card>
-                <br></br>
-                <Card body>
-                  <Card.Title>Employees</Card.Title>
-                  {this.employeeCards()}
-                </Card>
-                <br></br>
-                <Card body>
-                  <Card.Title>Machines</Card.Title>
-                  {this.machineCards()}
-                </Card>
-              </Jumbotron>
-            </Col>
-            <Col>
-              <Jumbotron>
-                <Card body>
-                  <Card.Title>Machines</Card.Title>
-                  <DataTableExtensions
-                    filterHidden={false}
+    const data = this.state.tasks;
+    return (
+      <Container>
+        <Row>
+          <Col>
+            <Jumbotron>
+              <Button onClick={() => this.saveRoute()}>Save</Button>{" "}
+              <Button variant="danger" onClick={() => this.deleteRoute()}>
+                Delete
+              </Button>
+              <br />
+              <br />
+              <Card body>
+                <Form.Group controlId="routeName">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    autoFocus
+                    type="type"
+                    value={this.state.routeName}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+              </Card>
+              <br></br>
+              <Card body>
+                <Card.Title>Employees</Card.Title>
+                {this.employeeCards()}
+              </Card>
+              <br></br>
+              <Card body>
+                <Card.Title>Assigned Tasks</Card.Title>
+                {this.machineCards()}
+              </Card>
+            </Jumbotron>
+          </Col>
+          <Col>
+            <Jumbotron>
+              <Card body>
+                <Card.Title>Open Tasks</Card.Title>
+                <DataTableExtensions
+                  filterHidden={false}
+                  columns={columns}
+                  data={this.state.tasks}
+                >
+                  <DataTable
+                    data={this.state.tasks}
+                    noHeader
+                    theme="machines"
                     columns={columns}
-                    data={this.state.machines}
-                  >
-                    <DataTable
-                      data={this.state.machines}
-                      noHeader
-                      theme="machines"
-                      columns={columns}
-                      pagination
-                      highlightOnHover
-                    />
-                  </DataTableExtensions>
-                </Card>
-                <br />
-                <Card body>
-                  <Card.Title>Employees</Card.Title>
-                  <DataTableExtensions
-                    filterHidden={false}
-                    columns={employeeColumns}
+                    pagination
+                    highlightOnHover
+                  />
+                </DataTableExtensions>
+              </Card>
+              <br />
+              <Card body>
+                <Card.Title>Employees</Card.Title>
+                <DataTableExtensions
+                  filterHidden={false}
+                  columns={employeeColumns}
+                  data={this.state.employees}
+                >
+                  <DataTable
                     data={this.state.employees}
-                  >
-                    <DataTable
-                      data={this.state.employees}
-                      noHeader
-                      theme="machines"
-                      columns={columns}
-                      pagination
-                      highlightOnHover
-                    />
-                  </DataTableExtensions>
-                </Card>
-              </Jumbotron>
-            </Col>
-          </Row>
-        </Container>
-      );
-    }
+                    noHeader
+                    theme="machines"
+                    columns={columns}
+                    pagination
+                    highlightOnHover
+                  />
+                </DataTableExtensions>
+              </Card>
+            </Jumbotron>
+          </Col>
+        </Row>
+      </Container>
+    );
   }
 
   render() {
-    return <div>{this.renderMachines()}</div>;
+    return <div>{this.renderTasks()}</div>;
   }
 }
 export default withRouter(NewRoute);

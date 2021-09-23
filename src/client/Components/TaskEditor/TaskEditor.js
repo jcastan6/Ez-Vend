@@ -6,8 +6,12 @@ import {
   FormControl,
   FormLabel,
   Form,
+  Card,
 } from "react-bootstrap";
+import Modal from "react-modal";
 import "../Definitions.css";
+import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
+import "../Maintenances/Maintenances.css";
 
 class TaskEditor extends Component {
   constructor(props) {
@@ -17,9 +21,13 @@ class TaskEditor extends Component {
       id: this.props.task.id,
       task: this.props.task.task,
       recurring: this.props.task.recurring,
-      reminderCount: this.props.task.reminderCount,
+      reminderCount: this.props.task.reminderAt,
       priority: this.props.task.priority,
+      showModal: false,
     };
+
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
     this.showReminder();
   }
 
@@ -42,6 +50,7 @@ class TaskEditor extends Component {
       .then((res) => res.json())
       .then((res) => {
         this.props.getMaintenances();
+        this.handleCloseModal();
       });
   };
 
@@ -60,15 +69,17 @@ class TaskEditor extends Component {
       });
   };
 
+  handleOpenModal() {
+    this.setState({ showModal: true });
+  }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
+  }
+
   validateForm() {
     return this.state.task.length > 0 && this.state.priority !== null;
   }
-
-  toggleRecurring = () => {
-    this.setState({
-      recurring: !this.state.recurring,
-    });
-  };
 
   showReminder() {
     return (
@@ -87,41 +98,54 @@ class TaskEditor extends Component {
 
   render() {
     return (
-      <div className="tab-panel">
-        <h1 id="justice">
-          <b>Edit Task</b>
-        </h1>
-        <br />
-        <form onSubmit={this.handleSubmit} className="body">
-          <FormGroup controlId="task">
-            <FormLabel>Task</FormLabel>
-            <FormControl
-              autoFocus
-              type="type"
-              value={this.state.task}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
+      <div>
+        <BsThreeDotsVertical onClick={this.handleOpenModal} />
 
-          {this.showReminder()}
+        <Modal
+          shouldCloseOnOverlayClick
+          isOpen={this.state.showModal}
+          className="modal-form"
+        >
+          <Card>
+            <Card.Body>
+              <BsFillXSquareFill onClick={this.handleCloseModal} /> <br />
+              <h1 id="justice">
+                <b>Edit Task</b>
+              </h1>
+              <br />
+              <form onSubmit={this.handleSubmit} className="body">
+                <FormGroup controlId="task">
+                  <FormLabel>Task</FormLabel>
+                  <FormControl
+                    autoFocus
+                    type="type"
+                    value={this.state.task}
+                    onChange={this.handleChange}
+                  />
+                </FormGroup>
 
-          <Button
-            block
-            disabled={!this.validateForm()}
-            type="submit"
-            onClick={this.onSubmit}
-          >
-            Update
-          </Button>
-          <Button
-            block
-            disabled={!this.validateForm()}
-            variant="danger"
-            onClick={this.delete}
-          >
-            Delete
-          </Button>
-        </form>
+                {this.showReminder()}
+
+                <Button
+                  block
+                  disabled={!this.validateForm()}
+                  type="submit"
+                  onClick={this.onSubmit}
+                >
+                  Update
+                </Button>
+                <Button
+                  block
+                  disabled={!this.validateForm()}
+                  variant="danger"
+                  onClick={this.delete}
+                >
+                  Delete
+                </Button>
+              </form>
+            </Card.Body>
+          </Card>
+        </Modal>
       </div>
     );
   }

@@ -1,20 +1,33 @@
-// repeating tasks with a scheduled reminder, this is the global definition of the task
-const { UUIDV4, UUIDV1, MACADDR } = require("sequelize");
+// keeps track of to/do maintenances. Scheduled or emergency
 
 module.exports = (sequelize, Sequelize) => {
   const maintenanceTask = sequelize.define("maintenanceTask", {
     id: {
-      type: Sequelize.UUID,
+      type: Sequelize.INTEGER,
       primaryKey: true,
-      defaultValue: UUIDV4(),
+      autoIncrement: true,
     },
     task: {
       type: Sequelize.STRING,
     },
-    recurring: {
+    emergency: {
       type: Sequelize.BOOLEAN,
+      defaultValue: false,
     },
-    reminderCount: {
+    completed: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    },
+    daysCount: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+      allowNull: true,
+    },
+    pastDue: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    },
+    reminderAt: {
       type: Sequelize.INTEGER,
       allowNull: true,
     },
@@ -29,8 +42,18 @@ module.exports = (sequelize, Sequelize) => {
   });
 
   maintenanceTask.associate = (models) => {
-    maintenanceTask.hasMany(models.maintenanceLog, {
-      as: "logs",
+    maintenanceTask.belongsTo(models.employee, {
+      as: "employees",
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+    maintenanceTask.belongsTo(models.route, {
+      as: "route",
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+    maintenanceTask.belongsTo(models.vendingMachine, {
+      as: "vendingMachine",
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     });

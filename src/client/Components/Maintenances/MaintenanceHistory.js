@@ -54,20 +54,19 @@ class MaintenanceHistory extends Component {
         name: "Task",
         selector: "task",
         sortable: true,
+        grow: 3,
+        allowOverflow: true,
       },
       {
         name: "Date",
         selector: "createdAt",
         sortable: true,
-      },
-      {
-        name: "Type",
-        selector: "pastDue",
-        sortable: true,
+
+        grow: 3,
       },
       {
         name: "Completed by",
-        selector: "reminderAt",
+        selector: "employee",
         sortable: true,
       },
     ];
