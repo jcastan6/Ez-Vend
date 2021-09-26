@@ -24,11 +24,12 @@ class MachineEditor extends Component {
       attributes: [],
       clients: [],
     };
-    this.getTypes = this.getTypes.bind(this);
+
+    //this.getTypes = this.getTypes.bind(this);
     //this.getAttributes = this.getAttributes.bind(this);
     this.getClients = this.getClients.bind(this);
     this.getClients();
-    this.getTypes();
+    //this.getTypes();
     //this.getAttributes();
   }
 
@@ -40,7 +41,7 @@ class MachineEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:4000/machines/editMachine", {
+    fetch("http://192.168.1.153:4000/machines/editMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -68,27 +69,8 @@ class MachineEditor extends Component {
     return true;
   }
 
-  getTypes() {
-    fetch(`http://localhost:4000/machines/getTypes/`, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        let types = [];
-
-        this.setState({
-          machineType: res,
-        }),
-          () => console.log();
-      });
-  }
-
   getClients() {
-    fetch(`http://localhost:4000/clients/getAll/`, {
+    fetch(`http://192.168.1.153:4000/clients/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -111,7 +93,7 @@ class MachineEditor extends Component {
   }
 
   delete = () => {
-    fetch("http://localhost:4000/machines/deleteMachine", {
+    fetch("http://192.168.1.153:4000/machines/deleteMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

@@ -8,12 +8,16 @@ import {
   Image,
   Card,
   Carousel,
+  Container,
+  Row,
+  Col,
 } from "react-bootstrap";
+import Modal from "react-modal";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
-import maintenanceHistory from "../../../server/models/maintenanceHistory";
-
+import HistoryEditor from "./HistoryEditor";
+import { BsCamera, BsThreeDotsVertical } from "react-icons/bs";
 class MaintenanceHistory extends Component {
   constructor(props) {
     super(props);
@@ -24,14 +28,24 @@ class MaintenanceHistory extends Component {
     };
     this.getMaintenances = this.getMaintenances.bind(this);
     this.getMaintenances();
+    this.renderModals = this.renderModals.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   handleRouteChange() {
     window.location.reload(false);
   }
+  handleOpenModal(id) {
+    this.setState({ showModal: id });
+  }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
+  }
 
   getMaintenances() {
-    fetch(`http://localhost:4000/machines/getMaintenanceHistory/`, {
+    fetch(`http://192.168.1.153:4000/machines/getMaintenanceHistory/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",
@@ -48,36 +62,72 @@ class MaintenanceHistory extends Component {
       });
   }
 
+  renderModals() {
+    const modals = [];
+    for (const element of this.state.maintenances) {
+      modals.push(
+        <Modal
+          shouldCloseOnOverlayClick={true}
+          onRequestClose={this.handleCloseModal}
+          className="modal-info"
+          isOpen={this.state.showModal === element.id}
+        >
+          <Container>
+            <Row>
+              <Col>
+                <HistoryEditor
+                  getMaintenances={this.getMaintenances}
+                  report={element}
+                ></HistoryEditor>
+              </Col>
+              <Col>
+                <Card>
+                  <Card.Body>
+                    <img src={element.image} width="100%"></img>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </Modal>
+      );
+    }
+    return modals;
+  }
   renderTasks() {
     const columns = [
       {
         name: "Task",
         selector: "task",
         sortable: true,
-        grow: 3,
-        allowOverflow: true,
       },
       {
-        name: "Date",
+        name: "Completed",
         selector: "createdAt",
         sortable: true,
-
-        grow: 3,
       },
       {
         name: "Completed by",
         selector: "employee",
         sortable: true,
       },
+      {
+        cell: (row) => {
+          return (
+            <BsThreeDotsVertical
+              onClick={() => this.handleOpenModal(row.id)}
+            ></BsThreeDotsVertical>
+          );
+        },
+      },
     ];
+
     return (
-      <Card body>
-        <Card.Title>Maintenance History</Card.Title>
-        <DataTableExtensions
-          filterHidden={false}
-          columns={columns}
-          data={this.state.maintenances}
-        >
+      <div>
+        {this.renderModals()}
+        <Card body className="table">
+          <Card.Title>Maintenance Reports</Card.Title>
+
           <DataTable
             data={this.state.maintenances}
             noHeader
@@ -85,9 +135,13 @@ class MaintenanceHistory extends Component {
             columns={columns}
             pagination
             highlightOnHover
+            pointerOnHover
+            onRowDoubleClicked={(row) => {
+              this.handleOpenModal(row.id);
+            }}
           />
-        </DataTableExtensions>
-      </Card>
+        </Card>
+      </div>
     );
   }
 

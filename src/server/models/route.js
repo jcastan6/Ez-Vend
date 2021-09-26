@@ -26,7 +26,6 @@ module.exports = (sequelize, Sequelize) => {
   route.associate = (models) => {
     route.belongsToMany(models.employee, {
       through: "employeeRoutes",
-      onUpdate: "CASCADE",
     });
     route.belongsToMany(models.maintenanceTask, {
       through: tasks,

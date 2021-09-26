@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Typeahead } from "react-bootstrap-typeahead";
 import { Route, withRouter, Link } from "react-router-dom";
 import {
   Button,
@@ -9,9 +10,9 @@ import {
   Image,
   Carousel,
   Jumbotron,
+  Spinner,
 } from "react-bootstrap";
-
-import { Typeahead } from "react-bootstrap-typeahead";
+import ImageUploader from "react-images-upload";
 
 class ReportMaintenance extends Component {
   constructor(props) {
@@ -21,11 +22,20 @@ class ReportMaintenance extends Component {
       machine: null,
       issue: "",
       machines: [],
+      pictures: [],
+      loading: false,
     };
 
     this.getMachines = this.getMachines.bind(this);
 
     this.getMachines();
+    this.onDrop = this.onDrop.bind(this);
+  }
+
+  onDrop(picture) {
+    this.setState({
+      pictures: this.state.pictures.concat(picture),
+    });
   }
 
   handleChange = (event) => {
@@ -37,16 +47,18 @@ class ReportMaintenance extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     let machine = String(this.state.machine).split(" -")[0];
+    const formData = new FormData();
+    formData.append("file", this.state.pictures[0]);
+    formData.append("machine", machine);
+    formData.append("issue", this.state.issue);
     this.setState({
-      machine: machine,
-    });
-    fetch("http://localhost:4000/machines/submitReport", {
+      loading: true,
+    }),
+      () => console.log();
+    fetch("http://192.168.1.153:4000/machines/submitReport", {
       method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
+
+      body: formData,
     }).then(() => this.handleRouteChange());
   };
 
@@ -66,7 +78,7 @@ class ReportMaintenance extends Component {
   }
 
   getMachines() {
-    fetch(`http://localhost:4000/machines/getAll/`, {
+    fetch(`http://192.168.1.153:4000/machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -90,6 +102,16 @@ class ReportMaintenance extends Component {
   }
 
   render() {
+    if (this.state.loading) {
+      return (
+        <Container>
+          <br></br>
+          <Jumbotron>
+            <Spinner animation="border" role="status"></Spinner>
+          </Jumbotron>
+        </Container>
+      );
+    }
     return (
       <div>
         <Container>
@@ -125,7 +147,16 @@ class ReportMaintenance extends Component {
                   onChange={this.handleChange}
                 ></FormControl>
               </FormGroup>
-              {this.state.attributes}
+              <FormLabel>Image</FormLabel>
+              <ImageUploader
+                withIcon={true}
+                buttonText="Choose images"
+                onChange={this.onDrop}
+                withPreview
+                withLabel={false}
+                imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                maxFileSize={5242880}
+              />
               <Button
                 disabled={!this.validateForm()}
                 type="submit"

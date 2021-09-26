@@ -53,7 +53,7 @@ export default class Definitions extends Component {
     this.setState({
       employees: [],
     });
-    fetch(`http://localhost:4000/users/getEmployees`, {
+    fetch(`http://192.168.1.153:4000/users/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -73,7 +73,7 @@ export default class Definitions extends Component {
   }
 
   getTypes() {
-    fetch(`http://localhost:4000/machines/getTypes`, {
+    fetch(`http://192.168.1.153:4000/machines/getTypes`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -92,7 +92,7 @@ export default class Definitions extends Component {
       });
   }
   getClients() {
-    fetch(`http://localhost:4000/Clients/getAll`, {
+    fetch(`http://192.168.1.153:4000/Clients/getAll`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -271,7 +271,7 @@ export default class Definitions extends Component {
         <div className="body">
           <Jumbotron>
             <Container fluid>
-              <h1>Maintenances </h1>
+              <h1>Machine Types</h1>
               <Tabs defaultTab="vertical-tab-one" vertical>
                 <TabList className="definition-tabs">
                   {this.renderTypes()}

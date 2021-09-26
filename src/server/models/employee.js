@@ -28,6 +28,10 @@ module.exports = (sequelize, Sequelize) => {
       as: "machineType",
       onUpdate: "CASCADE",
     });
+    employee.belongsTo(models.route, {
+      as: "route",
+      onUpdate: "CASCADE",
+    });
   };
 
   return employee;

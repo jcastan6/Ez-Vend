@@ -1,7 +1,9 @@
-const synchronize = require("../models/index");
-
 const express = require("express");
 const bodyParser = require("body-parser");
+const { where } = require("sequelize");
+const { managers } = require("socket.io-client");
+const synchronize = require("../models/index");
+
 const db = require("../models/index");
 
 const app = express();
@@ -12,7 +14,6 @@ const sleep = (waitTimeInMs) =>
 const { Op } = Sequelize;
 
 const router = express.Router();
-const { managers } = require("socket.io-client");
 const models = require("../models");
 const { sequelize } = require("../models/index");
 const { route } = require("./machines-router");
@@ -35,20 +36,28 @@ router.get("/getAll", async (req, res) => {
     });
 });
 
+router.get("/getEmployees", async (req, res) => {
+  await db.check();
+  models.employee
+    .findAll({
+      where: {
+        routeId: null,
+      },
+    })
+    .then(async (employees) => {
+      employeeList = [];
+      employees.forEach((employee) => {
+        employeeList.push(employee.dataValues);
+      });
+
+      return res.send(employeeList);
+    });
+});
+
 router.post("/addRoute", async (req, res) => {
   await db.check();
   const tasks = [];
 
-  const employees = [];
-  for (const employee of req.body.routeEmployees) {
-    employees.push(
-      await models.employee.findOne({
-        where: {
-          id: employee.id,
-        },
-      })
-    );
-  }
   await models.route
     .create({
       name: req.body.routeName,
@@ -67,8 +76,20 @@ router.post("/addRoute", async (req, res) => {
         tasks.push(task);
       }
 
+      const employees = [];
+      for (const e of req.body.routeEmployees) {
+        const employee = await models.employee.findOne({
+          where: {
+            id: e.id,
+          },
+        });
+        employees.push(employee);
+        employee.setRoute(route);
+      }
+
       await route.addMaintenanceTasks(tasks);
       await route.addEmployees(employees);
+
       await db.backup();
       res.status(200).json({ result: "route added" });
       return res.send();
@@ -102,14 +123,18 @@ router.post("/editRoute", async (req, res) => {
   }
 
   const employees = [];
+  const x = await route.getEmployees();
+  for (element of x) {
+    await element.setRoute(null);
+  }
   for (const employee of req.body.routeEmployees) {
-    employees.push(
-      await models.employee.findOne({
-        where: {
-          id: employee.id,
-        },
-      })
-    );
+    const employee2 = await models.employee.findOne({
+      where: {
+        id: employee.id,
+      },
+    });
+    employees.push(employee2);
+    employee2.setRoute(route);
   }
 
   await route.setEmployees(employees);
@@ -121,16 +146,17 @@ router.post("/editRoute", async (req, res) => {
 
 router.post("/deleteRoute", async (req, res) => {
   await db.check();
-  const task = await models.client.findOne({
+  console.log(req.body);
+  const route = await models.route.findOne({
     where: {
       id: req.body.id,
     },
   });
 
-  if (task) {
-    await task.destroy().then(async () => {
+  if (route) {
+    await route.destroy().then(async () => {
       await db.backup();
-      return res.status(200).json({ result: "client edited" });
+      return res.status(200).json({ result: "route deleted" });
     });
   }
 });

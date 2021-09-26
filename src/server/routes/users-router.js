@@ -174,4 +174,19 @@ router.post("/deleteEmployee", async (req, res) => {
       return res.status(200).json({ result: "employee info edited" });
     });
 });
+
+router.get("/getEmployeeRoute/:id", async (req, res) => {
+  await db.check();
+  console.log(req.params);
+  let employee = await models.employee.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  let route = await employee.getRoute({
+    include: [{ all: true, nested: true }],
+  });
+
+  return res.send(route.dataValues);
+});
 module.exports = router;

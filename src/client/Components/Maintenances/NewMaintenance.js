@@ -36,7 +36,7 @@ class NewMaintenance extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:4000/machines/newMaintenanceTask", {
+    fetch("http://192.168.1.153:4000/machines/newMaintenanceTask", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -54,7 +54,7 @@ class NewMaintenance extends Component {
   }
 
   handleCloseModal() {
-    this.setState({ showModal: false });
+    this.setState({ task: "", reminderCount: null, showModal: false });
   }
 
   validateForm() {
@@ -83,7 +83,7 @@ class NewMaintenance extends Component {
         >
           <Card>
             <Card.Body>
-              New Maintenance
+              <h5>New Maintenance</h5>
               <form onSubmit={this.handleSubmit}>
                 <FormGroup controlId="task">
                   <FormLabel>Task</FormLabel>

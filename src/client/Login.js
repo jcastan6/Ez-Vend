@@ -29,7 +29,7 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:4000/users/login", {
+    fetch("http://192.168.1.153:4000/users/login", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

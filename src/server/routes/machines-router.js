@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const db = require("../models/index");
 const cron = require("node-cron");
 
 const app = express();
@@ -10,8 +9,15 @@ const { Op } = Sequelize;
 
 const router = express.Router();
 const { UUIDV4, UUIDV1, MACADDR } = require("sequelize");
+const { Storage } = require("@google-cloud/storage");
 const models = require("../models");
 const { sequelize } = require("../models/index");
+
+const db = require("../models/index");
+
+const storage = new Storage({ keyFilename: "gcskey.json" });
+
+const bucket = storage.bucket("ezvend");
 
 cron.schedule("00 00 * * *", async () => {
   console.log("hey!");
@@ -32,7 +38,14 @@ router.get("/getAll/", async (req, res) => {
       machineList = [];
       for (const machine of machines) {
         const reports = await machine.getTasks();
-        machine.dataValues.reports = reports.length;
+        let i = 0;
+
+        for (report of reports) {
+          if (report.dataValues.emergency || report.dataValues.pastDue) {
+            i++;
+          }
+        }
+        machine.dataValues.reports = i;
         machineList.push(machine.dataValues);
       }
     });
@@ -77,17 +90,11 @@ router.post("/editMaintenanceTask", async (req, res) => {
     await task
       .update({
         task: req.body.task,
-        recurring: req.body.recurring,
-        reminderCount: req.body.reminderCount,
-        priority: req.body.priority,
+        reminderAt: req.body.reminderAt,
+        pastDue:
+          req.body.reminderAt <= task.dataValues.daysCount ? true : false,
       })
       .then(async () => {
-        await sequelize.query(
-          `UPDATE maintenancetasks SET reminderAt = ${req.body.reminderCount} where id = "${task.id}";`
-        );
-        await sequelize.query(
-          "UPDATE maintenancetasks SET pastDue = 1 where reminderAt = daysCount;"
-        );
         await db.backup();
         return res.status(200).json({ result: "task edited" });
       });
@@ -105,6 +112,42 @@ router.post("/deleteMaintenanceTask", async (req, res) => {
     await task.destroy().then(async () => {
       await db.backup();
       return res.status(200).json({ result: "task removed" });
+    });
+  }
+});
+
+router.post("/editMaintenanceReport", async (req, res) => {
+  await db.check();
+  const task = await models.maintenanceTask.findOne({
+    where: {
+      id: req.body.id,
+    },
+  });
+  if (task) {
+    await task
+      .update({
+        task: req.body.task,
+      })
+      .then(async () => {
+        await db.backup();
+        return res.status(200).json({ result: "task edited" });
+      });
+  } else {
+    return res.status(200).json({ result: "task edited" });
+  }
+});
+
+router.post("/deleteMaintenanceReport", async (req, res) => {
+  await db.check();
+  const task = await models.maintenanceTask.findOne({
+    where: {
+      id: req.body.id,
+    },
+  });
+  if (task) {
+    await task.destroy().then(async () => {
+      await db.backup();
+      return res.status(200).json({ result: "report removed" });
     });
   }
 });
@@ -155,7 +198,6 @@ router.post("/deleteMachine", async (req, res) => {
 
 router.post("/editMachine", async (req, res) => {
   await db.check();
-  console.log(req.body);
 
   const client = await models.client.findOne({
     where: {
@@ -222,26 +264,6 @@ router.get("/getTypes", async (req, res) => {
   });
 });
 
-// // gets maintenances tasks for one machine type
-// router.get("/getMaintenanceTasks", async (req, res) => {
-//   await db.check();
-
-//   const machineType = await models.machineType.findOne({
-//     where: {
-//       type: req.query.machineType,
-//     },
-//   });
-
-//   machineType.getTasks().then(async (tasks) => {
-//     maintenanceList = [];
-//     tasks.forEach((task) => {
-//       maintenanceList.push(task.dataValues);
-//     });
-//     await db.backup();
-//     return res.send(maintenanceList);
-//   });
-// });
-
 router.get("/getAllMaintenanceLogs", async (req, res) => {
   await db.check();
   const existing = await sequelize.query(
@@ -255,7 +277,6 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
       array.push(number.maintenanceTaskId);
     }
   }
-  console.log(array);
 
   const tasks = await models.maintenanceTask.findAll({
     where: {
@@ -272,8 +293,10 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
     const client = await models.client.findOne({
       where: { id: task.dataValues.vendingMachine.clientId },
     });
-    task.dataValues.client = client;
-    maintenanceList.push(task.dataValues);
+    if (client) {
+      task.dataValues.client = client;
+      maintenanceList.push(task.dataValues);
+    }
   }
   await db.backup();
 
@@ -357,26 +380,67 @@ router.post("/getMachineReports", async (req, res) => {
     });
 });
 
-module.exports = router;
-
 router.post("/submitReport", async (req, res) => {
   await db.check();
 
-  const report = await models.maintenanceTask.create({
-    task: req.body.issue,
-    emergency: true,
-  });
+  if (req.files) {
+    // Create a new blob in the bucket and upload the file data.
+    const blob = bucket.file(req.files.file.name);
+    const blobStream = blob.createWriteStream({
+      resumable: false,
+    });
 
-  const machine = await models.vendingMachine.findOne({
-    where: {
-      machineNo: req.body.machine,
-    },
-  });
+    blobStream.on("error", (err) => {
+      res.status(500).send({ message: err.message });
+    });
 
-  await machine.addTask(report);
+    blobStream.on("finish", async (data) => {
+      // Create URL for directly file access via HTTP.
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
 
-  await db.backup();
-  return res.send();
+      try {
+        const machine = await models.vendingMachine.findOne({
+          where: {
+            machineNo: req.body.machine,
+          },
+        });
+        const report = await models.maintenanceTask.create({
+          task: req.body.issue,
+          emergency: true,
+          image: publicUrl,
+        });
+        await machine.addTask(report);
+        await db.backup();
+        await bucket.file(req.file.originalname).makePublic();
+      } catch {
+        return res.status(500).send({
+          message: `Uploaded the file successfully: ${req.files.file.name}, but public access is denied!`,
+          url: publicUrl,
+        });
+      }
+
+      res.status(200).send({
+        message: "Uploaded the file successfully: " + req.files.file.name,
+        url: publicUrl,
+      });
+    });
+
+    blobStream.end(req.files.file.data);
+  } else {
+    const machine = await models.vendingMachine.findOne({
+      where: {
+        machineNo: req.body.machine,
+      },
+    });
+    const report = await models.maintenanceTask.create({
+      task: req.body.issue,
+      emergency: true,
+      image: null,
+    });
+    await machine.addTask(report);
+    await db.backup();
+    return res.status(200).send({ message: "success" });
+  }
 });
 
 router.post("/getMaintenanceHistory", async (req, res) => {
@@ -388,7 +452,9 @@ router.post("/getMaintenanceHistory", async (req, res) => {
     },
   });
   if (machine) {
-    const reports = await machine.getHistory();
+    const reports = await machine.getHistory({
+      order: [["createdAt", "DESC"]],
+    });
     const list = [];
     for (report of reports) {
       const task = await report.getMaintenance();
@@ -404,29 +470,121 @@ router.post("/getMaintenanceHistory", async (req, res) => {
   }
 });
 
+router.post("/deleteMaintenanceHistory", async (req, res) => {
+  await db.check();
+  const task = await models.maintenanceHistory.findOne({
+    where: {
+      id: req.body.id,
+    },
+  });
+  if (task) {
+    await task.destroy().then(async () => {
+      await db.backup();
+      return res.status(200).json({ result: "report removed" });
+    });
+  }
+});
+
+router.get("/getDailyMaintenanceHistory", async (req, res) => {
+  await db.check();
+  const Op = Sequelize.Op;
+  const TODAY_START = new Date().setHours(0, 0, 0, 0);
+  const NOW = new Date();
+
+  const reports = await models.maintenanceHistory.findAll({
+    where: {
+      createdAt: {
+        [Op.gt]: TODAY_START,
+        [Op.lt]: NOW,
+      },
+    },
+    order: [["createdAt", "DESC"]],
+  });
+  const list = [];
+  for (report of reports) {
+    const task = await report.getMaintenance();
+    const employee = await report.getEmployee();
+    if (employee) {
+      report.dataValues.employee = employee.dataValues.name;
+    }
+    report.dataValues.task = task.dataValues.task;
+    list.push(report.dataValues);
+  }
+  await db.backup();
+  return res.send(list);
+});
+
 router.post("/addMaintenanceHistory", async (req, res) => {
   await db.check();
 
-  const history = await models.maintenanceHistory.create({});
-  const machine = await models.vendingMachine.findOne({
-    where: {
-      id: req.body.machine,
-    },
-  });
+  if (req.files) {
+    // Create a new blob in the bucket and upload the file data.
+    const blob = bucket.file(req.files.file.name);
+    const blobStream = blob.createWriteStream({
+      resumable: false,
+    });
 
-  const task = await models.maintenanceTask.findOne({
-    where: {
-      id: req.body.task,
-      completed: false,
-    },
-  });
-  if (task.emergency === true) {
-    task.completed = true;
-    await task.save();
+    blobStream.on("error", (err) => {
+      res.status(500).send({ message: err.message });
+    });
+
+    blobStream.on("finish", async (data) => {
+      // Create URL for directly file access via HTTP.
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+
+      try {
+        const employee = await models.employee.findOne({
+          where: {
+            id: req.body.employeeId,
+          },
+        });
+        const history = await models.maintenanceHistory.create({
+          image: publicUrl,
+          notes: req.body.notes,
+        });
+        const machine = await models.vendingMachine.findOne({
+          where: {
+            id: req.body.machine,
+          },
+        });
+        const task = await models.maintenanceTask.findOne({
+          where: {
+            id: req.body.task,
+            completed: false,
+          },
+        });
+
+        if (!task.dataValues.emergency) {
+          task.daysCount = 0;
+          task.pastDue = false;
+          task.save();
+        }
+
+        await sequelize.query(
+          `DELETE FROM vending.employeetasks where maintenanceTaskId= ${req.body.task};`
+        );
+
+        await machine.addHistory(history);
+        await history.setEmployee(employee);
+        await history.setMaintenance(task);
+
+        await db.backup();
+        await bucket.file(req.file.originalname).makePublic();
+      } catch {
+        return res.status(500).send({
+          message: `Uploaded the file successfully: ${req.files.file.name}, but public access is denied!`,
+          url: publicUrl,
+        });
+      }
+
+      res.status(200).send({
+        message: "Uploaded the file successfully: " + req.files.file.name,
+        url: publicUrl,
+      });
+    });
+
+    blobStream.end(req.files.file.data);
   }
-  await machine.addHistory(history);
-  await history.setMaintenance(task);
-
-  await db.backup();
-  return res.send();
 });
+
+module.exports = router;

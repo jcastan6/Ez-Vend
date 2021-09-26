@@ -32,7 +32,7 @@ export default class Home extends Component {
 
   getResults() {
     fetch(
-      `http://localhost:4000/images/searchPosts/${this.props.match.params.searchParams}`,
+      `http://192.168.1.153:4000/images/searchPosts/${this.props.match.params.searchParams}`,
       {
         method: "GET",
         credentials: "same-origin",

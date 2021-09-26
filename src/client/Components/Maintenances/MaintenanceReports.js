@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, withRouter, Link } from "react-router-dom";
+import Modal from "react-modal";
 import {
   Button,
   FormGroup,
@@ -8,11 +9,18 @@ import {
   Image,
   Card,
   Carousel,
+  Container,
+  Jumbotron,
+  Row,
+  Col,
 } from "react-bootstrap";
+import "./Maintenances.css";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
 import maintenanceHistory from "../../../server/models/maintenanceHistory";
+import { BsCamera, BsThreeDotsVertical } from "react-icons/bs";
+import ReportEditor from "./ReportEditor";
 
 class MaintenanceReports extends Component {
   constructor(props) {
@@ -21,9 +29,21 @@ class MaintenanceReports extends Component {
     this.state = {
       machine: this.props.machine,
       maintenances: [],
+      showModal: false,
     };
     this.getMaintenances = this.getMaintenances.bind(this);
     this.getMaintenances();
+    this.renderModals = this.renderModals.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
+  }
+
+  handleOpenModal(id) {
+    this.setState({ showModal: id });
+  }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
   }
 
   handleRouteChange() {
@@ -31,7 +51,7 @@ class MaintenanceReports extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://localhost:4000/machines/getMachineReports/`, {
+    fetch(`http://192.168.1.153:4000/machines/getMachineReports/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",
@@ -44,6 +64,7 @@ class MaintenanceReports extends Component {
         res.forEach((element) => {
           element.createdAt = String(element.createdAt).split("T")[0];
         });
+
         this.setState({
           maintenances: res,
         }),
@@ -51,6 +72,38 @@ class MaintenanceReports extends Component {
       });
   }
 
+  renderModals() {
+    const modals = [];
+    for (const element of this.state.maintenances) {
+      modals.push(
+        <Modal
+          shouldCloseOnOverlayClick={true}
+          onRequestClose={this.handleCloseModal}
+          className="modal-info"
+          isOpen={this.state.showModal === element.id}
+        >
+          <Container>
+            <Row>
+              <Col>
+                <ReportEditor
+                  getMaintenances={this.getMaintenances}
+                  report={element}
+                ></ReportEditor>
+              </Col>
+              <Col>
+                <Card>
+                  <Card.Body>
+                    <img src={element.image} width="100%"></img>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </Modal>
+      );
+    }
+    return modals;
+  }
   renderTasks() {
     const columns = [
       {
@@ -63,15 +116,31 @@ class MaintenanceReports extends Component {
         selector: "createdAt",
         sortable: true,
       },
+      {
+        cell: (row) => {
+          if (row.image) {
+            return <BsCamera></BsCamera>;
+          }
+        },
+      },
+
+      {
+        cell: (row) => {
+          return (
+            <BsThreeDotsVertical
+              onClick={() => this.handleOpenModal(row.id)}
+            ></BsThreeDotsVertical>
+          );
+        },
+      },
     ];
+
     return (
-      <Card body>
-        <Card.Title>Maintenance Reports</Card.Title>
-        <DataTableExtensions
-          filterHidden={false}
-          columns={columns}
-          data={this.state.maintenances}
-        >
+      <div>
+        {this.renderModals()}
+        <Card body className="table">
+          <Card.Title>Maintenance History</Card.Title>
+
           <DataTable
             data={this.state.maintenances}
             noHeader
@@ -79,9 +148,13 @@ class MaintenanceReports extends Component {
             columns={columns}
             pagination
             highlightOnHover
+            pointerOnHover
+            onRowDoubleClicked={(row) => {
+              this.handleOpenModal(row.id);
+            }}
           />
-        </DataTableExtensions>
-      </Card>
+        </Card>
+      </div>
     );
   }
 

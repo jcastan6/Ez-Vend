@@ -21,7 +21,7 @@ class TaskEditor extends Component {
       id: this.props.task.id,
       task: this.props.task.task,
       recurring: this.props.task.recurring,
-      reminderCount: this.props.task.reminderAt,
+      reminderAt: this.props.task.reminderAt,
       priority: this.props.task.priority,
       showModal: false,
     };
@@ -39,7 +39,7 @@ class TaskEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:4000/machines/editMaintenanceTask", {
+    fetch("http://192.168.1.153:4000/machines/editMaintenanceTask", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -55,7 +55,7 @@ class TaskEditor extends Component {
   };
 
   delete = () => {
-    fetch("http://localhost:4000/machines/deleteMaintenanceTask", {
+    fetch("http://192.168.1.153:4000/machines/deleteMaintenanceTask", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -83,12 +83,12 @@ class TaskEditor extends Component {
 
   showReminder() {
     return (
-      <FormGroup controlId="reminderCount">
+      <FormGroup controlId="reminderAt">
         <FormLabel>Remind Every:</FormLabel>
         <FormControl
           autoFocus
           type="type"
-          value={this.state.reminderCount}
+          value={this.state.reminderAt}
           onChange={this.handleChange}
         />
         Days
@@ -103,12 +103,12 @@ class TaskEditor extends Component {
 
         <Modal
           shouldCloseOnOverlayClick
+          onRequestClose={this.handleCloseModal}
           isOpen={this.state.showModal}
           className="modal-form"
         >
           <Card>
             <Card.Body>
-              <BsFillXSquareFill onClick={this.handleCloseModal} /> <br />
               <h1 id="justice">
                 <b>Edit Task</b>
               </h1>
@@ -150,4 +150,4 @@ class TaskEditor extends Component {
     );
   }
 }
-export default withRouter(TaskEditor);
+export default TaskEditor;

@@ -9,7 +9,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, outputDirectory),
     filename: "bundle.js",
-    publicPath: "/"
+    publicPath: "/",
   },
   module: {
     rules: [
@@ -17,41 +17,41 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: "babel-loader",
+        },
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(jpe?g|jpg|png|woff|woff2|eot|ttf|svg)$/,
-        loader: "url-loader?limit=100000"
-      }
-    ]
+        loader: "url-loader?limit=100000",
+      },
+    ],
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx"]
+    extensions: ["*", ".js", ".jsx"],
   },
   devServer: {
     port: 3000,
     open: true,
     proxy: {
       "/api": {
-        target: "http://localhost:4000",
+        target: "http://127.0.0.1:4000",
         pathRewrite: { "^/api": "" },
         secure: false,
-        changeOrigin: true
-      }
+        changeOrigin: true,
+      },
     },
     historyApiFallback: { disableDotRule: true },
-    contentBase: "public"
+    contentBase: "public",
   },
   plugins: [
     new CleanWebpackPlugin([outputDirectory]),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
-      favicon: "./public/favicon.ico"
-    })
-  ]
+      favicon: "./public/icon.png",
+    }),
+  ],
 };

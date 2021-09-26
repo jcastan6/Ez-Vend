@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
 import { Container, Jumbotron, Row, Col, Button } from "react-bootstrap";
-import DataTableExtensions from "react-data-table-component-extensions";
+
 import Header from "./Components/Header/Header";
 import { retrieveCookie } from "./Components/Cookies";
 import MachineCard from "./Components/MachineCard/MachineCard";
 import NewRoute from "./Components/Routes/NewRoute";
 import "react-data-table-component-extensions/dist/index.css";
+import DataTableExtensions from "react-data-table-component-extensions";
 import DataTable, { createTheme } from "react-data-table-component";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
@@ -33,7 +34,7 @@ export default class Routes extends Component {
   }
 
   getRoutes() {
-    fetch(`http://localhost:4000/routes/getAll/`, {
+    fetch(`http://192.168.1.153:4000/routes/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -42,15 +43,6 @@ export default class Routes extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
-        res.forEach((route) => {
-          route.edit = (
-            <BsThreeDotsVertical
-              onClick={() => this.handleOpenModal(route.id)}
-            />
-          );
-        });
-        console.log(res);
-
         this.setState(
           {
             routes: res,
@@ -62,55 +54,6 @@ export default class Routes extends Component {
   }
 
   renderRoutes() {
-    createTheme("machines", {
-      text: {
-        primary: "#00000",
-        secondary: "#000000",
-      },
-
-      background: {
-        default: "rgba(0,0,0,0)",
-      },
-      context: {
-        background: "rgba(0,0,0,.2)",
-        text: "#000000",
-      },
-      divider: {
-        default: "rgba(0,0,0,.2)",
-      },
-      action: {
-        button: "rgba(0,0,0,1)",
-        hover: "rgba(0,0,0,.08)",
-        disabled: "rgba(0,0,0,.12)",
-      },
-    });
-    const columns = [
-      {
-        name: "Name",
-        selector: "name",
-        sortable: true,
-      },
-      {
-        name: "Tasks Assigned",
-        selector: "maintenanceTasks.length",
-        sortable: true,
-      },
-      {
-        name: "Employee",
-        selector: (row) => {
-          if (row.employees[0]) {
-            return row.employees[0].name;
-          }
-        },
-        sortable: true,
-      },
-      {
-        name: "Edit",
-        selector: "edit",
-        sortable: false,
-        right: true,
-      },
-    ];
     const customStyles = {
       context: {
         background: "#cb4b16",
@@ -134,6 +77,39 @@ export default class Routes extends Component {
         },
       },
     };
+    const columns = [
+      {
+        name: "Name",
+        selector: "name",
+        sortable: true,
+      },
+      {
+        name: "Tasks Assigned",
+        selector: "maintenanceTasks.length",
+        sortable: true,
+      },
+      {
+        name: "Employee",
+        cell: (row) => {
+          if (row.employees) {
+            let name = [];
+            row.employees.forEach((e) => {
+              name.push(e.name + " ");
+            });
+            return name;
+          }
+        },
+        sortable: true,
+      },
+      {
+        name: "Edit",
+        cell: (row) => (
+          <BsThreeDotsVertical onClick={() => this.handleOpenModal(row.id)} />
+        ),
+        sortable: false,
+        right: true,
+      },
+    ];
 
     return (
       <div className="table">
@@ -146,7 +122,12 @@ export default class Routes extends Component {
             data={this.state.routes}
             customStyles={customStyles}
             noHeader
+            onRowDoubleClicked={(row) => {
+              this.handleOpenModal(row.id);
+            }}
             columns={columns}
+            pointerOnHover
+            highlightOnHover
             pagination
             title="Routes"
           />
@@ -187,6 +168,8 @@ export default class Routes extends Component {
                   New Route
                 </Button>
               </Col>
+              <br />
+              <br />
               <Col>
                 <Modal
                   shouldCloseOnOverlayClick

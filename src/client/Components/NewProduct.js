@@ -6,7 +6,7 @@ import {
   FormControl,
   FormLabel,
   Image,
-  Carousel
+  Carousel,
 } from "react-bootstrap";
 import "../app.css";
 
@@ -16,28 +16,28 @@ export default class NewProduct extends Component {
     this.handleRouteChange = this.handleRouteChange.bind(this);
     this.state = {
       name: "",
-      businessName: "adminbusiness"
+      businessName: "adminbusiness",
     };
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
     });
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:4000/products/newProduct", {
+    fetch("http://192.168.1.153:4000/products/newProduct", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         this.handleRouteChange();
       });
   };

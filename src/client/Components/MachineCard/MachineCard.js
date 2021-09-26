@@ -8,7 +8,7 @@ import {
   Form,
   FormControl,
   Button,
-  Jumbotron
+  Jumbotron,
 } from "react-bootstrap";
 
 export default class MachineCard extends Component {
@@ -17,7 +17,7 @@ export default class MachineCard extends Component {
     this.state = {
       machineid: this.props.machineid,
       type: this.props.type,
-      client: this.props.client
+      client: this.props.client,
     };
   }
 

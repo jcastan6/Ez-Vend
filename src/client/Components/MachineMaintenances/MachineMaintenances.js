@@ -31,7 +31,7 @@ class MachineMaintenances extends Component {
 
   getMaintenances() {
     fetch(
-      `http://localhost:4000/machines/getMaintenanceTasks?machineType=${this.props.type}`,
+      `http://192.168.1.153:4000/machines/getMaintenanceTasks?machineType=${this.props.type}`,
       {
         method: "GET",
         credentials: "same-origin",

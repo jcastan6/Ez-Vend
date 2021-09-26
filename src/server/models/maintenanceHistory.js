@@ -15,6 +15,14 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DATE,
       defaultValue: sequelize.literal("NOW()"),
     },
+    image: {
+      type: Sequelize.STRING,
+      defaultValue: null,
+    },
+    notes: {
+      type: Sequelize.STRING,
+      defaultValue: null,
+    },
   });
 
   maintenanceHistory.associate = (models) => {

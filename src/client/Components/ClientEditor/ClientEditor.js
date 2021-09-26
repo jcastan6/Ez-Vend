@@ -28,7 +28,7 @@ class ClientEditor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://localhost:4000/clients/editClient", {
+    fetch("http://192.168.1.153:4000/clients/editClient", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -43,7 +43,7 @@ class ClientEditor extends Component {
   };
 
   delete = () => {
-    fetch("http://localhost:4000/clients/deleteClient", {
+    fetch("http://192.168.1.153:4000/clients/deleteClient", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

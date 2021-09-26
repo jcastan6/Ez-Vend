@@ -34,7 +34,7 @@ class MaintenanceLogs extends Component {
   getMaintenances() {
     const get = {};
     get.machine = this.state.machine;
-    fetch(`http://localhost:4000/machines/getMaintenanceLogs/`, {
+    fetch(`http://192.168.1.153:4000/machines/getMaintenanceLogs/`, {
       body: JSON.stringify(get),
       method: "POST",
       credentials: "same-origin",
@@ -44,11 +44,6 @@ class MaintenanceLogs extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
-        res.forEach((element) => {
-          element.edit = (
-            <TaskEditor task={element} getMaintenances={this.getMaintenances} />
-          );
-        });
         this.setState({
           maintenances: res,
         }),
@@ -81,13 +76,15 @@ class MaintenanceLogs extends Component {
       },
       {
         selector: "edit",
-        sortable: false,
+        cell: (row) => (
+          <TaskEditor task={row} getMaintenances={this.getMaintenances} />
+        ),
         right: true,
         button: true,
       },
     ];
     return (
-      <Card body>
+      <Card body className="table">
         <NewMaintenance
           machine={this.props.machine}
           getMaintenances={this.getMaintenances}

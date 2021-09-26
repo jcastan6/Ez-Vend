@@ -81,7 +81,7 @@ export default class Registration extends Component {
     e.preventDefault();
     if (formValid(this.state)) {
       this.handleRouteChange();
-      fetch("http://localhost:4000/users/register", {
+      fetch("http://192.168.1.153:4000/users/register", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),

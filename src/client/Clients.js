@@ -19,7 +19,7 @@ export default class Clients extends Component {
   }
 
   getMachines() {
-    fetch(`http://localhost:4000/clients/getAll/${this.state.business}`, {
+    fetch(`http://192.168.1.153:4000/clients/getAll/${this.state.business}`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

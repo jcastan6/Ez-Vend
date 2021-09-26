@@ -22,8 +22,16 @@ class Header extends Component {
   render() {
     const { location } = this.props;
     return (
-      <Navbar className="navber" expand="lg">
-        <Navbar.Brand href="">XXXXX</Navbar.Brand>
+      <Navbar className="navbar" expand="lg">
+        <Navbar.Brand href="">
+          <img
+            src="/public/icon.png"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="CVM"
+          />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto" activeKey={location.pathname}>

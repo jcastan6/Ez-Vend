@@ -7,7 +7,7 @@ const cors = require("cors");
 const io = require("socket.io")();
 const bodyParser = require("body-parser");
 const userRouter = require("./routes/users-router");
-const productRouter = require("./routes/products-router");
+
 const machinesRouter = require("./routes/machines-router");
 const clientsRouter = require("./routes/clients-router");
 const routesRouter = require("./routes/routes-router");
@@ -35,11 +35,11 @@ app.use(cors());
 app.use(express.static("dist"));
 
 app.set("view engine", "ejs");
-app.listen(4000, () => console.log("Listening on port 4000!"));
+app.listen(4000, "0.0.0.0", () => console.log("Listening on port 4000!"));
 
 app.use("/users", userRouter);
 app.use("/clients", clientsRouter);
-app.use("/products", productRouter);
+
 app.use("/machines", machinesRouter);
 app.use("/routes", routesRouter);
 

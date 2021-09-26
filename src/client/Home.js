@@ -1,58 +1,205 @@
 import React, { Component } from "react";
-import { Container, Jumbotron, Row, Col } from "react-bootstrap";
+
+import DataTable, { createTheme } from "react-data-table-component";
+import DataTableExtensions from "react-data-table-component-extensions";
 import Header from "./Components/Header/Header.js";
 import { retrieveCookie } from "./Components/Cookies";
 import Maintenances from "./Components/Maintenances/Maintenances";
+import "react-data-table-component-extensions/dist/index.css";
+import {
+  Container,
+  Jumbotron,
+  Row,
+  Col,
+  Card,
+  Carousel,
+} from "react-bootstrap";
+import {
+  BsFillPlusSquareFill,
+  BsFillCaretUpFill,
+  BsFillCaretDownFill,
+  BsFillXCircleFill,
+} from "react-icons/bs";
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: retrieveCookie(),
-      latestImages: [],
+      tasks: [],
+      dailyHistory: [],
     };
-    // this.getLatest();
+    this.getMaintenances = this.getMaintenances.bind(this);
+
+    this.renderTasks = this.renderTasks.bind(this);
+    this.getTasks = this.getTasks.bind(this);
+    this.getMaintenances();
+    this.getTasks();
+  }
+  // this.getLatest();
+
+  getTasks() {
+    fetch(`http://192.168.1.153:4000/machines/getAllMaintenanceLogs/`, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        this.setState({
+          tasks: res,
+        });
+      });
   }
 
-  // latestImages() {
-  //   const latest = [];
-  //   console.log(this.state.latestImages);
-  //   for (let i = 0; i < this.state.latestImages.length; i++) {
-  //     latest.push(
-  //       <Col className="post-card">
-  //         <PostCard postid={this.state.latestImages[i]} />
-  //       </Col>
-  //     );
-  //   }
-  //   return latest;
-  // }
+  getMaintenances() {
+    fetch(`http://192.168.1.153:4000/machines/getDailyMaintenanceHistory/`, {
+      method: "GET",
+      credentials: "same-origin",
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(JSON.stringify(res));
+        this.setState({
+          dailyHistory: res,
+        }),
+          () => console.log();
+      });
+  }
 
-  // getLatest() {
-  //   fetch("http://localhost:4000/images/latest", {
-  //     method: "GET",
-  //     credentials: "same-origin",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then(response => response.json())
-  //     .then(res => {
-  //       this.setState(
-  //         {
-  //           latestImages: res.latestImages
-  //         },
-  //         () => console.log()
-  //       );
-  //     });
-  // }
+  renderTasks() {
+    const customStyles = {
+      context: {
+        background: "#cb4b16",
+        text: "#FFFFFF",
+      },
+      headCells: {
+        style: {
+          fontSize: "14px",
+        },
+      },
+      rows: {
+        highlightOnHoverStyle: {
+          backgroundColor: "rgb(230, 244, 244)",
+          borderBottomColor: "#FFFFFF",
+          outline: "1px solid #FFFFFF",
+        },
+      },
+      pagination: {
+        style: {
+          border: "none",
+        },
+      },
+    };
 
+    const columns = [
+      {
+        name: "MachineNo",
+        selector: "vendingMachine.machineNo",
+        sortable: true,
+      },
+      {
+        name: "Task",
+        cell: (row) => {
+          return <div data-tip={row.task}>{row.task}</div>;
+        },
+        sortable: false,
+      },
+      {
+        name: "Client",
+        cell: (row) => {
+          if (row.client) {
+            return row.client.name;
+          } else {
+            return "";
+          }
+        },
+        sortable: true,
+      },
+      {
+        name: "Type",
+        cell: (row) => {
+          if (row.emergency) {
+            return "Correctivo";
+          } else {
+            return "Preventivo";
+          }
+        },
+
+        conditionalCellStyles: [
+          {
+            when: (row) => row.emergency,
+            style: {
+              backgroundColor: "rgba(255, 0, 0, 0.3)",
+            },
+          },
+        ],
+      },
+    ];
+    return (
+      <Card body className="table">
+        <Card.Title>Open Tasks</Card.Title>
+        <DataTable
+          data={this.state.tasks}
+          noHeader
+          columns={columns}
+          pagination
+          customStyles={customStyles}
+          highlightOnHover
+        />
+      </Card>
+    );
+  }
+  renderDailyTasks() {
+    const columns = [
+      {
+        name: "Task",
+        selector: "task",
+        sortable: true,
+        grow: 3,
+        allowOverflow: true,
+      },
+      {
+        name: "Date",
+        selector: "createdAt",
+        sortable: true,
+        grow: 3,
+      },
+      {
+        name: "Completed by",
+        selector: "employee",
+        sortable: true,
+      },
+    ];
+    return (
+      <Card body className="table">
+        <Card.Title>Today's Maintenances</Card.Title>
+        <DataTableExtensions
+          filterHidden={false}
+          columns={columns}
+          data={this.state.dailyHistory}
+        >
+          <DataTable
+            data={this.state.dailyHistory}
+            noHeader
+            theme="machines"
+            columns={columns}
+            pagination
+            highlightOnHover
+          />
+        </DataTableExtensions>
+      </Card>
+    );
+  }
   render() {
     return (
       <div>
         <Header />
         <Jumbotron>
           <Container>
-            <Maintenances />
+            {this.renderTasks()}
+            {this.renderDailyTasks()}
           </Container>
         </Jumbotron>
       </div>

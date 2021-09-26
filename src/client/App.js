@@ -10,8 +10,8 @@ import Routes from "./Routes";
 import Definitions from "./Definitions";
 import Search from "./Search";
 import Header from "./Components/Header/Header";
+import EmployeeView from "./Components/EmployeeView/EmployeeView";
 
-import MobileHome from "./Mobile-Components/Home";
 import ReportMaintenance from "./Components/Report/ReportMaintenance.js";
 
 import "./app.css";
@@ -36,7 +36,7 @@ export default class Routing extends Component {
         <Route component={Definitions} path="/definitions" />
         <Route component={Routes} path="/routes" />
 
-        <Route component={MobileHome} path="/mobile" />
+        <Route component={EmployeeView} path="/mobile" />
         <Route component={ReportMaintenance} path="/report" />
       </BrowserRouter>
     );

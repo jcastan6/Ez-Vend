@@ -39,7 +39,7 @@ class NewMachine extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:4000/machines/newMachine", {
+    fetch("http://192.168.1.153:4000/machines/newMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -68,7 +68,7 @@ class NewMachine extends Component {
   }
 
   getTypes() {
-    fetch(`http://localhost:4000/machines/getTypes/`, {
+    fetch(`http://192.168.1.153:4000/machines/getTypes/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -92,7 +92,7 @@ class NewMachine extends Component {
   }
 
   getClients() {
-    fetch(`http://localhost:4000/clients/getAll/`, {
+    fetch(`http://192.168.1.153:4000/clients/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -116,7 +116,7 @@ class NewMachine extends Component {
   }
 
   // getAttributes() {
-  //   fetch(`http://localhost:4000/machines/getMachineAttributes/`, {
+  //   fetch(`http://192.168.1.153:4000/machines/getMachineAttributes/`, {
   //     method: "GET",
   //     credentials: "same-origin",
   //     headers: {

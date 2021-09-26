@@ -3,7 +3,7 @@ import Header from "./Components/Header/Header";
 import { retrieveCookie } from "./Components/Cookies";
 import Modal from "react-modal";
 import MachineCard from "./Components/MachineCard/MachineCard";
-import NewMachine from "./Components/Machines/NewMachine";
+import NewMachine from "../../NewMachine";
 import { Jumbotron, Row, Col, Button, Card, Container } from "react-bootstrap";
 
 import DataTable, { createTheme } from "react-data-table-component";
@@ -15,7 +15,7 @@ import MaintenanceLogs from "./Components/Maintenances/MaintenanceLogs";
 import MaintenanceHistory from "./Components/Maintenances/MaintenanceHistory";
 import MaintenanceReports from "./Components/Maintenances/MaintenanceReports";
 import { ThemeConsumer } from "styled-components";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsArrowLeft, BsThreeDotsVertical } from "react-icons/bs";
 export default class Machines extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,7 @@ export default class Machines extends Component {
     this.setState({ showModal: false });
   }
   getMachines() {
-    fetch(`http://localhost:4000/machines/getAll/`, {
+    fetch(`http://192.168.1.153:4000/machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -124,7 +124,7 @@ export default class Machines extends Component {
         sortable: true,
       },
       {
-        name: "Open Reports",
+        name: "Open Tasks",
         selector: "reports",
         sortable: true,
       },
@@ -149,6 +149,10 @@ export default class Machines extends Component {
           customStyles={customStyles}
           columns={columns}
           pagination
+          onRowDoubleClicked={(row) => {
+            this.handleOpenModal(row.id);
+          }}
+          noheader
           pointerOnHover
           highlightOnHover
         />
@@ -161,17 +165,16 @@ export default class Machines extends Component {
     this.state.machines.forEach((machine) => {
       modals.push(
         <Modal
-          shouldCloseOnOverlayClick
+          shouldCloseOnOverlayClick={true}
+          onRequestClose={this.handleCloseModal}
           isOpen={this.state.showModal === machine.id}
         >
-          <Button variant="outline-primary" onClick={this.handleCloseModal}>
-            X
-          </Button>
-          <br />
-          <br />
+          <h4>
+            <BsArrowLeft onClick={this.handleCloseModal}></BsArrowLeft>
+          </h4>
           <Row>
             <Col>
-              <Card body>
+              <Card body className="table">
                 <MachineEditor
                   machine={machine}
                   getMachines={this.getMachines}
@@ -208,14 +211,13 @@ export default class Machines extends Component {
               <br></br>
               <br></br>
               <Modal
+                shouldCloseOnOverlayClick={true}
+                onRequestClose={this.handleCloseModal}
                 isOpen={this.state.showModal === "new"}
                 className="modal-form"
               >
                 <Card>
                   <Card.Body>
-                    <Button variant="secondary" onClick={this.handleCloseModal}>
-                      x
-                    </Button>
                     <NewMachine getMachines={this.getMachines} />
                   </Card.Body>
                 </Card>

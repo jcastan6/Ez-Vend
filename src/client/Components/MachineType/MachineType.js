@@ -25,7 +25,7 @@ class MachineType extends Component {
 
   getMaintenances() {
     fetch(
-      `http://localhost:4000/machines/getMaintenanceTasks/${this.state.type}`,
+      `http://192.168.1.153:4000/machines/getMaintenanceTasks/${this.state.type}`,
       {
         method: "GET",
         credentials: "same-origin",
