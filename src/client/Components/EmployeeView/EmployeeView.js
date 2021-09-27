@@ -186,6 +186,12 @@ export default class EmployeeView extends Component {
     if (this.state.secret === false) {
       return (
         <div className="body-mobile">
+          <img
+            src="https://storage.googleapis.com/ezvend/cvm.png"
+            width="100%"
+            className="d-inline-block align-top"
+            alt="CVM"
+          />{" "}
           <form onSubmit={this.checkPass}>
             <FormGroup className="userId" controlId="username">
               <FormLabel>Username</FormLabel>

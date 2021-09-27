@@ -144,6 +144,12 @@ class ReportMaintenance extends Component {
       return (
         <div className="body-mobile">
           <form onSubmit={this.checkPass}>
+            <img
+              src="https://storage.googleapis.com/ezvend/cvm.png"
+              width="100%"
+              className="d-inline-block align-top"
+              alt="CVM"
+            />{" "}
             <FormGroup className="userId" controlId="pass">
               <FormLabel>Password</FormLabel>
               <FormControl
