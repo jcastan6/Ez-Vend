@@ -146,7 +146,7 @@ class MaintenanceReports extends Component {
       <div>
         {this.renderModals()}
         <Card body className="table">
-          <Card.Title>Maintenance History</Card.Title>
+          <Card.Title>Open Reports</Card.Title>
 
           <DataTable
             data={this.state.maintenances}
