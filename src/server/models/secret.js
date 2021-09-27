@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
 
-  bcrypt.hash("californiavendingmachines", 10).then((hash) => {
+  bcrypt.hash("californiavendingmexico", 10).then((hash) => {
     const admins = [
       {
         password: hash,
