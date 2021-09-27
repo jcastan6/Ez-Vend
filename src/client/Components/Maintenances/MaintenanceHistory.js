@@ -46,7 +46,7 @@ class MaintenanceHistory extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://www.mantenimientoscvm.com/machines/getMaintenanceHistory/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getMaintenanceHistory/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",

@@ -43,7 +43,7 @@ class HistoryEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://www.mantenimientoscvm.com/machines/editMaintenanceHistory", {
+    fetch("https://www.mantenimientoscvm.com/machines/editMaintenanceHistory", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -59,7 +59,7 @@ class HistoryEditor extends Component {
 
   delete = () => {
     fetch(
-      "http://www.mantenimientoscvm.com/machines/deleteMaintenanceHistory",
+      "https://www.mantenimientoscvm.com/machines/deleteMaintenanceHistory",
       {
         method: "POST",
         credentials: "same-origin",

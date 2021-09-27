@@ -50,7 +50,7 @@ export default class EmployeeView extends Component {
 
   checkPass = (event) => {
     event.preventDefault();
-    fetch(`http://www.mantenimientoscvm.com/users/employeeLogin/`, {
+    fetch(`https://www.mantenimientoscvm.com/users/employeeLogin/`, {
       method: "POST",
       body: JSON.stringify({
         secret: this.state.pass,
@@ -77,7 +77,7 @@ export default class EmployeeView extends Component {
   };
   getRoute() {
     fetch(
-      `http://www.mantenimientoscvm.com/users/getEmployeeRoute/${this.state.employeeId}`,
+      `https://www.mantenimientoscvm.com/users/getEmployeeRoute/${this.state.employeeId}`,
       {
         method: "GET",
         credentials: "same-origin",

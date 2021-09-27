@@ -19,7 +19,7 @@ export default class Products extends Component {
 
   getMachines() {
     fetch(
-      `http://www.mantenimientoscvm.com/products/getAll/${this.state.business}`,
+      `https://www.mantenimientoscvm.com/products/getAll/${this.state.business}`,
       {
         method: "GET",
         credentials: "same-origin",

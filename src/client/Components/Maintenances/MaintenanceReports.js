@@ -52,7 +52,7 @@ class MaintenanceReports extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://www.mantenimientoscvm.com/machines/getMachineReports/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getMachineReports/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",

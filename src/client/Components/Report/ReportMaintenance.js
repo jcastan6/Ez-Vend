@@ -59,7 +59,7 @@ class ReportMaintenance extends Component {
       loading: true,
     }),
       () => console.log();
-    fetch("http://www.mantenimientoscvm.com/machines/submitReport", {
+    fetch("https://www.mantenimientoscvm.com/machines/submitReport", {
       method: "POST",
 
       body: formData,
@@ -93,7 +93,7 @@ class ReportMaintenance extends Component {
 
   checkPass = (event) => {
     event.preventDefault();
-    fetch(`http://www.mantenimientoscvm.com/users/checkSecret/`, {
+    fetch(`https://www.mantenimientoscvm.com/users/checkSecret/`, {
       method: "POST",
       body: JSON.stringify({ secret: this.state.pass }),
       credentials: "same-origin",
@@ -116,7 +116,7 @@ class ReportMaintenance extends Component {
   };
 
   getMachines() {
-    fetch(`http://www.mantenimientoscvm.com/machines/getAll/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

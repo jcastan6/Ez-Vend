@@ -29,7 +29,7 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://www.mantenimientoscvm.com/users/login", {
+    fetch("https://www.mantenimientoscvm.com/users/login", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
