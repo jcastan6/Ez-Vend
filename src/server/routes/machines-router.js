@@ -347,7 +347,7 @@ router.post("/deleteType", async (req, res) => {
 router.get("/getAllMaintenanceLogs", async (req, res) => {
   await db.check();
   const existing = await sequelize.query(
-    "SELECT maintenanceTaskId FROM vending.employeetasks;",
+    "SELECT maintenanceTaskId FROM vending.employeeTasks;",
     { raw: true }
   );
   const array = [];
@@ -648,7 +648,7 @@ router.post("/addMaintenanceHistory", async (req, res) => {
         }
 
         await sequelize.query(
-          `DELETE FROM vending.employeetasks where maintenanceTaskId= ${req.body.task};`
+          `DELETE FROM vending.employeeTasks where maintenanceTaskId= ${req.body.task};`
         );
 
         await machine.addHistory(history);
