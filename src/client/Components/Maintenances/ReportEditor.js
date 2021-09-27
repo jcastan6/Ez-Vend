@@ -42,7 +42,7 @@ class ReportEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:3000/machines/editMaintenanceReport", {
+    fetch("https://www.mantenimientoscvm.com/machines/editMaintenanceReport", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -57,14 +57,17 @@ class ReportEditor extends Component {
   };
 
   delete = () => {
-    fetch("http://localhost:3000/machines/deleteMaintenanceReport", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      "https://www.mantenimientoscvm.com/machines/deleteMaintenanceReport",
+      {
+        method: "POST",
+        credentials: "same-origin",
+        body: JSON.stringify(this.state),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         this.props.getMaintenances();
