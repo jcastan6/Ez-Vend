@@ -25,7 +25,7 @@ import {
 } from "react-bootstrap";
 import "./employeeView.css";
 import SubmitTask from "./SubmitTask";
-import { retrieveCookie, saveCookie } from "./employeeCookie";
+import { retrieveCookie, saveCookie, deleteCookie } from "./employeeCookie";
 
 export default class EmployeeView extends Component {
   constructor(props) {
@@ -39,8 +39,10 @@ export default class EmployeeView extends Component {
       username: "",
       secret: retrieveCookie().secret || false,
     };
+
     this.getRoute = this.getRoute.bind(this);
     this.renderTasks = this.renderTasks.bind(this);
+
     this.setSidebarClose = this.setSidebarClose.bind(this);
     this.setSidebarOpen = this.setSidebarOpen.bind(this);
     this.onRefresh = this.onRefresh.bind(this);

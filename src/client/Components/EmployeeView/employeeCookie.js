@@ -17,6 +17,10 @@ export const deleteCookie = () => {
   global.cookie.remove("secret", {
     path: "/",
   });
+  global.cookie.remove("user", {
+    path: "/",
+    maxAge: 1800,
+  });
 };
 
 export const retrieveCookie = () => {

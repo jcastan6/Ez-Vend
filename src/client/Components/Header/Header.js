@@ -47,6 +47,13 @@ class Header extends Component {
             <Nav.Link href="/Definitions">Definitions</Nav.Link>
           </Nav>
         </Navbar.Collapse>
+        <Navbar.Collapse className="justify-content-end">
+          <Navbar.Text>
+            <a href="/" onClick={() => deleteCookie()}>
+              Log Out
+            </a>
+          </Navbar.Text>
+        </Navbar.Collapse>
       </Navbar>
     );
   }

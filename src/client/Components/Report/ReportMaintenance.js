@@ -28,7 +28,7 @@ class ReportMaintenance extends Component {
       pass: "",
       secret: retrieveCookie(),
     };
-    console.log(retrieveCookie());
+
     this.checkPass = this.checkPass.bind(this);
     this.getMachines = this.getMachines.bind(this);
     this.getMachines();
