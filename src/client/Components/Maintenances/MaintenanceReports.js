@@ -116,6 +116,9 @@ class MaintenanceReports extends Component {
             </div>
           );
         },
+        cellExport: (row) => {
+          return row.task;
+        },
         sortable: true,
       },
       {

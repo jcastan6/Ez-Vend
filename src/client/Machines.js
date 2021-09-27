@@ -131,6 +131,9 @@ export default class Machines extends Component {
       {
         name: "Edit",
         selector: "edit",
+        cellExport: (row) => {
+          return "";
+        },
         sortable: false,
         right: true,
         Button: true,

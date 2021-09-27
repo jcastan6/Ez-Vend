@@ -106,6 +106,9 @@ class MaintenanceHistory extends Component {
             </div>
           );
         },
+        cellExport: (row) => {
+          return row.task;
+        },
         sortable: true,
       },
       {
@@ -134,19 +137,24 @@ class MaintenanceHistory extends Component {
         {this.renderModals()}
         <Card body className="table">
           <Card.Title>Maintenance History</Card.Title>
-
-          <DataTable
-            data={this.state.maintenances}
-            noHeader
-            theme="machines"
+          <DataTableExtensions
+            filterHidden={false}
             columns={columns}
-            pagination
-            highlightOnHover
-            pointerOnHover
-            onRowDoubleClicked={(row) => {
-              this.handleOpenModal(row.id);
-            }}
-          />
+            data={this.state.maintenances}
+          >
+            <DataTable
+              data={this.state.maintenances}
+              noHeader
+              theme="machines"
+              columns={columns}
+              pagination
+              highlightOnHover
+              pointerOnHover
+              onRowDoubleClicked={(row) => {
+                this.handleOpenModal(row.id);
+              }}
+            />
+          </DataTableExtensions>
         </Card>
       </div>
     );

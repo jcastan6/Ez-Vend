@@ -63,6 +63,9 @@ class MaintenanceLogs extends Component {
             </div>
           );
         },
+        cellExport: (row) => {
+          return row.task;
+        },
         sortable: true,
         grow: 3,
       },

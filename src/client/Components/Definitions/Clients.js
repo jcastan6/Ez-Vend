@@ -100,6 +100,9 @@ export default class Clients extends Component {
         cell: (row) => {
           return <ClientEditor client={row} getClients={this.getClients} />;
         },
+        cellExport: (row) => {
+          return "";
+        },
         right: true,
         button: true,
       },

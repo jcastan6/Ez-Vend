@@ -102,6 +102,9 @@ export default class Employees extends Component {
             <EmployeeEditor employee={row} getEmployees={this.getEmployees} />
           );
         },
+        cellExport: (row) => {
+          return "";
+        },
         right: true,
         button: true,
       },
