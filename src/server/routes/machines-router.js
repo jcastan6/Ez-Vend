@@ -44,7 +44,10 @@ router.get("/getAll/", async (req, res) => {
         let i = 0;
 
         for (const report of reports) {
-          if (report.dataValues.emergency || report.dataValues.pastDue) {
+          if (
+            (report.dataValues.emergency && !report.dataValues.completed) ||
+            report.dataValues.pastDue
+          ) {
             i++;
           }
         }

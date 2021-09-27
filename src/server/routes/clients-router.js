@@ -17,9 +17,16 @@ router.get("/getAll", async (req, res) => {
 
   models.client.findAll().then(async (clients) => {
     clientList = [];
-    clients.forEach((client) => {
+    for (const client of clients) {
+      const count = await models.vendingMachine.count({
+        where: {
+          clientId: client.dataValues.id,
+        },
+      });
+      client.dataValues.count = count;
+      console.log(count);
       clientList.push(client.dataValues);
-    });
+    }
 
     return res.send(clientList);
   });
