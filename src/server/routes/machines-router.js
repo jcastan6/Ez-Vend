@@ -389,23 +389,14 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
 
 router.get("/getAllMaintenanceLogsHome", async (req, res) => {
   await db.check();
-  const existing = await sequelize.query(
-    "SELECT maintenanceTaskId FROM vending.employeeTasks;",
-    { raw: true }
-  );
-  const array = [];
+ 
 
-  for (const number of existing[0]) {
-    if (number) {
-      array.push(number.maintenanceTaskId);
-    }
-  }
+
 
   const tasks = await models.maintenanceTask.findAll({
     where: {
       completed: false,
       [Op.or]: [{ pastDue: true }, { emergency: true }],
-      id: { [Op.notIn]: array },
     },
     include: ["vendingMachine"],
   });
