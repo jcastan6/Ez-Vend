@@ -28,6 +28,7 @@ class HistoryEditor extends Component {
     this.state = {
       task: this.props.report.task,
       id: this.props.report.id,
+      employee: this.props.report.employee,
       createdAt: this.props.report.createdAt,
     };
 
