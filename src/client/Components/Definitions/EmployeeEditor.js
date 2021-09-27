@@ -8,7 +8,7 @@ import {
   Card,
   Form,
 } from "react-bootstrap";
-import "../";
+
 import Modal from "react-modal";
 import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
 

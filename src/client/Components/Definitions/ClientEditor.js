@@ -9,7 +9,7 @@ import {
   Card,
 } from "react-bootstrap";
 import Modal from "react-modal";
-import "../";
+
 import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
 
 class ClientEditor extends Component {
