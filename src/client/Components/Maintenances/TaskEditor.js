@@ -9,9 +9,9 @@ import {
   Card,
 } from "react-bootstrap";
 import Modal from "react-modal";
-import "../Definitions.css";
+import "..";
 import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
-import "../Maintenances/Maintenances.css";
+import "./Maintenances.css";
 
 class TaskEditor extends Component {
   constructor(props) {
