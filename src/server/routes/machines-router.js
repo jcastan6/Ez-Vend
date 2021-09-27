@@ -499,7 +499,7 @@ router.post("/submitReport", async (req, res) => {
   await db.check();
 
   if (req.files) {
-    req.setTimeout(20000);
+    req.setTimeout(60000);
     // Create a new blob in the bucket and upload the file data.
     const blob = bucket.file(req.files.file.name);
     const blobStream = blob.createWriteStream({
