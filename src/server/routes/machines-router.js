@@ -247,7 +247,7 @@ router.post("/batchAddMachines", async (req, res) => {
   let data = req.files.file.data.toString().split("\n");
   for (const line of data) {
     if (line.length > 1) {
-      let machine = line.split(",");
+      let machine = line.split("|");
       console.log(machine);
       let client = await models.client.findOne({
         where: {
