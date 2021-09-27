@@ -24,6 +24,11 @@ body {
 }
 
 @media screen and (max-width: 900px) {
+  .login {
+    padding-right: 20%;
+    padding-left: 20%;
+    padding-top: 10px;
+  }
   .body-mobile {
     padding-right: 20%;
     padding-left: 20%;

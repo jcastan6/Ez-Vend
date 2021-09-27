@@ -65,9 +65,14 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="body">
+      <div className="body login">
         <h1 id="justice">
-          <b>Log In</b>
+          <img
+            src="https://storage.googleapis.com/ezvend/cvm.png"
+            width="100%"
+            className="d-inline-block align-top"
+            alt="CVM"
+          />{" "}
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>

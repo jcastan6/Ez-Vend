@@ -71,7 +71,7 @@ class Registration extends Component {
 
   render() {
     return (
-      <div className="body">
+      <div className="body login">
         <h1 id="justice">
           <b>Register</b>
         </h1>
