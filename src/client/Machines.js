@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Header from "./Components/Header/Header";
 import { retrieveCookie } from "./Components/Cookies";
 import Modal from "react-modal";
-import MachineCard from "./Components/MachineCard/MachineCard";
+
 import NewMachine from "../../NewMachine";
 import { Jumbotron, Row, Col, Button, Card, Container } from "react-bootstrap";
 
@@ -14,7 +14,7 @@ import "./app.css";
 import MaintenanceLogs from "./Components/Maintenances/MaintenanceLogs";
 import MaintenanceHistory from "./Components/Maintenances/MaintenanceHistory";
 import MaintenanceReports from "./Components/Maintenances/MaintenanceReports";
-import { ThemeConsumer } from "styled-components";
+
 import { BsArrowLeft, BsThreeDotsVertical } from "react-icons/bs";
 export default class Machines extends Component {
   constructor(props) {

@@ -24,8 +24,18 @@ body {
 }
 
 @media screen and (max-width: 900px) {
+  .body-mobile {
+    padding-right: 20%;
+    padding-left: 20%;
+    padding-top: 10px;
+  }
 }
 @media screen and (min-width: 900px) {
+  .body-mobile {
+    padding-right: 30%;
+    padding-left: 30%;
+    padding-top: 10px;
+  }
   .body {
     padding-right: 20%;
     padding-left: 20%;

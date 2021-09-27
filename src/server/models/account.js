@@ -11,12 +11,7 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      email: {
-        type: Sequelize.STRING(45),
-        allowNull: false,
-        unique: true,
-      },
-      businessName: {
+      username: {
         type: Sequelize.STRING(45),
         allowNull: false,
         unique: true,
@@ -50,18 +45,6 @@ module.exports = (sequelize, Sequelize) => {
   );
 
   account.associate = (models) => {};
-
-  // bcrypt.hash("admin123", 10).then(hash => {
-  //   const admins = [
-  //     {
-  //       email: "admin@administrator.com",
-  //       password: hash,
-  //       businessName: "adminbusiness"
-  //     }
-  //   ];
-
-  //   account.bulkCreate(admins).catch();
-  // });
 
   account.prototype.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);

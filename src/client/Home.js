@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import DataTable, { createTheme } from "react-data-table-component";
 import DataTableExtensions from "react-data-table-component-extensions";
 import Header from "./Components/Header/Header.js";
-import { retrieveCookie } from "./Components/Cookies";
-import Maintenances from "./Components/Maintenances/Maintenances";
 import "react-data-table-component-extensions/dist/index.css";
 import {
   Container,
@@ -14,12 +12,7 @@ import {
   Card,
   Carousel,
 } from "react-bootstrap";
-import {
-  BsFillPlusSquareFill,
-  BsFillCaretUpFill,
-  BsFillCaretDownFill,
-  BsFillXCircleFill,
-} from "react-icons/bs";
+import ReactTooltip from "react-tooltip";
 
 export default class Home extends Component {
   constructor(props) {
@@ -140,14 +133,20 @@ export default class Home extends Component {
     return (
       <Card body className="table">
         <Card.Title>Open Tasks</Card.Title>
-        <DataTable
-          data={this.state.tasks}
-          noHeader
+        <DataTableExtensions
+          filterHidden={false}
           columns={columns}
-          pagination
-          customStyles={customStyles}
-          highlightOnHover
-        />
+          data={this.state.tasks}
+        >
+          <DataTable
+            data={this.state.tasks}
+            noHeader
+            columns={columns}
+            pagination
+            customStyles={customStyles}
+            highlightOnHover
+          />
+        </DataTableExtensions>
       </Card>
     );
   }
@@ -155,9 +154,15 @@ export default class Home extends Component {
     const columns = [
       {
         name: "Task",
-        selector: "task",
+        cell: (row) => {
+          return (
+            <div data-tip={row.task}>
+              {row.task} <ReactTooltip />
+            </div>
+          );
+        },
         sortable: true,
-        grow: 3,
+
         allowOverflow: true,
       },
       {
@@ -198,8 +203,10 @@ export default class Home extends Component {
         <Header />
         <Jumbotron>
           <Container>
-            {this.renderTasks()}
-            {this.renderDailyTasks()}
+            <Row>
+              <Col>{this.renderTasks()}</Col>
+              <Col>{this.renderDailyTasks()}</Col>
+            </Row>
           </Container>
         </Jumbotron>
       </div>

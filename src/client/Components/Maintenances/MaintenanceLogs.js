@@ -9,11 +9,12 @@ import {
   Card,
   Carousel,
 } from "react-bootstrap";
+import ReactTooltip from "react-tooltip";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
 import NewMaintenance from "./NewMaintenance";
-import TaskEditor from "../TaskEditor/TaskEditor";
+import TaskEditor from "./TaskEditor";
 
 class MaintenanceLogs extends Component {
   constructor(props) {
@@ -55,7 +56,13 @@ class MaintenanceLogs extends Component {
     const columns = [
       {
         name: "Task",
-        selector: "task",
+        cell: (row) => {
+          return (
+            <div data-tip={row.task}>
+              {row.task} <ReactTooltip />
+            </div>
+          );
+        },
         sortable: true,
         grow: 3,
       },

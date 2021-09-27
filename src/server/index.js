@@ -4,7 +4,7 @@ const os = require("os");
 const path = require("path");
 const sequelize = require("sequelize");
 const cors = require("cors");
-const io = require("socket.io")();
+
 const bodyParser = require("body-parser");
 const userRouter = require("./routes/users-router");
 
@@ -19,15 +19,6 @@ app.use(
     createParentPath: true,
   })
 );
-
-io.listen(8080);
-app.set("socketio", io);
-
-io.of("/lobby").on("connection", (socket) => {
-  socket.on("subscribeToChat", (msg) => {
-    io.of("/lobby").emit("message", msg);
-  });
-});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

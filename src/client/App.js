@@ -4,7 +4,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Registration";
 import Home from "./Home";
-import Clients from "./Clients";
+
 import Machines from "./Machines";
 import Routes from "./Routes";
 import Definitions from "./Definitions";
@@ -31,7 +31,7 @@ export default class Routing extends Component {
         />
         <Route component={Home} path="/home" />
         <Route component={Register} path="/registration" />
-        <Route component={Clients} path="/clients" />
+
         <Route component={Machines} path="/machines" />
         <Route component={Definitions} path="/definitions" />
         <Route component={Routes} path="/routes" />

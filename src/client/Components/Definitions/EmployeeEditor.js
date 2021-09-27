@@ -5,9 +5,12 @@ import {
   FormGroup,
   FormControl,
   FormLabel,
+  Card,
   Form,
 } from "react-bootstrap";
 import "../Definitions.css";
+import Modal from "react-modal";
+import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
 
 class EmployeeEditor extends Component {
   constructor(props) {
@@ -18,9 +21,11 @@ class EmployeeEditor extends Component {
       id: this.props.employee.id,
       name: this.props.employee.name,
       type: this.props.employee.type,
+      username: this.props.employee.username,
       isTechnician: this.props.employee.isTechnician,
     };
-
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
     if (this.state.isTechnician) {
       this.getTypes();
     }
@@ -48,6 +53,13 @@ class EmployeeEditor extends Component {
         this.props.getClients();
       });
   };
+  handleOpenModal() {
+    this.setState({ showModal: true });
+  }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
+  }
 
   delete = () => {
     fetch("http://192.168.1.153:4000/users/deleteEmployee", {
@@ -117,50 +129,60 @@ class EmployeeEditor extends Component {
 
   render() {
     return (
-      <div className="tab-panel">
-        <h1 id="justice">
-          <b>Edit Employee Information</b>
-        </h1>
-        <br />
-        <form onSubmit={this.handleSubmit}>
-          <FormGroup className="userId" controlId="name">
-            <FormLabel>Name</FormLabel>
-            <FormControl
-              autoFocus
-              type="name"
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
+      <div className="">
+        <BsThreeDotsVertical onClick={this.handleOpenModal} />
+        <Modal
+          shouldCloseOnOverlayClick
+          onRequestClose={this.handleCloseModal}
+          isOpen={this.state.showModal}
+          className="modal-form"
+        >
+          <Card>
+            <Card.Body>
+              <h1 id="justice">
+                <b>Edit Employee Information</b>
+              </h1>
+              <br />
+              <form onSubmit={this.handleSubmit}>
+                <FormGroup className="userId" controlId="name">
+                  <FormLabel>Name</FormLabel>
+                  <FormControl
+                    autoFocus
+                    type="name"
+                    value={this.state.name}
+                    onChange={this.handleChange}
+                  />
+                </FormGroup>
+                <FormGroup className="userId" controlId="username">
+                  <FormLabel>Username</FormLabel>
+                  <FormControl
+                    autoFocus
+                    type="input"
+                    value={this.state.username}
+                    onChange={this.handleChange}
+                  />
+                </FormGroup>
 
-          <FormGroup controlId="isTechnician">
-            <FormLabel>Technician</FormLabel>
-            <FormControl
-              autoFocus
-              type="checkbox"
-              value={this.state.type}
-              checked={this.state.isTechnician}
-              onChange={this.toggleTechnician}
-            />
-          </FormGroup>
-          {this.isTechnician()}
-          <Button
-            block
-            disabled={!this.validateForm()}
-            type="submit"
-            onClick={this.onSubmit}
-          >
-            Update
-          </Button>
-          <Button
-            block
-            disabled={!this.validateForm()}
-            variant="danger"
-            onClick={this.delete}
-          >
-            Delete
-          </Button>
-        </form>
+                <Button
+                  block
+                  disabled={!this.validateForm()}
+                  type="submit"
+                  onClick={this.onSubmit}
+                >
+                  Update
+                </Button>
+                <Button
+                  block
+                  disabled={!this.validateForm()}
+                  variant="danger"
+                  onClick={this.delete}
+                >
+                  Delete
+                </Button>
+              </form>
+            </Card.Body>
+          </Card>
+        </Modal>
       </div>
     );
   }

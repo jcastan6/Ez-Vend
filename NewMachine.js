@@ -5,9 +5,10 @@ import {
   FormGroup,
   FormControl,
   FormLabel,
-  Image,
-  Carousel,
+  Tab,
+  Tabs,
 } from "react-bootstrap";
+import ImageUploader from "react-images-upload";
 
 class NewMachine extends Component {
   constructor(props) {
@@ -22,10 +23,12 @@ class NewMachine extends Component {
       types: [],
       attributes: [],
       clients: [],
+      file: [],
     };
     this.getTypes = this.getTypes.bind(this);
     //this.getAttributes = this.getAttributes.bind(this);
     this.getClients = this.getClients.bind(this);
+    this.onDrop = this.onDrop.bind(this);
     this.getClients();
     this.getTypes();
     //this.getAttributes();
@@ -67,6 +70,18 @@ class NewMachine extends Component {
     return true;
   }
 
+  validateFileForm() {
+    if (this.state.file.length === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  onDrop(file) {
+    this.setState({
+      file: this.state.file.concat(file),
+    });
+  }
   getTypes() {
     fetch(`http://192.168.1.153:4000/machines/getTypes/`, {
       method: "GET",
@@ -115,105 +130,124 @@ class NewMachine extends Component {
       });
   }
 
-  // getAttributes() {
-  //   fetch(`http://192.168.1.153:4000/machines/getMachineAttributes/`, {
-  //     method: "GET",
-  //     credentials: "same-origin",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((res) => {
-  //       let attributes = [];
-  //       res.forEach((element) => {
-  //         attributes.push(
-  //           <FormGroup controlId={element}>
-  //             <FormLabel>{element}</FormLabel>
-  //             <FormControl
-  //               onChange={this.handleChange}
-  //               as="textarea"
-  //               rows={1}
-  //             />
-  //           </FormGroup>
-  //         );
-  //       });
+  handleFileSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("file", this.state.file[0]);
+    fetch("http://192.168.1.153:4000/machines/batchAddMachines", {
+      method: "POST",
 
-  //       this.setState({
-  //         attributes: attributes,
-  //       }),
-  //         () => console.log();
-  //     });
-  // }
+      body: formData,
+    }).then((res) => {
+      this.props.getMachines();
+    });
+  };
 
   render() {
     return (
-      <div>
-        <br></br>
-        <h1 id="justice">
-          <b>Add New Machine</b>
-        </h1>
-        <br />
-        <form onSubmit={this.handleSubmit}>
-          <FormGroup className="userId" controlId="machineNo">
-            <FormLabel>Machine Number</FormLabel>
-            <FormControl
-              size="lg"
-              value={this.state.machineNo}
-              onChange={this.handleChange}
-            ></FormControl>
-          </FormGroup>
-          <FormGroup className="userId" controlId="machineType">
-            <FormLabel>Machine Type</FormLabel>
-            <FormControl
-              as="select"
-              size="lg"
-              value={this.state.machineType}
-              onChange={this.handleChange}
-            >
-              {this.state.types}
-            </FormControl>
-          </FormGroup>
-          <FormGroup className="clientId" controlId="clientName">
-            <FormLabel>Client</FormLabel>
-            <FormControl
-              as="select"
-              size="lg"
-              value={this.state.clientName}
-              onChange={this.handleChange}
-            >
-              {this.state.clients}
-            </FormControl>
-          </FormGroup>
-          <FormGroup className="clientId" controlId="model">
-            <FormLabel>Model</FormLabel>
-            <FormControl
-              size="lg"
-              value={this.state.model}
-              onChange={this.handleChange}
-            ></FormControl>
-          </FormGroup>
-          <FormGroup className="clientId" controlId="serialNo">
-            <FormLabel>Serial No.</FormLabel>
-            <FormControl
-              size="lg"
-              value={this.state.serialNo}
-              onChange={this.handleChange}
-            ></FormControl>
-          </FormGroup>
+      <Tabs
+        defaultActiveKey="home"
+        id="uncontrolled-tab-example"
+        className="mb-3"
+      >
+        <Tab eventKey="home" title="Single">
+          <div>
+            <br></br>
+            <h1 id="justice">
+              <b>Add New Machine</b>
+            </h1>
+            <br />
+            <form onSubmit={this.handleSubmit}>
+              <FormGroup className="userId" controlId="machineNo">
+                <FormLabel>Machine Number</FormLabel>
+                <FormControl
+                  size="lg"
+                  value={this.state.machineNo}
+                  onChange={this.handleChange}
+                ></FormControl>
+              </FormGroup>
+              <FormGroup className="userId" controlId="machineType">
+                <FormLabel>Machine Type</FormLabel>
+                <FormControl
+                  as="select"
+                  size="lg"
+                  value={this.state.machineType}
+                  onChange={this.handleChange}
+                >
+                  {this.state.types}
+                </FormControl>
+              </FormGroup>
+              <FormGroup className="clientId" controlId="clientName">
+                <FormLabel>Client</FormLabel>
+                <FormControl
+                  as="select"
+                  size="lg"
+                  value={this.state.clientName}
+                  onChange={this.handleChange}
+                >
+                  {this.state.clients}
+                </FormControl>
+              </FormGroup>
+              <FormGroup className="clientId" controlId="model">
+                <FormLabel>Model</FormLabel>
+                <FormControl
+                  size="lg"
+                  value={this.state.model}
+                  onChange={this.handleChange}
+                ></FormControl>
+              </FormGroup>
+              <FormGroup className="clientId" controlId="serialNo">
+                <FormLabel>Serial No.</FormLabel>
+                <FormControl
+                  size="lg"
+                  value={this.state.serialNo}
+                  onChange={this.handleChange}
+                ></FormControl>
+              </FormGroup>
 
-          {this.state.attributes}
+              {this.state.attributes}
 
-          <Button
-            block
-            disabled={!this.validateForm()}
-            type="submit"
-            onClick={this.onSubmit}
-          >
-            Agregar
-          </Button>
-        </form>
-      </div>
+              <Button
+                block
+                disabled={!this.validateForm()}
+                type="submit"
+                onClick={this.onSubmit}
+              >
+                Agregar
+              </Button>
+            </form>
+          </div>
+        </Tab>
+        <Tab eventKey="profile" title="Batch">
+          <div>
+            <br></br>
+            <h1 id="justice">
+              <b>Add Machines</b>
+            </h1>
+            <br />
+            <form onSubmit={this.handleFileSubmit}>
+              <ImageUploader
+                withIcon={true}
+                buttonText="Choose File"
+                accept="file"
+                onChange={this.onDrop}
+                withLabel={false}
+                imgExtension={[".csv", ".json", ".xlsh"]}
+                maxFileSize={5242880}
+                singleImage
+              />
+              <Button
+                block
+                disabled={!this.validateFileForm()}
+                type="submit"
+                onClick={this.onSubmit}
+              >
+                Agregar
+              </Button>
+            </form>
+          </div>
+        </Tab>
+      </Tabs>
     );
   }
 }

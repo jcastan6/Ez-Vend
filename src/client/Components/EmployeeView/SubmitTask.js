@@ -132,6 +132,7 @@ export default class SubmitTask extends Component {
             onChange={this.onDrop}
             withPreview
             withLabel={false}
+            singleImage
             imgExtension={[".jpg", ".gif", ".png", ".gif"]}
             maxFileSize={5242880}
           />

@@ -25,11 +25,11 @@ class MachineEditor extends Component {
       clients: [],
     };
 
-    //this.getTypes = this.getTypes.bind(this);
+    this.getTypes = this.getTypes.bind(this);
     //this.getAttributes = this.getAttributes.bind(this);
     this.getClients = this.getClients.bind(this);
     this.getClients();
-    //this.getTypes();
+    this.getTypes();
     //this.getAttributes();
   }
 
@@ -67,6 +67,29 @@ class MachineEditor extends Component {
       return false;
     }
     return true;
+  }
+  getTypes() {
+    fetch(`http://192.168.1.153:4000/machines/getTypes`, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        let types = [];
+        types.push(<option>{""}</option>);
+        res.forEach((element) => {
+          types.push(<option>{element.type}</option>);
+        });
+        this.setState(
+          {
+            types: types,
+          },
+          () => console.log()
+        );
+      });
   }
 
   getClients() {
@@ -127,8 +150,7 @@ class MachineEditor extends Component {
           <FormGroup className="userId" controlId="machineType">
             <FormLabel>Machine Type</FormLabel>
             <FormControl
-              as="Input"
-              readOnly
+              as="select"
               size="lg"
               value={this.state.machineType}
               onChange={this.handleChange}

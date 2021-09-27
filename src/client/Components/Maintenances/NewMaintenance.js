@@ -78,6 +78,7 @@ class NewMaintenance extends Component {
 
         <Modal
           shouldCloseOnOverlayClick
+          onRequestClose={this.handleCloseModal}
           isOpen={this.state.showModal}
           className="modal-form"
         >

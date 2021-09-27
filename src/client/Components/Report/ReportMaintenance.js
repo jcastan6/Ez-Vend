@@ -13,6 +13,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import ImageUploader from "react-images-upload";
+import { retrieveCookie, deleteCookie, saveCookie } from "./ReportCookie";
 
 class ReportMaintenance extends Component {
   constructor(props) {
@@ -24,12 +25,15 @@ class ReportMaintenance extends Component {
       machines: [],
       pictures: [],
       loading: false,
+      pass: "",
+      secret: retrieveCookie(),
     };
-
+    console.log(retrieveCookie());
+    this.checkPass = this.checkPass.bind(this);
     this.getMachines = this.getMachines.bind(this);
-
     this.getMachines();
     this.onDrop = this.onDrop.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   onDrop(picture) {
@@ -66,6 +70,12 @@ class ReportMaintenance extends Component {
     window.location.reload(false);
   }
 
+  handleChange = (event) => {
+    this.setState({
+      [event.target.id]: event.target.value,
+    });
+  };
+
   validateForm() {
     if (this.state.issue === "") {
       return false;
@@ -76,6 +86,34 @@ class ReportMaintenance extends Component {
 
     return true;
   }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
+  }
+
+  checkPass = (event) => {
+    event.preventDefault();
+    fetch(`http://192.168.1.153:4000/users/checkSecret/`, {
+      method: "POST",
+      body: JSON.stringify({ secret: this.state.pass }),
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 200) {
+          saveCookie(true);
+          this.setState({
+            secret: true,
+          }),
+            () => console.log();
+        } else {
+          alert("Wrong Password");
+        }
+      });
+  };
 
   getMachines() {
     fetch(`http://192.168.1.153:4000/machines/getAll/`, {
@@ -102,6 +140,23 @@ class ReportMaintenance extends Component {
   }
 
   render() {
+    if (this.state.secret === false) {
+      return (
+        <div className="body-mobile">
+          <form onSubmit={this.checkPass}>
+            <FormGroup className="userId" controlId="pass">
+              <FormLabel>Password</FormLabel>
+              <FormControl
+                type="password"
+                size="lg"
+                value={this.state.pass}
+                onChange={this.handleChange}
+              ></FormControl>
+            </FormGroup>
+          </form>
+        </div>
+      );
+    }
     if (this.state.loading) {
       return (
         <Container>
@@ -112,6 +167,7 @@ class ReportMaintenance extends Component {
         </Container>
       );
     }
+
     return (
       <div>
         <Container>
@@ -156,6 +212,7 @@ class ReportMaintenance extends Component {
                 withLabel={false}
                 imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                 maxFileSize={5242880}
+                singleImage
               />
               <Button
                 disabled={!this.validateForm()}

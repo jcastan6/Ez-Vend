@@ -1,19 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cron = require("node-cron");
-
+var fs = require("fs");
+var parse = require("csv-parser");
 const app = express();
 const Sequelize = require("sequelize");
 
 const { Op } = Sequelize;
 
 const router = express.Router();
-const { UUIDV4, UUIDV1, MACADDR } = require("sequelize");
+const { UUIDV4, UUIDV1, MACADDR, INTEGER } = require("sequelize");
 const { Storage } = require("@google-cloud/storage");
 const models = require("../models");
 const { sequelize } = require("../models/index");
 
 const db = require("../models/index");
+const { type } = require("jquery");
+const { report } = require("process");
 
 const storage = new Storage({ keyFilename: "gcskey.json" });
 
@@ -40,7 +43,7 @@ router.get("/getAll/", async (req, res) => {
         const reports = await machine.getTasks();
         let i = 0;
 
-        for (report of reports) {
+        for (const report of reports) {
           if (report.dataValues.emergency || report.dataValues.pastDue) {
             i++;
           }
@@ -178,6 +181,9 @@ router.post("/newMachine", async (req, res) => {
 
       await db.backup();
       return res.send(machine.dataValues);
+    })
+    .catch(Sequelize.UniqueConstraintError, function (err) {
+      res.status(400).json({ message: "Machine number already exists." });
     });
 });
 
@@ -199,6 +205,11 @@ router.post("/deleteMachine", async (req, res) => {
 router.post("/editMachine", async (req, res) => {
   await db.check();
 
+  const type = await models.machineType.findOne({
+    where: {
+      type: req.body.machineType,
+    },
+  });
   const client = await models.client.findOne({
     where: {
       name: req.body.clientName,
@@ -220,24 +231,50 @@ router.post("/editMachine", async (req, res) => {
       })
       .then(async (machine) => {
         await machine.setClient(client);
-
+        await machine.setType(type);
         await db.backup();
         return res.send(machine.dataValues);
       });
   }
 });
 
-router.post("/batchMachines", async (req, res) => {
+router.post("/batchAddMachines", async (req, res) => {
   await db.check();
+  //console.log(req.files.file.data.toString());
+  let data = req.files.file.data.toString().split("\n");
+  for (const line of data) {
+    if (line.length > 1) {
+      let machine = line.split(",");
+      console.log(machine);
+      let client = await models.client.findOne({
+        where: {
+          name: machine[1],
+        },
+      });
+      let type = await models.machineType.findOne({
+        where: {
+          type: machine[2],
+        },
+      });
+      models.vendingMachine
+        .create({
+          machineNo: parseInt(machine[0]),
+          model: machine[3],
+          serialNo: machine[4],
+        })
+        .then(async (machine) => {
+          if (client) {
+            machine.setClient(client);
+          }
+          if (type) {
+            machine.setType(type);
+          }
 
-  models.vendingMachine
-    .create({
-      type: req.body.type,
-    })
-    .then(async (machine) => {
-      await db.backup();
-      return res.send(machine.dataValues);
-    });
+          await db.backup();
+        });
+    }
+  }
+  return res.send();
 });
 
 router.post("/newType", async (req, res) => {
@@ -255,13 +292,56 @@ router.post("/newType", async (req, res) => {
 
 router.get("/getTypes", async (req, res) => {
   await db.check();
-  await models.machineType.findAll().then(async (machines) => {
-    machineList = [];
-    machines.forEach((machine) => {
-      machineList.push(machine.dataValues);
-    });
-    return res.send(machineList);
+  await models.machineType.findAll().then(async (types) => {
+    typeList = [];
+
+    for (const type of types) {
+      let count = await models.vendingMachine.count({
+        where: {
+          typeId: type.dataValues.id,
+        },
+      });
+      type.dataValues.count = count;
+      typeList.push(type.dataValues);
+    }
+    return res.send(typeList);
   });
+});
+
+router.post("/editType", async (req, res) => {
+  await db.check();
+  const task = await models.machineType.findOne({
+    where: {
+      id: req.body.id,
+    },
+  });
+  if (task) {
+    task
+      .update({
+        type: req.body.type,
+      })
+      .then(async () => {
+        await db.backup();
+        return res.status(200).send({
+          message: "Edited Type",
+        });
+      });
+  }
+});
+
+router.post("/deleteType", async (req, res) => {
+  await db.check();
+  const task = await models.machineType.findOne({
+    where: {
+      id: req.body.id,
+    },
+  });
+  if (task) {
+    await task.destroy().then(async () => {
+      await db.backup();
+      return res.status(200).json({ result: "type removed" });
+    });
+  }
 });
 
 router.get("/getAllMaintenanceLogs", async (req, res) => {
@@ -272,7 +352,7 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
   );
   const array = [];
 
-  for (number of existing[0]) {
+  for (const number of existing[0]) {
     if (number) {
       array.push(number.maintenanceTaskId);
     }
@@ -289,7 +369,7 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
 
   const maintenanceList = [];
 
-  for (task of tasks) {
+  for (const task of tasks) {
     const client = await models.client.findOne({
       where: { id: task.dataValues.vendingMachine.clientId },
     });
@@ -456,7 +536,7 @@ router.post("/getMaintenanceHistory", async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
     const list = [];
-    for (report of reports) {
+    for (const report of reports) {
       const task = await report.getMaintenance();
       const employee = await report.getEmployee();
       if (employee) {
@@ -498,15 +578,22 @@ router.get("/getDailyMaintenanceHistory", async (req, res) => {
         [Op.lt]: NOW,
       },
     },
+    include: [{ all: true, nested: true }],
     order: [["createdAt", "DESC"]],
   });
   const list = [];
-  for (report of reports) {
-    const task = await report.getMaintenance();
-    const employee = await report.getEmployee();
-    if (employee) {
-      report.dataValues.employee = employee.dataValues.name;
-    }
+  for (const report of reports) {
+    const task = await report.maintenance;
+    const employee = await report.employee;
+
+    report.dataValues.employee = employee.dataValues.name;
+
+    const machine = report.maintenance.vendingMachine;
+
+    report.dataValues.client = machine.client;
+    report.dataValues.machineNo = machine.dataValues.machineNo;
+
+    console.log(report);
     report.dataValues.task = task.dataValues.task;
     list.push(report.dataValues);
   }

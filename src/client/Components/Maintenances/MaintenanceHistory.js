@@ -17,6 +17,7 @@ import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
 import HistoryEditor from "./HistoryEditor";
+import ReactTooltip from "react-tooltip";
 import { BsCamera, BsThreeDotsVertical } from "react-icons/bs";
 class MaintenanceHistory extends Component {
   constructor(props) {
@@ -98,7 +99,13 @@ class MaintenanceHistory extends Component {
     const columns = [
       {
         name: "Task",
-        selector: "task",
+        cell: (row) => {
+          return (
+            <div data-tip={row.task}>
+              {row.task} <ReactTooltip />
+            </div>
+          );
+        },
         sortable: true,
       },
       {

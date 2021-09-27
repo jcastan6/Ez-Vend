@@ -19,6 +19,7 @@ export default class NewEmployee extends Component {
     this.state = {
       name: "",
       type: "",
+      username: "",
       isTechnician: false,
       types: [],
     };
@@ -39,16 +40,20 @@ export default class NewEmployee extends Component {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => res.json())
-      .then((res) => {
+    }).then((res) => {
+      if (res.status === 400) {
+        alert("Username already exists.");
+      } else {
         this.setState({
           name: "",
           type: "",
+          username: "",
           isTechnician: false,
         });
+
         this.props.getEmployees();
-      });
+      }
+    });
   };
 
   handleRouteChange() {
@@ -125,17 +130,16 @@ export default class NewEmployee extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-
-          <FormGroup controlId="isTechnician">
-            <FormLabel>Technician</FormLabel>
+          <FormGroup className="userId" controlId="username">
+            <FormLabel>Username</FormLabel>
             <FormControl
               autoFocus
-              type="checkbox"
-              value={this.state.type}
-              onChange={this.toggleTechnician}
+              type="input"
+              value={this.state.username}
+              onChange={this.handleChange}
             />
           </FormGroup>
-          {this.isTechnician()}
+
           <Button
             block
             disabled={!this.validateForm()}

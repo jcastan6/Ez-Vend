@@ -16,7 +16,7 @@ class Login extends Component {
     super(props);
     this.handleRouteChange = this.handleRouteChange.bind(this);
     this.state = {
-      userid: "",
+      username: "",
       password: "",
     };
   }
@@ -41,8 +41,8 @@ class Login extends Component {
       .then((res) => {
         if (res.status === 401) {
           alert("Sorry please check log-in credentials");
-        } else if (res.password === true) {
-          saveCookie(res.email);
+        } else if (res.username) {
+          saveCookie(res.username);
           this.handleRouteChange();
         } else {
           const error = new Error(res.error);
@@ -60,23 +60,23 @@ class Login extends Component {
   }
 
   validateForm() {
-    return this.state.userid.length > 0 && this.state.password.length > 0;
+    return this.state.username.length > 0 && this.state.password.length > 0;
   }
 
   render() {
     return (
-      <div>
+      <div className="body">
         <h1 id="justice">
           <b>Log In</b>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>
-          <FormGroup className="userId" controlId="userid">
+          <FormGroup className="username" controlId="username">
             <FormLabel>Username</FormLabel>
             <FormControl
               autoFocus
               type="username"
-              value={this.state.userid}
+              value={this.state.username}
               onChange={this.handleChange}
             />
           </FormGroup>
