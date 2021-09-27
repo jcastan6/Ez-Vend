@@ -26,7 +26,7 @@ app.use(cors());
 app.use(express.static("dist"));
 
 app.set("view engine", "ejs");
-app.listen(4000, "0.0.0.0", () => console.log("Listening on port 4000!"));
+app.listen(3001, () => console.log("Listening on port 4000!"));
 
 app.use("/users", userRouter);
 app.use("/clients", clientsRouter);

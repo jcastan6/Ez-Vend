@@ -31,7 +31,7 @@ export default class Home extends Component {
   // this.getLatest();
 
   getTasks() {
-    fetch(`http://192.168.1.153:4000/machines/getAllMaintenanceLogs/`, {
+    fetch(`http://127.0.0.1:3001/machines/getAllMaintenanceLogs/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -47,7 +47,7 @@ export default class Home extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://192.168.1.153:4000/machines/getDailyMaintenanceHistory/`, {
+    fetch(`http://127.0.0.1:3001/machines/getDailyMaintenanceHistory/`, {
       method: "GET",
       credentials: "same-origin",
     })

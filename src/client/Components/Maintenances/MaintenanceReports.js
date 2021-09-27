@@ -52,7 +52,7 @@ class MaintenanceReports extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://192.168.1.153:4000/machines/getMachineReports/`, {
+    fetch(`http://127.0.0.1:3001/machines/getMachineReports/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",

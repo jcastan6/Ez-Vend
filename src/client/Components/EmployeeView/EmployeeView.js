@@ -50,7 +50,7 @@ export default class EmployeeView extends Component {
 
   checkPass = (event) => {
     event.preventDefault();
-    fetch(`http://192.168.1.153:4000/users/employeeLogin/`, {
+    fetch(`http://127.0.0.1:3001/users/employeeLogin/`, {
       method: "POST",
       body: JSON.stringify({
         secret: this.state.pass,
@@ -77,7 +77,7 @@ export default class EmployeeView extends Component {
   };
   getRoute() {
     fetch(
-      `http://192.168.1.153:4000/users/getEmployeeRoute/${this.state.employeeId}`,
+      `http://127.0.0.1:3001/users/getEmployeeRoute/${this.state.employeeId}`,
       {
         method: "GET",
         credentials: "same-origin",

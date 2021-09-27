@@ -36,7 +36,7 @@ export default class Clients extends Component {
     this.setState({ showModal: false });
   }
   getClients() {
-    fetch(`http://192.168.1.153:4000/clients/getAll`, {
+    fetch(`http://127.0.0.1:3001/clients/getAll`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

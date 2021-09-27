@@ -41,7 +41,7 @@ class MachineEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://192.168.1.153:4000/machines/editMachine", {
+    fetch("http://127.0.0.1:3001/machines/editMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -69,7 +69,7 @@ class MachineEditor extends Component {
     return true;
   }
   getTypes() {
-    fetch(`http://192.168.1.153:4000/machines/getTypes`, {
+    fetch(`http://127.0.0.1:3001/machines/getTypes`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -93,7 +93,7 @@ class MachineEditor extends Component {
   }
 
   getClients() {
-    fetch(`http://192.168.1.153:4000/clients/getAll/`, {
+    fetch(`http://127.0.0.1:3001/clients/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -116,7 +116,7 @@ class MachineEditor extends Component {
   }
 
   delete = () => {
-    fetch("http://192.168.1.153:4000/machines/deleteMachine", {
+    fetch("http://127.0.0.1:3001/machines/deleteMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

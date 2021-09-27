@@ -59,7 +59,7 @@ class ReportMaintenance extends Component {
       loading: true,
     }),
       () => console.log();
-    fetch("http://192.168.1.153:4000/machines/submitReport", {
+    fetch("http://127.0.0.1:3001/machines/submitReport", {
       method: "POST",
 
       body: formData,
@@ -93,7 +93,7 @@ class ReportMaintenance extends Component {
 
   checkPass = (event) => {
     event.preventDefault();
-    fetch(`http://192.168.1.153:4000/users/checkSecret/`, {
+    fetch(`http://127.0.0.1:3001/users/checkSecret/`, {
       method: "POST",
       body: JSON.stringify({ secret: this.state.pass }),
       credentials: "same-origin",
@@ -116,7 +116,7 @@ class ReportMaintenance extends Component {
   };
 
   getMachines() {
-    fetch(`http://192.168.1.153:4000/machines/getAll/`, {
+    fetch(`http://127.0.0.1:3001/machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

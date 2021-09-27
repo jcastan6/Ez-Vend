@@ -29,7 +29,7 @@ export default class Maintenances extends Component {
   }
 
   getMaintenanceReports() {
-    fetch(`http://192.168.1.153:4000/routes/getAll/`, {
+    fetch(`http://127.0.0.1:3001/routes/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -41,7 +41,7 @@ export default class Maintenances extends Component {
   }
 
   getRoutes() {
-    fetch(`http://192.168.1.153:4000/routes/getAll/`, {
+    fetch(`http://127.0.0.1:3001/routes/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

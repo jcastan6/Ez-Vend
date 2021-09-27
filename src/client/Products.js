@@ -18,7 +18,7 @@ export default class Products extends Component {
   }
 
   getMachines() {
-    fetch(`http://192.168.1.153:4000/products/getAll/${this.state.business}`, {
+    fetch(`http://127.0.0.1:3001/products/getAll/${this.state.business}`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

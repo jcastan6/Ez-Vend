@@ -94,7 +94,7 @@ class NewRoute extends Component {
 
   saveRoute() {
     if (!this.props.route) {
-      fetch("http://192.168.1.153:4000/routes/addRoute", {
+      fetch("http://127.0.0.1:3001/routes/addRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -107,7 +107,7 @@ class NewRoute extends Component {
           this.props.getRoutes();
         });
     } else {
-      fetch("http://192.168.1.153:4000/routes/editRoute", {
+      fetch("http://127.0.0.1:3001/routes/editRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -130,7 +130,7 @@ class NewRoute extends Component {
     this.setState({
       employees: [],
     });
-    fetch(`http://192.168.1.153:4000/routes/getEmployees`, {
+    fetch(`http://127.0.0.1:3001/routes/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -150,7 +150,7 @@ class NewRoute extends Component {
   }
 
   getTasks() {
-    fetch(`http://192.168.1.153:4000/machines/getAllMaintenanceLogs/`, {
+    fetch(`http://127.0.0.1:3001/machines/getAllMaintenanceLogs/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -362,7 +362,7 @@ class NewRoute extends Component {
   }
 
   deleteRoute() {
-    fetch(`http://192.168.1.153:4000/routes/deleteRoute`, {
+    fetch(`http://127.0.0.1:3001/routes/deleteRoute`, {
       method: "POST",
       body: JSON.stringify(this.state),
       credentials: "same-origin",

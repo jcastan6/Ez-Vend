@@ -42,7 +42,7 @@ export default class Upload extends Component {
     formData.append("tags", JSON.stringify(this.state.tags));
 
     event.preventDefault();
-    fetch("http://192.168.1.153:4000/images/new", {
+    fetch("http://127.0.0.1:3001/images/new", {
       method: "POST",
       credentials: "same-origin",
       body: formData,

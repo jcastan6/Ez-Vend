@@ -36,7 +36,7 @@ export default class Employees extends Component {
     this.setState({ showModal: false });
   }
   getEmployees() {
-    fetch(`http://192.168.1.153:4000/users/getEmployees`, {
+    fetch(`http://127.0.0.1:3001/users/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
