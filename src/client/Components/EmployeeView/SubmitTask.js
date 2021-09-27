@@ -139,7 +139,7 @@ export default class SubmitTask extends Component {
             withLabel={false}
             singleImage
             imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-            maxFileSize={5242880}
+            maxFileSize={52428800}
           />
 
           <Button

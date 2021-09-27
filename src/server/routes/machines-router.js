@@ -349,11 +349,23 @@ router.post("/deleteType", async (req, res) => {
 
 router.get("/getAllMaintenanceLogs", async (req, res) => {
   await db.check();
+  const existing = await sequelize.query(
+    "SELECT maintenanceTaskId FROM vending.employeeTasks;",
+    { raw: true }
+  );
+  const array = [];
+
+  for (const number of existing[0]) {
+    if (number) {
+      array.push(number.maintenanceTaskId);
+    }
+  }
 
   const tasks = await models.maintenanceTask.findAll({
     where: {
       completed: false,
       [Op.or]: [{ pastDue: true }, { emergency: true }],
+      id: { [Op.notIn]: array },
     },
     include: ["vendingMachine"],
   });
@@ -373,6 +385,47 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
 
   return res.send(maintenanceList);
 });
+
+
+router.get("/getAllMaintenanceLogsHome", async (req, res) => {
+  await db.check();
+  const existing = await sequelize.query(
+    "SELECT maintenanceTaskId FROM vending.employeeTasks;",
+    { raw: true }
+  );
+  const array = [];
+
+  for (const number of existing[0]) {
+    if (number) {
+      array.push(number.maintenanceTaskId);
+    }
+  }
+
+  const tasks = await models.maintenanceTask.findAll({
+    where: {
+      completed: false,
+      [Op.or]: [{ pastDue: true }, { emergency: true }],
+      id: { [Op.notIn]: array },
+    },
+    include: ["vendingMachine"],
+  });
+
+  const maintenanceList = [];
+
+  for (const task of tasks) {
+    const client = await models.client.findOne({
+      where: { id: task.dataValues.vendingMachine.clientId },
+    });
+    if (client) {
+      task.dataValues.client = client;
+      maintenanceList.push(task.dataValues);
+    }
+  }
+  await db.backup();
+
+  return res.send(maintenanceList);
+});
+
 // gets all the daily maintenances for one machine
 router.post("/getMaintenanceLogs", async (req, res) => {
   await db.check();

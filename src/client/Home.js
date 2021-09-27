@@ -31,7 +31,7 @@ export default class Home extends Component {
   // this.getLatest();
 
   getTasks() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getAllMaintenanceLogs/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getAllMaintenanceLogsHome/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
