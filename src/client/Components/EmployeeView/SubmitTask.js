@@ -15,6 +15,7 @@ import {
   FormControl,
   Spinner,
   Jumbotron,
+  Card,
 } from "react-bootstrap";
 import "./employeeView.css";
 
@@ -28,6 +29,7 @@ export default class SubmitTask extends Component {
       pictures: [],
       employeeId: this.props.employee,
     };
+
     // this.getRoute = this.getRoute.bind(this);
     // this.renderTasks = this.renderTasks.bind(this);
     // this.setSidebarClose = this.setSidebarClose.bind(this);
@@ -115,6 +117,9 @@ export default class SubmitTask extends Component {
               {this.state.clients}
             </FormControl>
           </FormGroup>
+          <Card>
+            <img src={this.state.task.image} width="100%" />
+          </Card>
           <FormGroup className="clientId" controlId="notes">
             <FormLabel>Note</FormLabel>
             <FormControl
