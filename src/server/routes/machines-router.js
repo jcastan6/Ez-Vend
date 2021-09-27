@@ -512,6 +512,7 @@ router.post("/submitReport", async (req, res) => {
     });
 
     blobStream.on("finish", async (data) => {
+      console.log(data);
       // Create URL for directly file access via HTTP.
       const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
 
