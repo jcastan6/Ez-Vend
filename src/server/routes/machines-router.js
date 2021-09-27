@@ -502,10 +502,11 @@ router.post("/submitReport", async (req, res) => {
     // Create a new blob in the bucket and upload the file data.
     const blob = bucket.file(req.files.file.name);
     const blobStream = blob.createWriteStream({
-      resumable: false,
+      resumable: true,
     });
 
     blobStream.on("error", (err) => {
+      console.log("uplaod error")
       res.status(500).send({ message: err.message });
     });
 
