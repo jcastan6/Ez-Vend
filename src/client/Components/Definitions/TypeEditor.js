@@ -35,7 +35,7 @@ class TypeEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://127.0.0.1:3001/machines/editType", {
+    fetch("http://54.177.22.144:3001/machines/editType", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -51,7 +51,7 @@ class TypeEditor extends Component {
   };
 
   delete = () => {
-    fetch("http://127.0.0.1:3001/machines/deleteType", {
+    fetch("http://54.177.22.144:3001/machines/deleteType", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

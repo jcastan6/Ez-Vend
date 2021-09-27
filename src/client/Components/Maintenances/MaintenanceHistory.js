@@ -46,7 +46,7 @@ class MaintenanceHistory extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://127.0.0.1:3001/machines/getMaintenanceHistory/`, {
+    fetch(`http://54.177.22.144:3001/machines/getMaintenanceHistory/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",

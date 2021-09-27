@@ -61,7 +61,7 @@ export default class SubmitTask extends Component {
       loading: true,
     }),
       () => console.log();
-    fetch("http://127.0.0.1:3001/machines/addMaintenanceHistory", {
+    fetch("http://54.177.22.144:3001/machines/addMaintenanceHistory", {
       method: "POST",
 
       body: formData,

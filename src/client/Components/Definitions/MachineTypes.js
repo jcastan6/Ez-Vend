@@ -36,7 +36,7 @@ export default class MachineTypes extends Component {
     this.setState({ showModal: false });
   }
   getTypes() {
-    fetch(`http://127.0.0.1:3001/machines/getTypes`, {
+    fetch(`http://54.177.22.144:3001/machines/getTypes`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
