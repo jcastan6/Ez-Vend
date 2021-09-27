@@ -645,6 +645,9 @@ router.post("/addMaintenanceHistory", async (req, res) => {
           task.daysCount = 0;
           task.pastDue = false;
           task.save();
+        } else {
+          task.completed = true;
+          task.save();
         }
 
         await sequelize.query(
