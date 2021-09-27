@@ -39,7 +39,7 @@ export default class Machines extends Component {
     this.setState({ showModal: false });
   }
   getMachines() {
-    fetch(`http://54.177.22.144:3001/machines/getAll/`, {
+    fetch(`http://www.mantenimientoscvm.com/machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

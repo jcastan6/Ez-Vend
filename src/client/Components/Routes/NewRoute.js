@@ -94,7 +94,7 @@ class NewRoute extends Component {
 
   saveRoute() {
     if (!this.props.route) {
-      fetch("http://54.177.22.144:3001/routes/addRoute", {
+      fetch("http://www.mantenimientoscvm.com/routes/addRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -107,7 +107,7 @@ class NewRoute extends Component {
           this.props.getRoutes();
         });
     } else {
-      fetch("http://54.177.22.144:3001/routes/editRoute", {
+      fetch("http://www.mantenimientoscvm.com/routes/editRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -130,7 +130,7 @@ class NewRoute extends Component {
     this.setState({
       employees: [],
     });
-    fetch(`http://54.177.22.144:3001/routes/getEmployees`, {
+    fetch(`http://www.mantenimientoscvm.com/routes/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -150,7 +150,7 @@ class NewRoute extends Component {
   }
 
   getTasks() {
-    fetch(`http://54.177.22.144:3001/machines/getAllMaintenanceLogs/`, {
+    fetch(`http://www.mantenimientoscvm.com/machines/getAllMaintenanceLogs/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -362,7 +362,7 @@ class NewRoute extends Component {
   }
 
   deleteRoute() {
-    fetch(`http://54.177.22.144:3001/routes/deleteRoute`, {
+    fetch(`http://www.mantenimientoscvm.com/routes/deleteRoute`, {
       method: "POST",
       body: JSON.stringify(this.state),
       credentials: "same-origin",

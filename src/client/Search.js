@@ -32,7 +32,7 @@ export default class Home extends Component {
 
   getResults() {
     fetch(
-      `http://54.177.22.144:3001/images/searchPosts/${this.props.match.params.searchParams}`,
+      `http://www.mantenimientoscvm.com/images/searchPosts/${this.props.match.params.searchParams}`,
       {
         method: "GET",
         credentials: "same-origin",

@@ -35,7 +35,7 @@ class MaintenanceLogs extends Component {
   getMaintenances() {
     const get = {};
     get.machine = this.state.machine;
-    fetch(`http://54.177.22.144:3001/machines/getMaintenanceLogs/`, {
+    fetch(`http://www.mantenimientoscvm.com/machines/getMaintenanceLogs/`, {
       body: JSON.stringify(get),
       method: "POST",
       credentials: "same-origin",

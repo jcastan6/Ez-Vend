@@ -32,7 +32,7 @@ class Registration extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.validateForm()) {
-      fetch("http://54.177.22.144:3001/users/register", {
+      fetch("http://www.mantenimientoscvm.com/users/register", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),

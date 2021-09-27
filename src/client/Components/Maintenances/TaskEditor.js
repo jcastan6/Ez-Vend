@@ -39,7 +39,7 @@ class TaskEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://54.177.22.144:3001/machines/editMaintenanceTask", {
+    fetch("http://www.mantenimientoscvm.com/machines/editMaintenanceTask", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -55,7 +55,7 @@ class TaskEditor extends Component {
   };
 
   delete = () => {
-    fetch("http://54.177.22.144:3001/machines/deleteMaintenanceTask", {
+    fetch("http://www.mantenimientoscvm.com/machines/deleteMaintenanceTask", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

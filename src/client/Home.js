@@ -31,7 +31,7 @@ export default class Home extends Component {
   // this.getLatest();
 
   getTasks() {
-    fetch(`http://54.177.22.144:3001/machines/getAllMaintenanceLogs/`, {
+    fetch(`http://www.mantenimientoscvm.com/machines/getAllMaintenanceLogs/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -47,10 +47,13 @@ export default class Home extends Component {
   }
 
   getMaintenances() {
-    fetch(`http://54.177.22.144:3001/machines/getDailyMaintenanceHistory/`, {
-      method: "GET",
-      credentials: "same-origin",
-    })
+    fetch(
+      `http://www.mantenimientoscvm.com/machines/getDailyMaintenanceHistory/`,
+      {
+        method: "GET",
+        credentials: "same-origin",
+      }
+    )
       .then((response) => response.json())
       .then((res) => {
         console.log(JSON.stringify(res));

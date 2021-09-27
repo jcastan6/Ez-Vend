@@ -34,7 +34,7 @@ export default class Routes extends Component {
   }
 
   getRoutes() {
-    fetch(`http://54.177.22.144:3001/routes/getAll/`, {
+    fetch(`http://www.mantenimientoscvm.com/routes/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

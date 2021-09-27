@@ -26,7 +26,7 @@ class NewType extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://54.177.22.144:3001/machines/newType", {
+    fetch("http://www.mantenimientoscvm.com/machines/newType", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

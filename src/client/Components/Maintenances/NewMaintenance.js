@@ -36,7 +36,7 @@ class NewMaintenance extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://54.177.22.144:3001/machines/newMaintenanceTask", {
+    fetch("http://www.mantenimientoscvm.com/machines/newMaintenanceTask", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

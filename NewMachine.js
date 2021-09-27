@@ -42,7 +42,7 @@ class NewMachine extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://54.177.22.144:3001/machines/newMachine", {
+    fetch("http://www.mantenimientoscvm.com/machines/newMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -83,7 +83,7 @@ class NewMachine extends Component {
     });
   }
   getTypes() {
-    fetch(`http://54.177.22.144:3001/machines/getTypes/`, {
+    fetch(`http://www.mantenimientoscvm.com/machines/getTypes/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -107,7 +107,7 @@ class NewMachine extends Component {
   }
 
   getClients() {
-    fetch(`http://54.177.22.144:3001/clients/getAll/`, {
+    fetch(`http://www.mantenimientoscvm.com/clients/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -134,7 +134,7 @@ class NewMachine extends Component {
     event.preventDefault();
     const formData = new FormData();
     formData.append("file", this.state.file[0]);
-    fetch("http://54.177.22.144:3001/machines/batchAddMachines", {
+    fetch("http://www.mantenimientoscvm.com/machines/batchAddMachines", {
       method: "POST",
 
       body: formData,

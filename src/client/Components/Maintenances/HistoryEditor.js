@@ -43,7 +43,7 @@ class HistoryEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://54.177.22.144:3001/machines/editMaintenanceHistory", {
+    fetch("http://www.mantenimientoscvm.com/machines/editMaintenanceHistory", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -58,14 +58,17 @@ class HistoryEditor extends Component {
   };
 
   delete = () => {
-    fetch("http://54.177.22.144:3001/machines/deleteMaintenanceHistory", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      "http://www.mantenimientoscvm.com/machines/deleteMaintenanceHistory",
+      {
+        method: "POST",
+        credentials: "same-origin",
+        body: JSON.stringify(this.state),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         this.props.getMaintenances();

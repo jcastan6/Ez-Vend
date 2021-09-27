@@ -40,7 +40,7 @@ class EmployeeEditor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://54.177.22.144:3001/users/editEmployee", {
+    fetch("http://www.mantenimientoscvm.com/users/editEmployee", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -62,7 +62,7 @@ class EmployeeEditor extends Component {
   }
 
   delete = () => {
-    fetch("http://54.177.22.144:3001/users/deleteEmployee", {
+    fetch("http://www.mantenimientoscvm.com/users/deleteEmployee", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -76,7 +76,7 @@ class EmployeeEditor extends Component {
       });
   };
   getTypes() {
-    fetch(`http://54.177.22.144:3001/machines/getTypes/`, {
+    fetch(`http://www.mantenimientoscvm.com/machines/getTypes/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

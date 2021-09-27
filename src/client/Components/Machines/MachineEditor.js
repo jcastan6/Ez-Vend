@@ -41,7 +41,7 @@ class MachineEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://54.177.22.144:3001/machines/editMachine", {
+    fetch("http://www.mantenimientoscvm.com/machines/editMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -69,7 +69,7 @@ class MachineEditor extends Component {
     return true;
   }
   getTypes() {
-    fetch(`http://54.177.22.144:3001/machines/getTypes`, {
+    fetch(`http://www.mantenimientoscvm.com/machines/getTypes`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -93,7 +93,7 @@ class MachineEditor extends Component {
   }
 
   getClients() {
-    fetch(`http://54.177.22.144:3001/clients/getAll/`, {
+    fetch(`http://www.mantenimientoscvm.com/clients/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -116,7 +116,7 @@ class MachineEditor extends Component {
   }
 
   delete = () => {
-    fetch("http://54.177.22.144:3001/machines/deleteMachine", {
+    fetch("http://www.mantenimientoscvm.com/machines/deleteMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

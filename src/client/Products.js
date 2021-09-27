@@ -18,13 +18,16 @@ export default class Products extends Component {
   }
 
   getMachines() {
-    fetch(`http://54.177.22.144:3001/products/getAll/${this.state.business}`, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `http://www.mantenimientoscvm.com/products/getAll/${this.state.business}`,
+      {
+        method: "GET",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((res) => {
         this.setState(
