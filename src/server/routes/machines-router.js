@@ -251,7 +251,7 @@ router.post("/batchAddMachines", async (req, res) => {
       console.log(machine);
       let client = await models.client.findOne({
         where: {
-          name: machine[1],
+          name: machine[1].toString(),
         },
       });
       let type = await models.machineType.findOne({
@@ -262,7 +262,7 @@ router.post("/batchAddMachines", async (req, res) => {
       models.vendingMachine
         .create({
           machineNo: parseInt(machine[0]),
-          model: machine[3],
+          model: machine[3].toString(),
           serialNo: machine[4],
         })
         .then(async (machine) => {
