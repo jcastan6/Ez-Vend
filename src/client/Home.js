@@ -156,6 +156,12 @@ export default class Home extends Component {
   renderDailyTasks() {
     const columns = [
       {
+        name: "Machine",
+        selector: "machineNo",
+        sortable: true,
+
+      },
+      {
         name: "Task",
         cell: (row) => {
           return (
@@ -168,11 +174,12 @@ export default class Home extends Component {
 
         allowOverflow: true,
       },
+
       {
         name: "Date",
         selector: "createdAt",
         sortable: true,
-        grow: 3,
+       
       },
       {
         name: "Completed by",
