@@ -28,6 +28,7 @@ class HistoryEditor extends Component {
     this.state = {
       task: this.props.report.task,
       id: this.props.report.id,
+      notes: this.props.report.notes,
       employee: this.props.report.employee,
       createdAt: this.props.report.createdAt,
     };
@@ -111,6 +112,17 @@ class HistoryEditor extends Component {
                   disabled
                   type="type"
                   value={this.state.employee}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+
+              <FormGroup controlId="task">
+                <FormLabel>Notes:</FormLabel>
+                <FormControl
+                  autoFocus
+                  disabled
+                  type="type"
+                  value={this.state.notes}
                   onChange={this.handleChange}
                 />
               </FormGroup>
