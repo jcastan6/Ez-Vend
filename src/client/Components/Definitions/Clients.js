@@ -36,7 +36,7 @@ export default class Clients extends Component {
     this.setState({ showModal: false });
   }
   getClients() {
-    fetch(`https://www.mantenimientoscvm.com/clients/getAll`, {
+    fetch(`https://www.mantenimientoscvm.com//clients/getAll`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -81,7 +81,7 @@ export default class Clients extends Component {
     };
     const columns = [
       {
-        name: "Name",
+        name: "Nombre",
         selector: "name",
         sortable: true,
         style: {
@@ -91,11 +91,12 @@ export default class Clients extends Component {
         },
       },
       {
-        name: "Machine Count",
+        name: "Cuenta de Maquinas",
         selector: "count",
         sortable: true,
       },
       {
+        name: "Editar Cliente",
         selector: "edit",
         cell: (row) => {
           return <ClientEditor client={row} getClients={this.getClients} />;
@@ -115,7 +116,7 @@ export default class Clients extends Component {
         data={this.state.clients}
       >
         <DataTable
-          title="Clients"
+          title="Clientes"
           data={this.state.clients}
           customStyles={customStyles}
           columns={columns}
@@ -136,7 +137,7 @@ export default class Clients extends Component {
             <Row>
               <Col lg={2}>
                 <Button onClick={() => this.handleOpenModal("new")}>
-                  Add Client
+                  Agregar Cliente
                 </Button>
               </Col>
               <br></br>

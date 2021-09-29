@@ -8,6 +8,8 @@ import {
   Image,
   Carousel,
 } from "react-bootstrap";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class MachineEditor extends Component {
   constructor(props) {
@@ -41,7 +43,7 @@ class MachineEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/machines/editMachine", {
+    fetch("https://www.mantenimientoscvm.com//machines/editMachine", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -69,7 +71,7 @@ class MachineEditor extends Component {
     return true;
   }
   getTypes() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getTypes`, {
+    fetch(`https://www.mantenimientoscvm.com//machines/getTypes`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -93,7 +95,7 @@ class MachineEditor extends Component {
   }
 
   getClients() {
-    fetch(`https://www.mantenimientoscvm.com/clients/getAll/`, {
+    fetch(`https://www.mantenimientoscvm.com//clients/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -102,6 +104,7 @@ class MachineEditor extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
+        res.sort((a, b) => (a.name > b.name ? 1 : -1));
         let types = [];
         types.push(<option>{""}</option>);
         res.forEach((element) => {
@@ -116,31 +119,45 @@ class MachineEditor extends Component {
   }
 
   delete = () => {
-    fetch("https://www.mantenimientoscvm.com/machines/deleteMachine", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getMachines();
-      });
+    confirmAlert({
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch("https://www.mantenimientoscvm.com//machines/deleteMachine", {
+              method: "POST",
+              credentials: "same-origin",
+              body: JSON.stringify(this.state),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                this.props.getMachines();
+              }),
+        },
+        {
+          label: "No",
+          onClick: () => console.log(),
+        },
+      ],
+    });
   };
   render() {
     return (
       <div>
         <br />
         <h1 id="justice">
-          <b>Edit Machine</b>
+          <b>Editar Maquina</b>
         </h1>
         <br />
 
         <form onSubmit={this.handleSubmit}>
           <FormGroup className="userId" controlId="machineNo">
-            <FormLabel>Machine Number</FormLabel>
+            <FormLabel>Número de Maquina</FormLabel>
             <FormControl
               size="lg"
               value={this.state.machineNo}
@@ -148,7 +165,7 @@ class MachineEditor extends Component {
             ></FormControl>
           </FormGroup>
           <FormGroup className="userId" controlId="machineType">
-            <FormLabel>Machine Type</FormLabel>
+            <FormLabel>Tipo de Maquina</FormLabel>
             <FormControl
               as="select"
               size="lg"
@@ -159,7 +176,7 @@ class MachineEditor extends Component {
             </FormControl>
           </FormGroup>
           <FormGroup className="clientId" controlId="clientName">
-            <FormLabel>Client</FormLabel>
+            <FormLabel>Cliente</FormLabel>
             <FormControl
               as="select"
               size="lg"
@@ -170,7 +187,7 @@ class MachineEditor extends Component {
             </FormControl>
           </FormGroup>
           <FormGroup className="clientId" controlId="model">
-            <FormLabel>Model</FormLabel>
+            <FormLabel>Modelo</FormLabel>
             <FormControl
               size="lg"
               value={this.state.model}
@@ -178,7 +195,7 @@ class MachineEditor extends Component {
             ></FormControl>
           </FormGroup>
           <FormGroup className="clientId" controlId="serialNo">
-            <FormLabel>Serial No.</FormLabel>
+            <FormLabel>Numero de Serie</FormLabel>
             <FormControl
               size="lg"
               value={this.state.serialNo}
@@ -194,10 +211,10 @@ class MachineEditor extends Component {
             type="submit"
             onClick={this.onSubmit}
           >
-            Update
+            Actualizar
           </Button>
           <Button block variant="danger" onClick={this.delete}>
-            Delete
+            Borrar
           </Button>
         </form>
       </div>

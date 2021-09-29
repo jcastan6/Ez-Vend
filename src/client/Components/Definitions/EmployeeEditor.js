@@ -11,6 +11,8 @@ import {
 
 import Modal from "react-modal";
 import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class EmployeeEditor extends Component {
   constructor(props) {
@@ -40,7 +42,7 @@ class EmployeeEditor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("https://www.mantenimientoscvm.com/users/editEmployee", {
+    fetch("https://www.mantenimientoscvm.com//users/editEmployee", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -62,21 +64,35 @@ class EmployeeEditor extends Component {
   }
 
   delete = () => {
-    fetch("https://www.mantenimientoscvm.com/users/deleteEmployee", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getEmployees();
-      });
+    confirmAlert({
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch("https://www.mantenimientoscvm.com//users/deleteEmployee", {
+              method: "POST",
+              credentials: "same-origin",
+              body: JSON.stringify(this.state),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                this.props.getEmployees();
+              }),
+        },
+        {
+          label: "No",
+          onClick: () => console.log,
+        },
+      ],
+    });
   };
   getTypes() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getTypes/`, {
+    fetch(`https://www.mantenimientoscvm.com//machines/getTypes/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -140,12 +156,12 @@ class EmployeeEditor extends Component {
           <Card>
             <Card.Body>
               <h1 id="justice">
-                <b>Edit Employee Information</b>
+                <b>Editar Información de Empleado</b>
               </h1>
               <br />
               <form onSubmit={this.handleSubmit}>
                 <FormGroup className="userId" controlId="name">
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl
                     autoFocus
                     type="name"
@@ -154,7 +170,7 @@ class EmployeeEditor extends Component {
                   />
                 </FormGroup>
                 <FormGroup className="userId" controlId="username">
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Usuario</FormLabel>
                   <FormControl
                     autoFocus
                     type="input"
@@ -169,7 +185,7 @@ class EmployeeEditor extends Component {
                   type="submit"
                   onClick={this.onSubmit}
                 >
-                  Update
+                  Actualizar
                 </Button>
                 <Button
                   block
@@ -177,7 +193,7 @@ class EmployeeEditor extends Component {
                   variant="danger"
                   onClick={this.delete}
                 >
-                  Delete
+                  Borrar
                 </Button>
               </form>
             </Card.Body>

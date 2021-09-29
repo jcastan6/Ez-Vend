@@ -1,21 +1,53 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
-import { Container, Jumbotron, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 import Header from "./Components/Header/Header";
-import { retrieveCookie } from "./Components/Cookies";
-import MachineCard from "./Components/MachineCard/MachineCard";
+
 import NewRoute from "./Components/Routes/NewRoute";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTableExtensions from "react-data-table-component-extensions";
 import DataTable, { createTheme } from "react-data-table-component";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
+import styled, { keyframes } from "styled-components";
+const rotate360 = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+  margin: 16px;
+  animation: ${rotate360} 1s linear infinite;
+  transform: translateZ(0);
+  border-top: 2px solid grey;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+  border-left: 4px solid black;
+  background: transparent;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`;
+
+const CustomLoader = () => (
+  <div style={{ padding: "24px" }}>
+    <Spinner />
+    <div>Cargando...</div>
+  </div>
+);
+
 export default class Routes extends Component {
   constructor(props) {
     super(props);
     this.state = {
       routes: [],
+      routesPending: true,
     };
     this.renderRoutes = this.renderRoutes.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -34,7 +66,10 @@ export default class Routes extends Component {
   }
 
   getRoutes() {
-    fetch(`https://www.mantenimientoscvm.com/routes/getAll/`, {
+    this.setState({
+      routesPending: true,
+    });
+    fetch(`https://www.mantenimientoscvm.com//routes/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -47,6 +82,7 @@ export default class Routes extends Component {
           {
             routes: res,
             showModal: false,
+            routesPending: false,
           },
           () => console.log()
         );
@@ -79,17 +115,17 @@ export default class Routes extends Component {
     };
     const columns = [
       {
-        name: "Name",
+        name: "Nombre",
         selector: "name",
         sortable: true,
       },
       {
-        name: "Tasks Assigned",
+        name: "Tareas Asignadas",
         selector: "maintenanceTasks.length",
         sortable: true,
       },
       {
-        name: "Employee",
+        name: "Empleado",
         cell: (row) => {
           if (row.employees) {
             let name = [];
@@ -102,7 +138,7 @@ export default class Routes extends Component {
         sortable: true,
       },
       {
-        name: "Edit",
+        name: "Editar Ruta",
         cell: (row) => (
           <BsThreeDotsVertical onClick={() => this.handleOpenModal(row.id)} />
         ),
@@ -126,10 +162,12 @@ export default class Routes extends Component {
               this.handleOpenModal(row.id);
             }}
             columns={columns}
+            progressPending={this.state.routesPending}
+            progressComponent={<CustomLoader />}
             pointerOnHover
             highlightOnHover
             pagination
-            title="Routes"
+            title="Rutas"
           />
         </DataTableExtensions>
       </div>
@@ -165,7 +203,7 @@ export default class Routes extends Component {
             <Row>
               <Col lg={2}>
                 <Button onClick={() => this.handleOpenModal("new")}>
-                  New Route
+                  Crear Ruta
                 </Button>
               </Col>
               <br />
@@ -179,7 +217,7 @@ export default class Routes extends Component {
                     variant="outline-primary"
                     onClick={this.handleCloseModal}
                   >
-                    X
+                    Cerrar
                   </Button>
                   <br />
                   <br />

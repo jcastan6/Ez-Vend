@@ -8,8 +8,7 @@ import Home from "./Home";
 import Machines from "./Machines";
 import Routes from "./Routes";
 import Definitions from "./Definitions";
-import Search from "./Search";
-import Header from "./Components/Header/Header";
+
 import EmployeeView from "./Components/EmployeeView/EmployeeView";
 
 import ReportMaintenance from "./Components/Report/ReportMaintenance.js";

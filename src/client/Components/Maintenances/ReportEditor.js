@@ -19,7 +19,8 @@ import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
 import { BsCamera } from "react-icons/bs";
-import maintenanceHistory from "../../../server/models/maintenanceHistory";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class ReportEditor extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class ReportEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/machines/editMaintenanceReport", {
+    fetch("https://www.mantenimientoscvm.com//machines/editMaintenanceReport", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -57,21 +58,35 @@ class ReportEditor extends Component {
   };
 
   delete = () => {
-    fetch(
-      "https://www.mantenimientoscvm.com/machines/deleteMaintenanceReport",
-      {
-        method: "POST",
-        credentials: "same-origin",
-        body: JSON.stringify(this.state),
-        headers: {
-          "Content-Type": "application/json",
+    confirmAlert({
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch(
+              "https://www.mantenimientoscvm.com//machines/deleteMaintenanceReport",
+              {
+                method: "POST",
+                credentials: "same-origin",
+                body: JSON.stringify(this.state),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                this.props.getMaintenances();
+              }),
         },
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getMaintenances();
-      });
+        {
+          label: "No",
+          onClick: () => console.log(),
+        },
+      ],
+    });
   };
 
   handleOpenModal() {
@@ -93,7 +108,7 @@ class ReportEditor extends Component {
           <Card.Body>
             <form onSubmit={this.handleSubmit}>
               <FormGroup controlId="task">
-                <FormLabel>Report:</FormLabel>
+                <FormLabel>Reporte:</FormLabel>
                 <FormControl
                   autoFocus
                   type="type"
@@ -108,7 +123,7 @@ class ReportEditor extends Component {
                 type="submit"
                 onClick={this.onSubmit}
               >
-                Update
+                Actualizar
               </Button>
               <Button
                 block
@@ -116,7 +131,7 @@ class ReportEditor extends Component {
                 variant="danger"
                 onClick={this.delete}
               >
-                Delete
+                Borrar Reporte
               </Button>
             </form>
           </Card.Body>

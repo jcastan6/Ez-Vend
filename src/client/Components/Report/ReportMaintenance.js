@@ -19,6 +19,12 @@ class ReportMaintenance extends Component {
   constructor(props) {
     super(props);
     this.handleRouteChange = this.handleRouteChange.bind(this);
+    let secret = false;
+    if (retrieveCookie().secret) {
+      secret = retrieveCookie().secret;
+    } else {
+      secret = retrieveCookie();
+    }
     this.state = {
       machine: null,
       issue: "",
@@ -26,7 +32,7 @@ class ReportMaintenance extends Component {
       pictures: [],
       loading: false,
       pass: "",
-      secret: retrieveCookie(),
+      secret,
     };
 
     this.checkPass = this.checkPass.bind(this);
@@ -59,7 +65,7 @@ class ReportMaintenance extends Component {
       loading: true,
     }),
       () => console.log();
-    fetch("https://www.mantenimientoscvm.com/machines/submitReport", {
+    fetch("https://www.mantenimientoscvm.com//machines/submitReport", {
       method: "POST",
 
       body: formData,
@@ -91,32 +97,8 @@ class ReportMaintenance extends Component {
     this.setState({ showModal: false });
   }
 
-  checkPass = (event) => {
-    event.preventDefault();
-    fetch(`https://www.mantenimientoscvm.com/users/checkSecret/`, {
-      method: "POST",
-      body: JSON.stringify({ secret: this.state.pass }),
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.status === 200) {
-          saveCookie(true);
-          this.setState({
-            secret: true,
-          }),
-            () => console.log();
-        } else {
-          alert("Wrong Password");
-        }
-      });
-  };
-
   getMachines() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getAll/`, {
+    fetch(`https://www.mantenimientoscvm.com//machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -151,7 +133,7 @@ class ReportMaintenance extends Component {
               alt="CVM"
             />{" "}
             <FormGroup className="userId" controlId="pass">
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Contraseña</FormLabel>
               <FormControl
                 type="password"
                 size="lg"
@@ -159,6 +141,9 @@ class ReportMaintenance extends Component {
                 onChange={this.handleChange}
               ></FormControl>
             </FormGroup>
+            <Button block type="submit" onClick={this.onSubmit}>
+              Iniciar Sesión
+            </Button>
           </form>
         </div>
       );
@@ -180,13 +165,13 @@ class ReportMaintenance extends Component {
           <br></br>
           <Jumbotron>
             <h1 id="justice">
-              <b>Submit Report</b>
+              <b>Agregar Reporte</b>
             </h1>
             <br />
 
             <form onSubmit={this.handleSubmit}>
               <FormGroup className="userId" controlId="machine">
-                <FormLabel>Machine</FormLabel>
+                <FormLabel>Máquina</FormLabel>
                 <Typeahead
                   id="basic-typeahead-multiple"
                   labelKey="name"
@@ -197,22 +182,22 @@ class ReportMaintenance extends Component {
                     });
                   }}
                   options={this.state.machines}
-                  placeholder="Choose a machine..."
+                  placeholder="Elejir numero de maquina..."
                   selected={this.state.machine}
                 />
               </FormGroup>
               <FormGroup className="clientId" controlId="issue">
-                <FormLabel>Issue</FormLabel>
+                <FormLabel>Reporte</FormLabel>
                 <FormControl
                   size="lg"
                   value={this.state.issue}
                   onChange={this.handleChange}
                 ></FormControl>
               </FormGroup>
-              <FormLabel>Image</FormLabel>
+              <FormLabel>Fotografía</FormLabel>
               <ImageUploader
                 withIcon={true}
-                buttonText="Choose images"
+                buttonText="Escoger Imagen"
                 onChange={this.onDrop}
                 withPreview
                 withLabel={false}
@@ -225,10 +210,10 @@ class ReportMaintenance extends Component {
                 type="submit"
                 onClick={this.onSubmit}
               >
-                Submit
+                Enviar
               </Button>{" "}
               <Button variant="danger" onClick={this.delete}>
-                Clear
+                Despejar
               </Button>
             </form>
           </Jumbotron>

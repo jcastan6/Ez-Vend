@@ -22,7 +22,7 @@ const storage = new Storage({ keyFilename: "gcskey.json" });
 
 const bucket = storage.bucket("ezvend");
 
-cron.schedule("00 00 * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   console.log("hey!");
   await sequelize.query(
     "UPDATE maintenancetasks SET daysCount = dayscount + 1;"
@@ -373,12 +373,17 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
   const maintenanceList = [];
 
   for (const task of tasks) {
-    const client = await models.client.findOne({
-      where: { id: task.dataValues.vendingMachine.clientId },
-    });
-    if (client) {
-      task.dataValues.client = client;
-      maintenanceList.push(task.dataValues);
+    try {
+      const client = await models.client.findOne({
+        where: { id: task.dataValues.vendingMachine.clientId },
+      });
+
+      if (client) {
+        task.dataValues.client = client;
+        maintenanceList.push(task.dataValues);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   await db.backup();
@@ -386,12 +391,8 @@ router.get("/getAllMaintenanceLogs", async (req, res) => {
   return res.send(maintenanceList);
 });
 
-
 router.get("/getAllMaintenanceLogsHome", async (req, res) => {
   await db.check();
- 
-
-
 
   const tasks = await models.maintenanceTask.findAll({
     where: {
@@ -400,16 +401,20 @@ router.get("/getAllMaintenanceLogsHome", async (req, res) => {
     },
     include: ["vendingMachine"],
   });
-
   const maintenanceList = [];
 
   for (const task of tasks) {
-    const client = await models.client.findOne({
-      where: { id: task.dataValues.vendingMachine.clientId },
-    });
-    if (client) {
-      task.dataValues.client = client;
-      maintenanceList.push(task.dataValues);
+    console.log(task);
+    try {
+      const client = await models.client.findOne({
+        where: { id: task.dataValues.vendingMachine.clientId },
+      });
+      if (client) {
+        task.dataValues.client = client;
+        maintenanceList.push(task.dataValues);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   await db.backup();
@@ -439,7 +444,7 @@ router.post("/getMaintenanceLogs", async (req, res) => {
         if (task.dataValues.pastDue === false) {
           task.dataValues.pastDue = "No";
         } else {
-          task.dataValues.pastDue = "Yes";
+          task.dataValues.pastDue = "Si";
         }
         maintenanceList.push(task.dataValues);
       });
@@ -507,7 +512,7 @@ router.post("/submitReport", async (req, res) => {
     });
 
     blobStream.on("error", (err) => {
-      console.log("uplaod error")
+      console.log("uplaod error");
       res.status(500).send({ message: err.message });
     });
 

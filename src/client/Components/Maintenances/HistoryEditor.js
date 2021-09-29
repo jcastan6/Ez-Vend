@@ -19,7 +19,8 @@ import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import DataTable, { createTheme } from "react-data-table-component";
 import { BsCamera } from "react-icons/bs";
-import maintenanceHistory from "../../../server/models/maintenanceHistory";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class HistoryEditor extends Component {
   constructor(props) {
@@ -45,23 +46,8 @@ class HistoryEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/machines/editMaintenanceHistory", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getMaintenances();
-      });
-  };
-
-  delete = () => {
     fetch(
-      "https://www.mantenimientoscvm.com/machines/deleteMaintenanceHistory",
+      "https://www.mantenimientoscvm.com//machines/editMaintenanceHistory",
       {
         method: "POST",
         credentials: "same-origin",
@@ -75,6 +61,38 @@ class HistoryEditor extends Component {
       .then((res) => {
         this.props.getMaintenances();
       });
+  };
+
+  delete = () => {
+    confirmAlert({
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto? Esto es permanente.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch(
+              "https://www.mantenimientoscvm.com//machines/deleteMaintenanceHistory",
+              {
+                method: "POST",
+                credentials: "same-origin",
+                body: JSON.stringify(this.state),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                this.props.getMaintenances();
+              }),
+        },
+        {
+          label: "No",
+          onClick: () => console.log(),
+        },
+      ],
+    });
   };
 
   handleOpenModal() {
@@ -96,7 +114,7 @@ class HistoryEditor extends Component {
           <Card.Body>
             <form onSubmit={this.handleSubmit}>
               <FormGroup controlId="task">
-                <FormLabel>Task Done:</FormLabel>
+                <FormLabel>Tarea Realizada:</FormLabel>
                 <FormControl
                   autoFocus
                   disabled
@@ -106,7 +124,7 @@ class HistoryEditor extends Component {
                 />
               </FormGroup>
               <FormGroup controlId="task">
-                <FormLabel>Completed by:</FormLabel>
+                <FormLabel>Realizada Por:</FormLabel>
                 <FormControl
                   autoFocus
                   disabled
@@ -117,7 +135,7 @@ class HistoryEditor extends Component {
               </FormGroup>
 
               <FormGroup controlId="task">
-                <FormLabel>Notes:</FormLabel>
+                <FormLabel>Notas:</FormLabel>
                 <FormControl
                   autoFocus
                   disabled
@@ -127,7 +145,7 @@ class HistoryEditor extends Component {
                 />
               </FormGroup>
               <FormGroup controlId="task">
-                <FormLabel>Date:</FormLabel>
+                <FormLabel>Fecha:</FormLabel>
                 <FormControl
                   autoFocus
                   disabled
@@ -143,7 +161,7 @@ class HistoryEditor extends Component {
                 variant="danger"
                 onClick={this.delete}
               >
-                Delete
+                Borrar
               </Button>
             </form>
           </Card.Body>

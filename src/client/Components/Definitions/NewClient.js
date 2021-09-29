@@ -27,7 +27,7 @@ export default class NewClient extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/clients/addClient", {
+    fetch("https://www.mantenimientoscvm.com//clients/addClient", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -56,12 +56,12 @@ export default class NewClient extends Component {
     return (
       <div>
         <h1 id="justice">
-          <b>Add New Client</b>
+          <b>Agregar Cliente</b>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>
           <FormGroup className="userId" controlId="name">
-            <FormLabel>Client Name</FormLabel>
+            <FormLabel>Nombre de Cliente</FormLabel>
             <FormControl
               autoFocus
               type="name"
@@ -76,7 +76,7 @@ export default class NewClient extends Component {
             type="submit"
             onClick={this.onSubmit}
           >
-            Add
+            Agregar
           </Button>
         </form>
       </div>

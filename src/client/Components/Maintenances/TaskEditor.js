@@ -12,6 +12,10 @@ import Modal from "react-modal";
 
 import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
 import "./Maintenances.css";
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class TaskEditor extends Component {
   constructor(props) {
@@ -38,35 +42,58 @@ class TaskEditor extends Component {
   };
 
   handleSubmit = (event) => {
-    event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/machines/editMaintenanceTask", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getMaintenances();
-        this.handleCloseModal();
-      });
+    if (this.state.reminderAt < 1) {
+      alert(
+        "Mantenimiento preventivo necesita ser recordado cada un dia, minimo."
+      );
+    } else {
+      event.preventDefault();
+      fetch("https://www.mantenimientoscvm.com//machines/editMaintenanceTask", {
+        method: "POST",
+        credentials: "same-origin",
+        body: JSON.stringify(this.state),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          this.props.getMaintenances();
+          this.handleCloseModal();
+        });
+    }
   };
 
   delete = () => {
-    fetch("https://www.mantenimientoscvm.com/machines/deleteMaintenanceTask", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getMaintenances();
-      });
+    confirmAlert({
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch(
+              "https://www.mantenimientoscvm.com//machines/deleteMaintenanceTask",
+              {
+                method: "POST",
+                credentials: "same-origin",
+                body: JSON.stringify(this.state),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                this.props.getMaintenances();
+              }),
+        },
+        {
+          label: "No",
+          onClick: () => console.log(),
+        },
+      ],
+    });
   };
 
   handleOpenModal() {
@@ -78,20 +105,24 @@ class TaskEditor extends Component {
   }
 
   validateForm() {
-    return this.state.task.length > 0 && this.state.priority !== null;
+    return (
+      this.state.task.length > 0 &&
+      this.state.priority !== null &&
+      this.state.reminderAt > 0
+    );
   }
 
   showReminder() {
     return (
       <FormGroup controlId="reminderAt">
-        <FormLabel>Remind Every:</FormLabel>
+        <FormLabel>Recordar Cada:</FormLabel>
         <FormControl
           autoFocus
           type="type"
           value={this.state.reminderAt}
           onChange={this.handleChange}
         />
-        Days
+        Dias
       </FormGroup>
     );
   }
@@ -110,12 +141,12 @@ class TaskEditor extends Component {
           <Card>
             <Card.Body>
               <h1 id="justice">
-                <b>Edit Task</b>
+                <b>Editar Mantenimiento Preventivo</b>
               </h1>
               <br />
               <form onSubmit={this.handleSubmit} className="body">
                 <FormGroup controlId="task">
-                  <FormLabel>Task</FormLabel>
+                  <FormLabel>Tarea</FormLabel>
                   <FormControl
                     autoFocus
                     type="type"
@@ -132,7 +163,7 @@ class TaskEditor extends Component {
                   type="submit"
                   onClick={this.onSubmit}
                 >
-                  Update
+                  Actualizar
                 </Button>
                 <Button
                   block
@@ -140,7 +171,7 @@ class TaskEditor extends Component {
                   variant="danger"
                   onClick={this.delete}
                 >
-                  Delete
+                  Borrar
                 </Button>
               </form>
             </Card.Body>

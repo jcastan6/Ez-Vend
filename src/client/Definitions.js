@@ -26,20 +26,20 @@ export default class Definitions extends Component {
         <Header />
         <div className="body">
           <Container fluid>
-            <h1>Machine Types</h1>
+            <h1>Tipos de Maquina</h1>
             <br />
             <MachineTypes />
           </Container>
 
           <Container fluid>
-            <h1>Clients</h1>
+            <h1>Clientes</h1>
             <br />
             <Clients />
             <p />
           </Container>
 
           <Container fluid>
-            <h1>Employees</h1>
+            <h1>Empleados</h1>
             <br />
             <Employees />
             <p />

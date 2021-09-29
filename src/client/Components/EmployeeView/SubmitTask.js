@@ -63,7 +63,7 @@ export default class SubmitTask extends Component {
       loading: true,
     }),
       () => console.log();
-    fetch("https://www.mantenimientoscvm.com/machines/addMaintenanceHistory", {
+    fetch("https://www.mantenimientoscvm.com//machines/addMaintenanceHistory", {
       method: "POST",
 
       body: formData,
@@ -76,6 +76,10 @@ export default class SubmitTask extends Component {
 
   validateForm() {
     if (this.state.pictures.length === 0) {
+      return false;
+    }
+
+    if (this.state.notes.length < 1) {
       return false;
     }
 
@@ -97,7 +101,7 @@ export default class SubmitTask extends Component {
       <div className="body">
         <Container fluid>
           <FormGroup className="userId" controlId="machineNo">
-            <FormLabel>Machine Number</FormLabel>
+            <FormLabel>Numero de Maquina</FormLabel>
             <FormControl
               size="lg"
               value={this.state.task.vendingMachine.machineNo}
@@ -106,7 +110,7 @@ export default class SubmitTask extends Component {
             />
           </FormGroup>
           <FormGroup className="clientId" controlId="clientName">
-            <FormLabel>Client</FormLabel>
+            <FormLabel>Cliente</FormLabel>
             <FormControl
               as="Input"
               size="lg"
@@ -121,7 +125,7 @@ export default class SubmitTask extends Component {
             <img src={this.state.task.image} width="100%" />
           </Card>
           <FormGroup className="clientId" controlId="notes">
-            <FormLabel>Note</FormLabel>
+            <FormLabel>Notas</FormLabel>
             <FormControl
               as="Input"
               size="lg"
@@ -133,7 +137,7 @@ export default class SubmitTask extends Component {
           </FormGroup>
           <ImageUploader
             withIcon
-            buttonText="Choose images"
+            buttonText="Escoger Imagen"
             onChange={this.onDrop}
             withPreview
             withLabel={false}
@@ -148,7 +152,7 @@ export default class SubmitTask extends Component {
             type="submit"
             onClick={this.handleSubmit}
           >
-            Submit
+            Enviar
           </Button>
         </Container>
       </div>

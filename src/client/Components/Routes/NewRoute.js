@@ -11,11 +11,46 @@ import {
 } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
 
+import styled, { keyframes } from "styled-components";
+const rotate360 = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+  margin: 16px;
+  animation: ${rotate360} 1s linear infinite;
+  transform: translateZ(0);
+  border-top: 2px solid grey;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+  border-left: 4px solid black;
+  background: transparent;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`;
+
+const CustomLoader = () => (
+  <div style={{ padding: "24px" }}>
+    <Spinner />
+    <div>Cargando...</div>
+  </div>
+);
+
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import DataTable, { createTheme } from "react-data-table-component";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import WeekdayPicker from "reactjs-weekday-picker";
 import "react-day-picker/lib/style.css";
+
 import "./NewRoute.css";
 const arrayMove = require("array-move");
 import {
@@ -38,6 +73,9 @@ class NewRoute extends Component {
         routeName: this.props.route.name,
         routeEmployees: this.props.route.employees,
         routeTasks: this.props.route.maintenanceTasks,
+        tasksPending: true,
+        employeesPending: true,
+        routePending: true,
       };
     } else {
       this.state = {
@@ -94,7 +132,7 @@ class NewRoute extends Component {
 
   saveRoute() {
     if (!this.props.route) {
-      fetch("https://www.mantenimientoscvm.com/routes/addRoute", {
+      fetch("https://www.mantenimientoscvm.com//routes/addRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -107,7 +145,7 @@ class NewRoute extends Component {
           this.props.getRoutes();
         });
     } else {
-      fetch("https://www.mantenimientoscvm.com/routes/editRoute", {
+      fetch("https://www.mantenimientoscvm.com//routes/editRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -129,8 +167,9 @@ class NewRoute extends Component {
   getEmployees() {
     this.setState({
       employees: [],
+      employeesPending: true,
     });
-    fetch(`https://www.mantenimientoscvm.com/routes/getEmployees`, {
+    fetch(`https://www.mantenimientoscvm.com//routes/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -143,6 +182,7 @@ class NewRoute extends Component {
         this.setState(
           {
             employees: res,
+            employeesPending: false,
           },
           () => console.log()
         );
@@ -150,17 +190,24 @@ class NewRoute extends Component {
   }
 
   getTasks() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getAllMaintenanceLogs/`, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    this.setState({
+      tasksPending: true,
+    });
+    fetch(
+      `https://www.mantenimientoscvm.com//machines/getAllMaintenanceLogs/`,
+      {
+        method: "GET",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((res) => {
         this.setState({
           tasks: res,
+          tasksPending: false,
         });
       });
   }
@@ -362,18 +409,32 @@ class NewRoute extends Component {
   }
 
   deleteRoute() {
-    fetch(`https://www.mantenimientoscvm.com/routes/deleteRoute`, {
-      method: "POST",
-      body: JSON.stringify(this.state),
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        this.props.getRoutes();
-      });
+    confirmAlert({
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch(`https://www.mantenimientoscvm.com//routes/deleteRoute`, {
+              method: "POST",
+              body: JSON.stringify(this.state),
+              credentials: "same-origin",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((res) => {
+                this.props.getRoutes();
+              }),
+        },
+        {
+          label: "No",
+          onClick: () => console.log(),
+        },
+      ],
+    });
   }
 
   renderTasks() {
@@ -523,6 +584,8 @@ class NewRoute extends Component {
                 data={this.state.tasks}
                 noHeader
                 columns={columns}
+                progressPending={this.state.tasksPending}
+                progressComponent={<CustomLoader />}
                 pagination
                 customStyles={customStyles}
                 highlightOnHover
@@ -540,6 +603,8 @@ class NewRoute extends Component {
                   data={this.state.employees}
                   noHeader
                   theme="machines"
+                  progressPending={this.state.employeesPending}
+                  progressComponent={<CustomLoader />}
                   columns={columns}
                   pagination
                   highlightOnHover

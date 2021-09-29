@@ -2,13 +2,7 @@ import React, { Component } from "react";
 import { PullToRefresh } from "react-js-pull-to-refresh";
 import Sidebar from "react-sidebar";
 import "react-data-table-component-extensions/dist/index.css";
-import DataTableExtensions from "react-data-table-component-extensions";
-import DataTable, { createTheme } from "react-data-table-component";
-import {
-  PullDownContent,
-  ReleaseContent,
-  RefreshContent,
-} from "react-js-pull-to-refresh";
+
 import "./employeeView.css";
 
 import {
@@ -26,6 +20,18 @@ import {
 import "./employeeView.css";
 import SubmitTask from "./SubmitTask";
 import { retrieveCookie, saveCookie, deleteCookie } from "./employeeCookie";
+import ReportMaintenance from "../Report/ReportMaintenance";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+
+import {
+  Accordion,
+  AccordionItem,
+  AccordionItemHeading,
+  AccordionItemButton,
+  AccordionItemPanel,
+} from "react-accessible-accordion";
+import "react-accessible-accordion/dist/fancy-example.css";
 
 export default class EmployeeView extends Component {
   constructor(props) {
@@ -36,6 +42,7 @@ export default class EmployeeView extends Component {
       sidebarOpen: false,
       refreshingContent: false,
       pass: "",
+      reportCollapse: false,
       username: "",
       secret: retrieveCookie().secret || false,
     };
@@ -52,7 +59,7 @@ export default class EmployeeView extends Component {
 
   checkPass = (event) => {
     event.preventDefault();
-    fetch(`https://www.mantenimientoscvm.com/users/employeeLogin/`, {
+    fetch(`https://www.mantenimientoscvm.com//users/employeeLogin/`, {
       method: "POST",
       body: JSON.stringify({
         secret: this.state.pass,
@@ -79,7 +86,7 @@ export default class EmployeeView extends Component {
   };
   getRoute() {
     fetch(
-      `https://www.mantenimientoscvm.com/users/getEmployeeRoute/${this.state.employeeId}`,
+      `https://www.mantenimientoscvm.com//users/getEmployeeRoute/${this.state.employeeId}`,
       {
         method: "GET",
         credentials: "same-origin",
@@ -148,17 +155,20 @@ export default class EmployeeView extends Component {
                   <Col>
                     <Card.Title>
                       <p>
-                        Maquina:{" "}
+                        <b>Maquina:</b>{" "}
                         {this.state.routeTasks[index].vendingMachine.machineNo}
                       </p>
                       <p>
-                        Cliente:{" "}
+                        <b>Cliente:</b>{" "}
                         {
                           this.state.routeTasks[index].vendingMachine.client
                             .name
                         }
                       </p>
-                      <p>Mantenimiento: {this.state.routeTasks[index].task}</p>
+                      <p>
+                        <b>Mantenimiento Necesario:</b>{" "}
+                        {this.state.routeTasks[index].task}
+                      </p>
                     </Card.Title>
                   </Col>
                 </Row>
@@ -196,7 +206,7 @@ export default class EmployeeView extends Component {
           />{" "}
           <form onSubmit={this.checkPass}>
             <FormGroup className="userId" controlId="username">
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Usuario</FormLabel>
               <FormControl
                 type="input-"
                 size="lg"
@@ -205,7 +215,7 @@ export default class EmployeeView extends Component {
               ></FormControl>
             </FormGroup>
             <FormGroup className="userId" controlId="pass">
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Contraseña</FormLabel>
               <FormControl
                 type="password"
                 size="lg"
@@ -214,7 +224,7 @@ export default class EmployeeView extends Component {
               ></FormControl>
             </FormGroup>
             <Button block type="submit" onClick={this.onSubmit}>
-              Login
+              Iniciar Sesión
             </Button>
           </form>
         </div>
@@ -237,8 +247,19 @@ export default class EmployeeView extends Component {
             }}
           />{" "}
           <br></br>
+          <Accordion allowZeroExpanded={true}>
+            <AccordionItem key={1}>
+              <AccordionItemHeading>
+                <AccordionItemButton>Agregar Reporte</AccordionItemButton>
+              </AccordionItemHeading>
+              <AccordionItemPanel>
+                <ReportMaintenance></ReportMaintenance>
+              </AccordionItemPanel>
+            </AccordionItem>
+          </Accordion>
+          <br></br>
           <Card body className="table task-card">
-            <Card.Title>Open Tasks</Card.Title>
+            <Card.Title>Tareas Abiertas</Card.Title>
           </Card>
           {this.renderTasks()}
         </Container>

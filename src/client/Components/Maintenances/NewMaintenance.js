@@ -35,18 +35,24 @@ class NewMaintenance extends Component {
   };
 
   handleSubmit = (event) => {
-    event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/machines/newMaintenanceTask", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(() => {
-      this.props.getMaintenances();
-      this.handleCloseModal();
-    });
+    if (this.state.reminderCount < 1) {
+      alert(
+        "Mantenimiento preventivo necesita ser recordado minimo una vez al dia."
+      );
+    } else {
+      event.preventDefault();
+      fetch("https://www.mantenimientoscvm.com//machines/newMaintenanceTask", {
+        method: "POST",
+        credentials: "same-origin",
+        body: JSON.stringify(this.state),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(() => {
+        this.props.getMaintenances();
+        this.handleCloseModal();
+      });
+    }
   };
 
   handleOpenModal() {
@@ -69,7 +75,7 @@ class NewMaintenance extends Component {
     return (
       <div>
         <h4>
-          Maintenances{" "}
+          Mantenimientos Preventivos{" "}
           <BsFillPlusSquareFill
             onClick={this.handleOpenModal}
             className="add"
@@ -84,10 +90,10 @@ class NewMaintenance extends Component {
         >
           <Card>
             <Card.Body>
-              <h5>New Maintenance</h5>
+              <h5>Agregar Mantenimiento Preventivo</h5>
               <form onSubmit={this.handleSubmit}>
                 <FormGroup controlId="task">
-                  <FormLabel>Task</FormLabel>
+                  <FormLabel>Tarea</FormLabel>
                   <FormControl
                     autoFocus
                     type="type"
@@ -97,21 +103,21 @@ class NewMaintenance extends Component {
                 </FormGroup>
 
                 <FormGroup controlId="reminderCount">
-                  <FormLabel>Remind Every:</FormLabel>
+                  <FormLabel>Recordar Cada:</FormLabel>
                   <FormControl
                     autoFocus
                     type="type"
                     value={this.state.reminderCount}
                     onChange={this.handleChange}
                   />
-                  Days
+                  Dias
                 </FormGroup>
               </form>
               <Button variant="secondary" onClick={this.handleCloseModal}>
-                Close
+                Cerrar
               </Button>{" "}
               <Button variant="primary" onClick={this.handleSubmit}>
-                Save
+                Enviar
               </Button>
             </Card.Body>
           </Card>

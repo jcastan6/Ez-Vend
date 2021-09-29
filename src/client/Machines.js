@@ -15,6 +15,38 @@ import MaintenanceLogs from "./Components/Maintenances/MaintenanceLogs";
 import MaintenanceHistory from "./Components/Maintenances/MaintenanceHistory";
 import MaintenanceReports from "./Components/Maintenances/MaintenanceReports";
 
+import styled, { keyframes } from "styled-components";
+const rotate360 = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+  margin: 16px;
+  animation: ${rotate360} 1s linear infinite;
+  transform: translateZ(0);
+  border-top: 2px solid grey;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+  border-left: 4px solid black;
+  background: transparent;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`;
+
+const CustomLoader = () => (
+  <div style={{ padding: "24px" }}>
+    <Spinner />
+    <div>Cargando...</div>
+  </div>
+);
+
 import { BsArrowLeft, BsThreeDotsVertical } from "react-icons/bs";
 export default class Machines extends Component {
   constructor(props) {
@@ -22,6 +54,7 @@ export default class Machines extends Component {
     this.state = {
       machines: [],
       showModal: false,
+      pending: true,
     };
     this.getMachines = this.getMachines.bind(this);
     this.getMachines();
@@ -39,7 +72,8 @@ export default class Machines extends Component {
     this.setState({ showModal: false });
   }
   getMachines() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getAll/`, {
+    this.setState({ pending: true });
+    fetch(`https://www.mantenimientoscvm.com//machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -72,6 +106,7 @@ export default class Machines extends Component {
           {
             machines: res,
             showModal: false,
+            pending: false,
           },
           () => console.log()
         );
@@ -104,7 +139,7 @@ export default class Machines extends Component {
     };
     const columns = [
       {
-        name: "MachineNo",
+        name: "Numero de maquina",
         selector: "machineNo",
         sortable: true,
         style: {
@@ -114,22 +149,22 @@ export default class Machines extends Component {
         },
       },
       {
-        name: "Type",
+        name: "Tipo",
         selector: "type",
         sortable: true,
       },
       {
-        name: "Client",
+        name: "Cliente",
         selector: "client",
         sortable: true,
       },
       {
-        name: "Open Tasks",
+        name: "Tareas Abiertas",
         selector: "reports",
         sortable: true,
       },
       {
-        name: "Edit",
+        name: "Editar",
         selector: "edit",
         cellExport: (row) => {
           return "";
@@ -147,11 +182,13 @@ export default class Machines extends Component {
         data={this.state.machines}
       >
         <DataTable
-          title="Machines"
+          title="Maquinas"
           data={this.state.machines}
           customStyles={customStyles}
           columns={columns}
           pagination
+          progressPending={this.state.pending}
+          progressComponent={<CustomLoader />}
           onRowDoubleClicked={(row) => {
             this.handleOpenModal(row.id);
           }}
@@ -208,7 +245,7 @@ export default class Machines extends Component {
             <Row>
               <Col lg={2}>
                 <Button onClick={() => this.handleOpenModal("new")}>
-                  Add Machines
+                  Agregar Maquinas
                 </Button>
               </Col>
               <br></br>

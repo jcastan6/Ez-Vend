@@ -68,7 +68,6 @@ db.backup = () => {
 };
 
 db.check = async () => {
-	console.log("db checked");
-
+  console.log("db checked");
 };
 module.exports = db;

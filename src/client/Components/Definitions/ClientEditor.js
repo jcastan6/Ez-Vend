@@ -9,7 +9,8 @@ import {
   Card,
 } from "react-bootstrap";
 import Modal from "react-modal";
-
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
 
 class ClientEditor extends Component {
@@ -43,7 +44,7 @@ class ClientEditor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("https://www.mantenimientoscvm.com/clients/editClient", {
+    fetch("https://www.mantenimientoscvm.com//clients/editClient", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -58,18 +59,32 @@ class ClientEditor extends Component {
   };
 
   delete = () => {
-    fetch("https://www.mantenimientoscvm.com/clients/deleteClient", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getClients();
-      });
+    confirmAlert({
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch("https://www.mantenimientoscvm.com//clients/deleteClient", {
+              method: "POST",
+              credentials: "same-origin",
+              body: JSON.stringify(this.state),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                this.props.getClients();
+              }),
+        },
+        {
+          label: "No",
+          onClick: () => console.log(),
+        },
+      ],
+    });
   };
 
   validateForm() {
@@ -90,7 +105,7 @@ class ClientEditor extends Component {
             <Card.Body>
               <form onSubmit={this.handleSubmit} className="body">
                 <FormGroup controlId="name">
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl
                     autoFocus
                     type="type"
@@ -105,7 +120,7 @@ class ClientEditor extends Component {
                   type="submit"
                   onClick={this.onSubmit}
                 >
-                  Update
+                  Actualizar
                 </Button>
                 <Button
                   block
@@ -113,7 +128,7 @@ class ClientEditor extends Component {
                   variant="danger"
                   onClick={this.delete}
                 >
-                  Delete
+                  Borrar
                 </Button>
               </form>
             </Card.Body>

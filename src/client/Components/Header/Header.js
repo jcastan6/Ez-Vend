@@ -41,16 +41,16 @@ class Header extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto" activeKey={location.pathname}>
-            <Nav.Link href="/Home">Home</Nav.Link>
-            <Nav.Link href="/Routes">Routes</Nav.Link>
-            <Nav.Link href="/Machines">Machines</Nav.Link>
-            <Nav.Link href="/Definitions">Definitions</Nav.Link>
+            <Nav.Link href="/Home">Inicio</Nav.Link>
+            <Nav.Link href="/Routes">Rutas</Nav.Link>
+            <Nav.Link href="/Machines">Maquinas</Nav.Link>
+            <Nav.Link href="/Definitions">Definiciones</Nav.Link>
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
             <a href="/" onClick={() => deleteCookie()}>
-              Log Out
+              Cerrar Sesión
             </a>
           </Navbar.Text>
         </Navbar.Collapse>

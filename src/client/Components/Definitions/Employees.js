@@ -36,7 +36,7 @@ export default class Employees extends Component {
     this.setState({ showModal: false });
   }
   getEmployees() {
-    fetch(`https://www.mantenimientoscvm.com/users/getEmployees`, {
+    fetch(`https://www.mantenimientoscvm.com//users/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -81,7 +81,7 @@ export default class Employees extends Component {
     };
     const columns = [
       {
-        name: "Name",
+        name: "Nombre",
         selector: "name",
         sortable: true,
         style: {
@@ -91,11 +91,12 @@ export default class Employees extends Component {
         },
       },
       {
-        name: "Username",
+        name: "Usuario",
         selector: "username",
         sortable: true,
       },
       {
+        name: "Editar Empleado",
         selector: "edit",
         cell: (row) => {
           return (
@@ -138,7 +139,7 @@ export default class Employees extends Component {
             <Row>
               <Col lg={2}>
                 <Button onClick={() => this.handleOpenModal("new")}>
-                  Add Employee
+                  Agregar Empleado
                 </Button>
               </Col>
               <br></br>

@@ -19,6 +19,39 @@ import DataTable, { createTheme } from "react-data-table-component";
 import HistoryEditor from "./HistoryEditor";
 import ReactTooltip from "react-tooltip";
 import { BsCamera, BsThreeDotsVertical } from "react-icons/bs";
+
+import styled, { keyframes } from "styled-components";
+const rotate360 = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+  margin: 16px;
+  animation: ${rotate360} 1s linear infinite;
+  transform: translateZ(0);
+  border-top: 2px solid grey;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+  border-left: 4px solid black;
+  background: transparent;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`;
+
+const CustomLoader = () => (
+  <div style={{ padding: "24px" }}>
+    <Spinner />
+    <div>Cargando...</div>
+  </div>
+);
+
 class MaintenanceHistory extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +59,7 @@ class MaintenanceHistory extends Component {
     this.state = {
       machine: this.props.machine,
       maintenances: [],
+      pending: true,
     };
     this.getMaintenances = this.getMaintenances.bind(this);
     this.getMaintenances();
@@ -46,14 +80,18 @@ class MaintenanceHistory extends Component {
   }
 
   getMaintenances() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getMaintenanceHistory/`, {
-      body: JSON.stringify(this.state),
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    this.setState({ pending: true });
+    fetch(
+      `https://www.mantenimientoscvm.com//machines/getMaintenanceHistory/`,
+      {
+        body: JSON.stringify(this.state),
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((res) => {
         this.setState({
@@ -98,7 +136,7 @@ class MaintenanceHistory extends Component {
   renderTasks() {
     const columns = [
       {
-        name: "Task",
+        name: "Mantenimiento",
         cell: (row) => {
           return (
             <div data-tip={row.task}>
@@ -112,16 +150,17 @@ class MaintenanceHistory extends Component {
         sortable: true,
       },
       {
-        name: "Completed",
+        name: "Realizado?",
         selector: "createdAt",
         sortable: true,
       },
       {
-        name: "Completed by",
+        name: "Realizado Por:",
         selector: "employee",
         sortable: true,
       },
       {
+        name: "Editar",
         cell: (row) => {
           return (
             <BsThreeDotsVertical
@@ -136,7 +175,7 @@ class MaintenanceHistory extends Component {
       <div>
         {this.renderModals()}
         <Card body className="table">
-          <Card.Title>Maintenance History</Card.Title>
+          <Card.Title>Historial de Mantenimiento</Card.Title>
           <DataTableExtensions
             filterHidden={false}
             columns={columns}

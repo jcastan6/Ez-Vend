@@ -36,7 +36,7 @@ export default class MachineTypes extends Component {
     this.setState({ showModal: false });
   }
   getTypes() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getTypes`, {
+    fetch(`https://www.mantenimientoscvm.com//machines/getTypes`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -80,7 +80,7 @@ export default class MachineTypes extends Component {
     };
     const columns = [
       {
-        name: "Type",
+        name: "Tipo",
         selector: "type",
         sortable: true,
         style: {
@@ -90,11 +90,12 @@ export default class MachineTypes extends Component {
         },
       },
       {
-        name: "Machine Count",
+        name: "Cuenta de Maquinas",
         selector: "count",
         sortable: true,
       },
       {
+        name: "Editar Tipo",
         selector: "edit",
         cell: (row) => {
           return <TypeEditor type={row} getTypes={this.getTypes} />;
@@ -111,7 +112,7 @@ export default class MachineTypes extends Component {
         data={this.state.types}
       >
         <DataTable
-          title="Machines"
+          title="Tipos de Maquina"
           data={this.state.types}
           customStyles={customStyles}
           columns={columns}
@@ -132,7 +133,7 @@ export default class MachineTypes extends Component {
             <Row>
               <Col lg={2}>
                 <Button onClick={() => this.handleOpenModal("new")}>
-                  Add Type
+                  Agregar Tipo
                 </Button>
               </Col>
               <br></br>

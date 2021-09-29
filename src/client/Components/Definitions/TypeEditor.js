@@ -12,6 +12,8 @@ import Modal from "react-modal";
 
 import { BsFillXSquareFill, BsThreeDotsVertical } from "react-icons/bs";
 import "../Maintenances/Maintenances.css";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class TypeEditor extends Component {
   constructor(props) {
@@ -35,7 +37,7 @@ class TypeEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/machines/editType", {
+    fetch("https://www.mantenimientoscvm.com//machines/editType", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -51,18 +53,32 @@ class TypeEditor extends Component {
   };
 
   delete = () => {
-    fetch("https://www.mantenimientoscvm.com/machines/deleteType", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.props.getTypes();
-      });
+    confirmAlert({
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () =>
+            fetch("https://www.mantenimientoscvm.com//machines/deleteType", {
+              method: "POST",
+              credentials: "same-origin",
+              body: JSON.stringify(this.state),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                this.props.getTypes();
+              }),
+        },
+        {
+          label: "No",
+          onClick: () => console.log(),
+        },
+      ],
+    });
   };
 
   handleOpenModal() {

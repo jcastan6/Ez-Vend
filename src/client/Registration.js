@@ -32,7 +32,7 @@ class Registration extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.validateForm()) {
-      fetch("https://www.mantenimientoscvm.com/users/register", {
+      fetch("https://www.mantenimientoscvm.com//users/register", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -46,7 +46,7 @@ class Registration extends Component {
             alert("Sorry please check log-in credentials");
           }
           if (res.status === 401) {
-            alert("Secret does not match.");
+            alert("El secreto no coincide con la base de datos.");
           } else if (res.status === 200) {
             this.handleRouteChange();
           } else {
@@ -55,7 +55,7 @@ class Registration extends Component {
           }
         })
         .catch((err) => {
-          alert("Error logging in please try again");
+          alert("Error al crear la cuenta.");
           console.error(err);
         });
     }
@@ -66,19 +66,23 @@ class Registration extends Component {
   }
 
   validateForm() {
-    return this.state.username.length > 0 && this.state.password.length > 8;
+    return (
+      this.state.username.length > 0 &&
+      this.state.password.length > 8 &&
+      this.state.validatePass === this.state.password
+    );
   }
 
   render() {
     return (
       <div className="body login">
         <h1 id="justice">
-          <b>Register</b>
+          <b>Registrar</b>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>
           <FormGroup className="username" controlId="username">
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Usuario</FormLabel>
             <FormControl
               autoFocus
               type="username"
@@ -87,7 +91,7 @@ class Registration extends Component {
             />
           </FormGroup>
           <FormGroup controlId="password">
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Contraseña</FormLabel>
             <FormControl
               value={this.state.password}
               onChange={this.handleChange}
@@ -96,7 +100,7 @@ class Registration extends Component {
             />
           </FormGroup>
           <FormGroup controlId="validatePass">
-            <FormLabel>Validate Password</FormLabel>
+            <FormLabel>Validar Contraseña</FormLabel>
             <FormControl
               value={this.state.validatePass}
               onChange={this.handleChange}
@@ -105,7 +109,7 @@ class Registration extends Component {
             />
           </FormGroup>
           <FormGroup controlId="secret">
-            <FormLabel>Secret</FormLabel>
+            <FormLabel>Secreto</FormLabel>
             <FormControl
               value={this.state.secret}
               onChange={this.handleChange}
@@ -119,10 +123,10 @@ class Registration extends Component {
             type="submit"
             onClick={this.onSubmit}
           >
-            Submit
+            Crear Cuenta
           </Button>
           <Link to="/" className="small">
-            Already Have an Account?
+            Ya tengo Cuenta.
           </Link>
         </form>
       </div>

@@ -29,7 +29,7 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/users/login", {
+    fetch("https://www.mantenimientoscvm.com//users/login", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -56,7 +56,7 @@ class Login extends Component {
   };
 
   handleRouteChange() {
-    this.props.history.push("/home");
+    this.props.history.push("/Home");
   }
 
   validateForm() {
@@ -77,7 +77,7 @@ class Login extends Component {
         <br />
         <form onSubmit={this.handleSubmit}>
           <FormGroup className="username" controlId="username">
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Usuario</FormLabel>
             <FormControl
               autoFocus
               type="username"
@@ -86,7 +86,7 @@ class Login extends Component {
             />
           </FormGroup>
           <FormGroup controlId="password">
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Contraseña</FormLabel>
             <FormControl
               value={this.state.password}
               onChange={this.handleChange}
@@ -100,10 +100,10 @@ class Login extends Component {
             type="submit"
             onClick={this.onSubmit}
           >
-            Login
+            Iniciar Sesión
           </Button>
           <Link to="/Registration" className="small">
-            Don't Have an Account?
+            Crear Cuenta
           </Link>
         </form>
       </div>

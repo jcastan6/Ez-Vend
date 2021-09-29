@@ -26,7 +26,7 @@ class NewType extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/machines/newType", {
+    fetch("https://www.mantenimientoscvm.com//machines/newType", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -49,12 +49,12 @@ class NewType extends Component {
     return (
       <div>
         <h1 id="justice">
-          <b>Add New Machine Type</b>
+          <b>Agregar Tipo de Maquina</b>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>
           <FormGroup className="userId" controlId="type">
-            <FormLabel>Machine Type</FormLabel>
+            <FormLabel>Tipo de Maquina</FormLabel>
             <FormControl
               autoFocus
               type="type"
@@ -69,7 +69,7 @@ class NewType extends Component {
             type="submit"
             onClick={this.onSubmit}
           >
-            Add
+            Agregar
           </Button>
         </form>
       </div>

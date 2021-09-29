@@ -33,7 +33,7 @@ export default class NewEmployee extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com/users/addEmployee", {
+    fetch("https://www.mantenimientoscvm.com//users/addEmployee", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -65,7 +65,7 @@ export default class NewEmployee extends Component {
   }
 
   getTypes() {
-    fetch(`https://www.mantenimientoscvm.com/machines/getTypes/`, {
+    fetch(`https://www.mantenimientoscvm.com//machines/getTypes/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -117,12 +117,12 @@ export default class NewEmployee extends Component {
     return (
       <div>
         <h1 id="justice">
-          <b>Add New Employee</b>
+          <b>Agregar Empleado</b>
         </h1>
         <br />
         <form onSubmit={this.handleSubmit}>
           <FormGroup className="userId" controlId="name">
-            <FormLabel>Name</FormLabel>
+            <FormLabel>Nombre</FormLabel>
             <FormControl
               autoFocus
               type="name"
@@ -131,7 +131,7 @@ export default class NewEmployee extends Component {
             />
           </FormGroup>
           <FormGroup className="userId" controlId="username">
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Usuario</FormLabel>
             <FormControl
               autoFocus
               type="input"
@@ -146,7 +146,7 @@ export default class NewEmployee extends Component {
             type="submit"
             onClick={this.onSubmit}
           >
-            Add
+            Agregar
           </Button>
         </form>
       </div>
