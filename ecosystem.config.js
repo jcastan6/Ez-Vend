@@ -12,11 +12,9 @@ module.exports = {
       max_memory_restart: "1G",
       env: {
         NODE_ENV: "development",
-        TZ: "America/Tijuana",
       },
       env_production: {
         NODE_ENV: "production",
-        TZ: "America/Tijuana",
       },
     },
   ],
