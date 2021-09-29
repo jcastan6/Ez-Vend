@@ -68,17 +68,7 @@ db.backup = () => {
 };
 
 db.check = async () => {
-  await dbConnection
-    .query(
-      "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'vending';"
-    )
-    .then(async (result) => {
-      if (result[0].length === 0) {
-        await dbConnection.query("CREATE DATABASE IF NOT EXISTS vending;");
-        await sequelize.sync();
-      } else {
-        await sequelize.sync();
-      }
-    });
+	console.log("db checked");
+
 };
 module.exports = db;
