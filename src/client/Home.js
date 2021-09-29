@@ -136,19 +136,19 @@ export default class Home extends Component {
 
     const columns = [
       {
-        name: "MachineNo",
+        name: "Numero de Maquina",
         selector: "vendingMachine.machineNo",
         sortable: true,
       },
       {
-        name: "Task",
+        name: "Tarea",
         cell: (row) => {
           return <div data-tip={row.task}>{row.task}</div>;
         },
         sortable: false,
       },
       {
-        name: "Client",
+        name: "Cliente",
         cell: (row) => {
           if (row.client) {
             return row.client.name;
@@ -159,7 +159,7 @@ export default class Home extends Component {
         sortable: true,
       },
       {
-        name: "Type",
+        name: "Tipo de Mantenimiento",
         cell: (row) => {
           if (row.emergency) {
             return "Correctivo";
@@ -180,7 +180,7 @@ export default class Home extends Component {
     ];
     return (
       <Card body className="table">
-        <Card.Title>Open Tasks</Card.Title>
+        <Card.Title>Tareas Abiertas</Card.Title>
         <DataTableExtensions
           filterHidden={false}
           columns={columns}
@@ -203,12 +203,12 @@ export default class Home extends Component {
   renderDailyTasks() {
     const columns = [
       {
-        name: "Machine",
+        name: "Numero de Maquina",
         selector: "machineNo",
         sortable: true,
       },
       {
-        name: "Task",
+        name: "Tarea",
         cell: (row) => {
           return (
             <div data-tip={row.task}>
@@ -222,19 +222,19 @@ export default class Home extends Component {
       },
 
       {
-        name: "Date",
+        name: "Fecha",
         selector: "createdAt",
         sortable: true,
       },
       {
-        name: "Completed by",
+        name: "Realizado Por:",
         selector: "employee",
         sortable: true,
       },
     ];
     return (
       <Card body className="table">
-        <Card.Title>Today's Maintenances</Card.Title>
+        <Card.Title>Mantenimientos Hechos Hoy</Card.Title>
         <DataTableExtensions
           filterHidden={false}
           columns={columns}
