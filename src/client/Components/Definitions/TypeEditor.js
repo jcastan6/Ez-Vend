@@ -37,7 +37,7 @@ class TypeEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com//machines/editType", {
+    fetch("https://www.mantenimientoscvm.com/machines/editType", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -60,7 +60,7 @@ class TypeEditor extends Component {
         {
           label: "Yes",
           onClick: () =>
-            fetch("https://www.mantenimientoscvm.com//machines/deleteType", {
+            fetch("https://www.mantenimientoscvm.com/machines/deleteType", {
               method: "POST",
               credentials: "same-origin",
               body: JSON.stringify(this.state),

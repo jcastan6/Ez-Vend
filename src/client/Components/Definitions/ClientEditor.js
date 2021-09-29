@@ -44,7 +44,7 @@ class ClientEditor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("https://www.mantenimientoscvm.com//clients/editClient", {
+    fetch("https://www.mantenimientoscvm.com/clients/editClient", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -66,7 +66,7 @@ class ClientEditor extends Component {
         {
           label: "Yes",
           onClick: () =>
-            fetch("https://www.mantenimientoscvm.com//clients/deleteClient", {
+            fetch("https://www.mantenimientoscvm.com/clients/deleteClient", {
               method: "POST",
               credentials: "same-origin",
               body: JSON.stringify(this.state),

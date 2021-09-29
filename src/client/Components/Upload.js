@@ -31,7 +31,7 @@ export default class Upload extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com//images/new", {
+    fetch("https://www.mantenimientoscvm.com/images/new", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

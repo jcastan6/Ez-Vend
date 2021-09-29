@@ -87,7 +87,7 @@ class MaintenanceReports extends Component {
 
   getMaintenances() {
     this.setState({ pending: true });
-    fetch(`https://www.mantenimientoscvm.com//machines/getMachineReports/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getMachineReports/`, {
       body: JSON.stringify(this.state),
       method: "POST",
       credentials: "same-origin",

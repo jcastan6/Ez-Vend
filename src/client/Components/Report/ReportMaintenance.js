@@ -65,7 +65,7 @@ class ReportMaintenance extends Component {
       loading: true,
     }),
       () => console.log();
-    fetch("https://www.mantenimientoscvm.com//machines/submitReport", {
+    fetch("https://www.mantenimientoscvm.com/machines/submitReport", {
       method: "POST",
 
       body: formData,
@@ -98,7 +98,7 @@ class ReportMaintenance extends Component {
   }
 
   getMachines() {
-    fetch(`https://www.mantenimientoscvm.com//machines/getAll/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

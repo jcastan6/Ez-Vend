@@ -27,7 +27,7 @@ export default class NewClient extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com//clients/addClient", {
+    fetch("https://www.mantenimientoscvm.com/clients/addClient", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

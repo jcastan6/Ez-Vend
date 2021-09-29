@@ -73,7 +73,7 @@ export default class Machines extends Component {
   }
   getMachines() {
     this.setState({ pending: true });
-    fetch(`https://www.mantenimientoscvm.com//machines/getAll/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

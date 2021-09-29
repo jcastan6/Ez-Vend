@@ -46,7 +46,7 @@ class NewReport extends Component {
       loading: true,
     }),
       () => console.log();
-    fetch("https://www.mantenimientoscvm.com//machines/submitReport", {
+    fetch("https://www.mantenimientoscvm.com/machines/submitReport", {
       method: "POST",
 
       body: formData,

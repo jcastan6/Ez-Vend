@@ -69,7 +69,7 @@ export default class Home extends Component {
       tasksPending: true,
     });
     fetch(
-      `https://www.mantenimientoscvm.com//machines/getAllMaintenanceLogsHome/`,
+      `https://www.mantenimientoscvm.com/machines/getAllMaintenanceLogsHome/`,
       {
         method: "GET",
         credentials: "same-origin",
@@ -92,7 +92,7 @@ export default class Home extends Component {
       maintenancesPending: true,
     });
     fetch(
-      `https://www.mantenimientoscvm.com//machines/getDailyMaintenanceHistory/`,
+      `https://www.mantenimientoscvm.com/machines/getDailyMaintenanceHistory/`,
       {
         method: "GET",
         credentials: "same-origin",

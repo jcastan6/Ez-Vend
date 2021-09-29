@@ -132,7 +132,7 @@ class NewRoute extends Component {
 
   saveRoute() {
     if (!this.props.route) {
-      fetch("https://www.mantenimientoscvm.com//routes/addRoute", {
+      fetch("https://www.mantenimientoscvm.com/routes/addRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -145,7 +145,7 @@ class NewRoute extends Component {
           this.props.getRoutes();
         });
     } else {
-      fetch("https://www.mantenimientoscvm.com//routes/editRoute", {
+      fetch("https://www.mantenimientoscvm.com/routes/editRoute", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -169,7 +169,7 @@ class NewRoute extends Component {
       employees: [],
       employeesPending: true,
     });
-    fetch(`https://www.mantenimientoscvm.com//routes/getEmployees`, {
+    fetch(`https://www.mantenimientoscvm.com/routes/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -193,16 +193,13 @@ class NewRoute extends Component {
     this.setState({
       tasksPending: true,
     });
-    fetch(
-      `https://www.mantenimientoscvm.com//machines/getAllMaintenanceLogs/`,
-      {
-        method: "GET",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`https://www.mantenimientoscvm.com/machines/getAllMaintenanceLogs/`, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((res) => {
         this.setState({
@@ -416,7 +413,7 @@ class NewRoute extends Component {
         {
           label: "Yes",
           onClick: () =>
-            fetch(`https://www.mantenimientoscvm.com//routes/deleteRoute`, {
+            fetch(`https://www.mantenimientoscvm.com/routes/deleteRoute`, {
               method: "POST",
               body: JSON.stringify(this.state),
               credentials: "same-origin",

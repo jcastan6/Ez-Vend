@@ -42,7 +42,7 @@ class EmployeeEditor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("https://www.mantenimientoscvm.com//users/editEmployee", {
+    fetch("https://www.mantenimientoscvm.com/users/editEmployee", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -71,7 +71,7 @@ class EmployeeEditor extends Component {
         {
           label: "Yes",
           onClick: () =>
-            fetch("https://www.mantenimientoscvm.com//users/deleteEmployee", {
+            fetch("https://www.mantenimientoscvm.com/users/deleteEmployee", {
               method: "POST",
               credentials: "same-origin",
               body: JSON.stringify(this.state),
@@ -92,7 +92,7 @@ class EmployeeEditor extends Component {
     });
   };
   getTypes() {
-    fetch(`https://www.mantenimientoscvm.com//machines/getTypes/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getTypes/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

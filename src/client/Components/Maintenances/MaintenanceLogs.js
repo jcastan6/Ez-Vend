@@ -70,7 +70,7 @@ class MaintenanceLogs extends Component {
     this.setState({ pending: true });
     const get = {};
     get.machine = this.state.machine;
-    fetch(`https://www.mantenimientoscvm.com//machines/getMaintenanceLogs/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getMaintenanceLogs/`, {
       body: JSON.stringify(get),
       method: "POST",
       credentials: "same-origin",

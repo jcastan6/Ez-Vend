@@ -41,7 +41,7 @@ class NewMaintenance extends Component {
       );
     } else {
       event.preventDefault();
-      fetch("https://www.mantenimientoscvm.com//machines/newMaintenanceTask", {
+      fetch("https://www.mantenimientoscvm.com/machines/newMaintenanceTask", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),

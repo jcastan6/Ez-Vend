@@ -48,7 +48,7 @@ class TaskEditor extends Component {
       );
     } else {
       event.preventDefault();
-      fetch("https://www.mantenimientoscvm.com//machines/editMaintenanceTask", {
+      fetch("https://www.mantenimientoscvm.com/machines/editMaintenanceTask", {
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify(this.state),
@@ -73,7 +73,7 @@ class TaskEditor extends Component {
           label: "Yes",
           onClick: () =>
             fetch(
-              "https://www.mantenimientoscvm.com//machines/deleteMaintenanceTask",
+              "https://www.mantenimientoscvm.com/machines/deleteMaintenanceTask",
               {
                 method: "POST",
                 credentials: "same-origin",

@@ -36,7 +36,7 @@ export default class Clients extends Component {
     this.setState({ showModal: false });
   }
   getClients() {
-    fetch(`https://www.mantenimientoscvm.com//clients/getAll`, {
+    fetch(`https://www.mantenimientoscvm.com/clients/getAll`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

@@ -81,17 +81,14 @@ class MaintenanceHistory extends Component {
 
   getMaintenances() {
     this.setState({ pending: true });
-    fetch(
-      `https://www.mantenimientoscvm.com//machines/getMaintenanceHistory/`,
-      {
-        body: JSON.stringify(this.state),
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`https://www.mantenimientoscvm.com/machines/getMaintenanceHistory/`, {
+      body: JSON.stringify(this.state),
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((res) => {
         this.setState({

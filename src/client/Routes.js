@@ -69,7 +69,7 @@ export default class Routes extends Component {
     this.setState({
       routesPending: true,
     });
-    fetch(`https://www.mantenimientoscvm.com//routes/getAll/`, {
+    fetch(`https://www.mantenimientoscvm.com/routes/getAll/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

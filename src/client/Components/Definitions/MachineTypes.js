@@ -36,7 +36,7 @@ export default class MachineTypes extends Component {
     this.setState({ showModal: false });
   }
   getTypes() {
-    fetch(`https://www.mantenimientoscvm.com//machines/getTypes`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getTypes`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

@@ -33,7 +33,7 @@ export default class NewEmployee extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com//users/addEmployee", {
+    fetch("https://www.mantenimientoscvm.com/users/addEmployee", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -65,7 +65,7 @@ export default class NewEmployee extends Component {
   }
 
   getTypes() {
-    fetch(`https://www.mantenimientoscvm.com//machines/getTypes/`, {
+    fetch(`https://www.mantenimientoscvm.com/machines/getTypes/`, {
       method: "GET",
       credentials: "same-origin",
       headers: {

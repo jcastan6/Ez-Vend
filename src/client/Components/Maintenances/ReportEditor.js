@@ -43,7 +43,7 @@ class ReportEditor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com//machines/editMaintenanceReport", {
+    fetch("https://www.mantenimientoscvm.com/machines/editMaintenanceReport", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),
@@ -66,7 +66,7 @@ class ReportEditor extends Component {
           label: "Yes",
           onClick: () =>
             fetch(
-              "https://www.mantenimientoscvm.com//machines/deleteMaintenanceReport",
+              "https://www.mantenimientoscvm.com/machines/deleteMaintenanceReport",
               {
                 method: "POST",
                 credentials: "same-origin",

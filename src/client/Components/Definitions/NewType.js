@@ -26,7 +26,7 @@ class NewType extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://www.mantenimientoscvm.com//machines/newType", {
+    fetch("https://www.mantenimientoscvm.com/machines/newType", {
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(this.state),

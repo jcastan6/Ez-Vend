@@ -36,7 +36,7 @@ export default class Employees extends Component {
     this.setState({ showModal: false });
   }
   getEmployees() {
-    fetch(`https://www.mantenimientoscvm.com//users/getEmployees`, {
+    fetch(`https://www.mantenimientoscvm.com/users/getEmployees`, {
       method: "GET",
       credentials: "same-origin",
       headers: {
