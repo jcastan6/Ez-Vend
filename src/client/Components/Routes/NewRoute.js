@@ -10,6 +10,7 @@ import {
   Card,
 } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
+import { Typeahead } from "react-bootstrap-typeahead";
 
 import styled, { keyframes } from "styled-components";
 const rotate360 = keyframes`
@@ -323,25 +324,13 @@ class NewRoute extends Component {
 
     const columns = [
       {
-        name: "MachineNo",
+        name: "Numero de Maquina",
         selector: "vendingMachine.machineNo",
         sortable: true,
       },
-      {
-        name: "Task",
-
-        cell: (row) => {
-          return (
-            <div data-tip={row.task}>
-              {row.task} <ReactTooltip />
-            </div>
-          );
-        },
-        sortable: false,
-      },
 
       {
-        name: "Client",
+        name: "Cliente",
         cell: (row) => {
           if (row.client) {
             return row.client.name;
@@ -352,7 +341,19 @@ class NewRoute extends Component {
         sortable: true,
       },
       {
-        name: "Type",
+        name: "Tarea",
+
+        cell: (row) => {
+          return (
+            <div data-tip={row.task}>
+              {row.task} <ReactTooltip />
+            </div>
+          );
+        },
+        sortable: false,
+      },
+      {
+        name: "Tipo de Mantenimiento",
         cell: (row) => {
           if (row.emergency) {
             return "Correctivo";
@@ -372,7 +373,7 @@ class NewRoute extends Component {
       },
 
       {
-        name: "Edit",
+        name: "Editar",
         cell: (index) => (
           <div>
             <h4>
@@ -461,12 +462,12 @@ class NewRoute extends Component {
 
     const columns = [
       {
-        name: "MachineNo",
+        name: "Numero de Maquina",
         selector: "vendingMachine.machineNo",
         sortable: true,
       },
       {
-        name: "Task",
+        name: "Tarea",
         cell: (row) => {
           return <div data-tip={row.task}>{row.task}</div>;
         },
@@ -474,7 +475,7 @@ class NewRoute extends Component {
         grow: 3,
       },
       {
-        name: "Client",
+        name: "Cliente",
         cell: (row) => {
           if (row.client) {
             return row.client.name;
@@ -486,7 +487,7 @@ class NewRoute extends Component {
         right: true,
       },
       {
-        name: "Type",
+        name: "Tipo de Mantenimiento",
         cell: (row) => {
           if (row.emergency) {
             return "Correctivo";
@@ -506,7 +507,7 @@ class NewRoute extends Component {
         ],
       },
       {
-        name: "Add",
+        name: "Agregar a Ruta",
         cell: (row) => (
           <a onClick={() => this.addToRoute(row)}>
             <BsFillPlusSquareFill></BsFillPlusSquareFill>
@@ -519,7 +520,7 @@ class NewRoute extends Component {
 
     const employeeColumns = [
       {
-        name: "Name",
+        name: "Nombre",
         selector: "name",
         sortable: true,
       },
@@ -545,37 +546,43 @@ class NewRoute extends Component {
         <Row>
           <Col lg={6}>
             <Card body className="table">
-              <Button onClick={() => this.saveRoute()}>Save</Button>
+              <Button onClick={() => this.saveRoute()}>Actualizar</Button>
               {"   "}
               <Button variant="danger" onClick={() => this.deleteRoute()}>
-                Delete
+                Borrar
               </Button>
               <br />
               <br />
               <Form.Group controlId="routeName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  autoFocus
-                  type="type"
-                  value={this.state.routeName}
-                  onChange={this.handleChange}
+                <Form.Label>Empleado</Form.Label>
+                <Typeahead
+                  defaultSelected={this.state.routeEmployees}
+                  id="basic-typeahead-multiple"
+                  labelKey="name"
+                  clearButton
+                  multiple
+                  onChange={(option, e) => {
+                    this.setState({
+                      routeEmployees: option,
+                    });
+                  }}
+                  options={this.state.employees}
+                  placeholder="Elejir empleado..."
+                  selected={this.state.routeEmployees}
                 />
               </Form.Group>
             </Card>
             <br></br>
-            <Card body className="table">
-              <Card.Title>Employees</Card.Title>
-              {this.employeeCards()}
-            </Card>
+
             <br></br>
             <Card body className="table">
-              <Card.Title>Assigned Tasks</Card.Title>
+              <Card.Title>Tareas Asignadas</Card.Title>
               {this.machineCards()}
             </Card>
           </Col>
           <Col lg={6}>
             <Card body className="table">
-              <Card.Title>Open Tasks</Card.Title>
+              <Card.Title>Tareas Abiertas</Card.Title>
 
               <DataTable
                 data={this.state.tasks}
@@ -589,25 +596,6 @@ class NewRoute extends Component {
               />
             </Card>
             <br />
-            <Card body className="table">
-              <Card.Title>Employees</Card.Title>
-              <DataTableExtensions
-                filterHidden={false}
-                columns={employeeColumns}
-                data={this.state.employees}
-              >
-                <DataTable
-                  data={this.state.employees}
-                  noHeader
-                  theme="machines"
-                  progressPending={this.state.employeesPending}
-                  progressComponent={<CustomLoader />}
-                  columns={columns}
-                  pagination
-                  highlightOnHover
-                />
-              </DataTableExtensions>
-            </Card>
           </Col>
         </Row>
       </Container>

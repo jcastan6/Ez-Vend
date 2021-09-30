@@ -239,9 +239,15 @@ router.get("/getEmployeeRoute/:id", async (req, res) => {
       id: req.params.id,
     },
   });
-  let route = await employee.getRoute({
-    include: [{ all: true, nested: true }],
-  });
+
+  let route = {};
+  try {
+    route = await employee.getRoute({
+      include: [{ all: true, nested: true }],
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
   return res.send(route.dataValues);
 });

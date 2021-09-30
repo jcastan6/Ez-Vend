@@ -115,16 +115,6 @@ export default class Routes extends Component {
     };
     const columns = [
       {
-        name: "Nombre",
-        selector: "name",
-        sortable: true,
-      },
-      {
-        name: "Tareas Asignadas",
-        selector: "maintenanceTasks.length",
-        sortable: true,
-      },
-      {
         name: "Empleado",
         cell: (row) => {
           if (row.employees) {
@@ -138,12 +128,16 @@ export default class Routes extends Component {
         sortable: true,
       },
       {
+        name: "Tareas Asignadas",
+        selector: "maintenanceTasks.length",
+        sortable: true,
+      },
+      {
         name: "Editar Ruta",
         cell: (row) => (
           <BsThreeDotsVertical onClick={() => this.handleOpenModal(row.id)} />
         ),
         sortable: false,
-        right: true,
       },
     ];
 

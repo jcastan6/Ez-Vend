@@ -18,7 +18,7 @@ import { retrieveCookie, deleteCookie, saveCookie } from "./ReportCookie";
 class ReportMaintenance extends Component {
   constructor(props) {
     super(props);
-    this.handleRouteChange = this.handleRouteChange.bind(this);
+
     let secret = false;
     if (retrieveCookie().secret) {
       secret = retrieveCookie().secret;
@@ -35,11 +35,13 @@ class ReportMaintenance extends Component {
       secret,
     };
 
+    this.handleRouteChange = this.handleRouteChange.bind(this);
     this.checkPass = this.checkPass.bind(this);
     this.getMachines = this.getMachines.bind(this);
-    this.getMachines();
+
     this.onDrop = this.onDrop.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.getMachines();
   }
 
   onDrop(picture) {
@@ -52,6 +54,32 @@ class ReportMaintenance extends Component {
     this.setState({
       [event.target.id]: event.target.value,
     });
+  };
+
+  checkPass = (event) => {
+    event.preventDefault();
+    fetch(`https://www.mantenimientoscvm.com/users/checkSecret/`, {
+      method: "POST",
+      body: JSON.stringify({
+        secret: this.state.pass,
+      }),
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 200) {
+          saveCookie(true);
+          this.setState({
+            secret: true,
+          }),
+            () => console.log();
+          this.getRoute();
+        } else {
+        }
+      });
   };
 
   handleSubmit = (event) => {
