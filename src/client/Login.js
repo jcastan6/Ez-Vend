@@ -40,7 +40,7 @@ class Login extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.status === 401) {
-          alert("Sorry please check log-in credentials");
+          alert("Usuario y contraseña no fueron encontrados");
         } else if (res.username) {
           saveCookie(res.username);
           this.handleRouteChange();
@@ -50,7 +50,7 @@ class Login extends Component {
         }
       })
       .catch((err) => {
-        alert("Error logging in please try again");
+        alert("Hubo un error al iniciar la sesión");
         console.error(err);
       });
   };

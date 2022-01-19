@@ -54,8 +54,8 @@ class TypeEditor extends Component {
 
   delete = () => {
     confirmAlert({
-      title: "Confirm to submit",
-      message: "Are you sure to do this.",
+      title: "Confirmar",
+      message: "Seguro que quieres borrar esto?",
       buttons: [
         {
           label: "Yes",
@@ -107,12 +107,12 @@ class TypeEditor extends Component {
           <Card>
             <Card.Body>
               <h1 id="justice">
-                <b>Edit Type</b>
+                <b>Editar Tipo de Maquina</b>
               </h1>
               <br />
               <form onSubmit={this.handleSubmit} className="body">
                 <FormGroup controlId="type">
-                  <FormLabel>Type</FormLabel>
+                  <FormLabel>Tipo</FormLabel>
                   <FormControl
                     autoFocus
                     type="type"
@@ -127,7 +127,7 @@ class TypeEditor extends Component {
                   type="submit"
                   onClick={this.onSubmit}
                 >
-                  Update
+                  Actualizar
                 </Button>
                 <Button
                   block
@@ -135,7 +135,7 @@ class TypeEditor extends Component {
                   variant="danger"
                   onClick={this.delete}
                 >
-                  Delete
+                  Borrar
                 </Button>
               </form>
             </Card.Body>

@@ -177,7 +177,7 @@ export default class Routes extends Component {
           isOpen={this.state.showModal === route.id}
         >
           <Button variant="outline-primary" onClick={this.handleCloseModal}>
-            X
+            Cerrar sin guardar cambios
           </Button>
           <br />
           <br />

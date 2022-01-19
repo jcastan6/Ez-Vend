@@ -43,7 +43,7 @@ class Registration extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.status === 400) {
-            alert("Sorry please check log-in credentials");
+            alert("Usuario y contraseña no fueron encontrados");
           }
           if (res.status === 401) {
             alert("El secreto no coincide con la base de datos.");

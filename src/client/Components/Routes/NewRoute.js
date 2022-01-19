@@ -187,6 +187,14 @@ class NewRoute extends Component {
           },
           () => console.log()
         );
+        let e = this.state.employees;
+        e.push(this.state.routeEmployees[0]);
+        this.setState(
+          {
+            employees: e,
+          },
+          () => console.log()
+        );
       });
   }
 
