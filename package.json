@@ -1,7 +1,7 @@
 {
-  "name": "simple-react-full-stack",
+  "name": "EZ-Vend",
   "version": "1.0.0",
-  "description": "Boilerplate to build a full stack web application using React, Node.js, Express and Webpack.",
+  "description": "Task & Maintenance management system for vending machines.",
   "main": "src/server/index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -10,7 +10,7 @@
     "server": "nodemon src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "Jose C",
+  "author": "Mar C",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "^5.14.3",
